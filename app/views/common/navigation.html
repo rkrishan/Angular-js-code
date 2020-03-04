@@ -1,0 +1,125 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse" ng-controller="LeftMenuListCtrl">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+
+                <div class="dropdown profile-element" dropdown>
+                    <!-- <img alt="image" class="img-circle" src="img/profile_small.jpg"/> -->
+                    <a class="dropdown-toggle" dropdown-toggle href>
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{{userProfile.firstName}} {{userProfile.lastName}}</strong>
+                         </span>
+                            <span class="text-muted text-xs block">Action <b class="caret"></b></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a ng-click="change_password()">Profile</a></li>
+                        <!-- <li><a ui-sref="contacts">Contacts</a></li>
+                        <li><a ui-sref="inbox">Mailbox</a></li> -->
+                        <li class="divider"></li>
+                        <li><a ui-sref="logout">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    SPECTA
+                </div>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.main"><i class="fa fa-home"></i> <span class="nav-label">Home</span> </a>
+            </li>
+
+            <li ng-class="{active: $state.includes('dashboards')}">
+                <a ui-sref="index.dashboardlist">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">{{ 'Dashboard' }}</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('dashboards')}">
+                    <li ui-sref-active="active" ng-repeat="menu in menuDashboardList"><a  ng-click="changeDashboard(menu._id)">{{ menu.name }}</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('reports')}">
+                <a ui-sref="index.reportslist">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span class="nav-label">{{ 'Reports' }}</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('reports')}">
+                    <li ui-sref-active="active" ng-repeat="menu in menuReportsList">
+                        <a  ng-click="changeReport(menu._id)" ng-if="menu.type == 'dynamic'">{{ menu.name }}</a>
+                        <a  ng-click="changeStaticReport(menu._id, menu.file)" ng-if="menu.type == 'static'">{{ menu.name }}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('analysis')}">
+                <a ui-sref="index.analysislist">
+                    <i class="fa fa-pie-chart"></i>
+                    <span class="nav-label">{{ 'Analytics' }}</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('analysis')}">
+                    <li ui-sref-active="active" ng-repeat="menu in menuAnalysisList">
+                        <a  ng-click="changeAnalysis(menu._id)" ng-if="menu.type == 'dynamic'">{{ menu.name }}</a>
+                        <a  ng-click="changeStaticAnalysis(menu._id, menu.file)" ng-if="menu.type == 'static'">{{ menu.name }}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('staging')}" ng-if="userProfile.userType != 'user'">
+                <a ui-sref="index.analysislist">
+                    <i class="fa fa-pie-chart"></i>
+                    <span class="nav-label">{{ 'Staging' }}</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('staging')}">
+                    <li ui-sref-active="active" ng-repeat="menu in stagingList">
+                        <a ng-click="changeStaging(menu._id)" ng-if="menu.type == 'dynamic'">{{ menu.name }}</a>
+                        <a  ng-click="changeStaticStaging(menu._id, menu.file)" ng-if="menu.type == 'static'">{{ menu.name }}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- <li ui-sref-active="active" ng-if="userProfile.userType != 'user'">
+                <a ui-sref="index.staticfilter"><i class="fa fa-users"></i> <span class="nav-label">Filter</span></a>
+            </li> -->
+
+            <li ui-sref-active="active" ng-if="userProfile.userType != 'user'">
+                <a ui-sref="index.grouplist"><i class="fa fa-users"></i> <span class="nav-label">Group Management</span></a>
+            </li>
+
+            <li ui-sref-active="active" ng-if="userProfile.userType != 'user'">
+                <a ui-sref="index.userlist"><i class="fa fa-user"></i> <span class="nav-label">User Management</span></a>
+            </li>
+
+            <!-- <li ui-sref-active="active" ng-if="userProfile.userType == 'user'">
+                <a ui-sref="/"><i class="fa fa-envelope"></i> <span class="nav-label">Alerts</span></a>
+            </li>
+
+            <li ui-sref-active="active" ng-if="userProfile.userType == 'user'">
+                <a ui-sref="/"><i class="fa fa-globe"></i> <span class="nav-label">Miscellaneous</span></a>
+            </li> -->
+
+            <li ng-class="{active: $state.includes('configure')}" ng-if="userProfile.userType != 'user'">
+                <a ui-sref="index.configure">
+                    <i class="fa fa-edit"></i>
+                    <span class="nav-label">{{ 'Configure' }}</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('dashboards')}">
+                    <li ui-sref-active="active"><a ui-sref="index.modulelist">Modules</a></li>
+                    <li ui-sref-active="active"><a ui-sref="index.statementlist">Statements</a></li>
+                    <li ui-sref-active="active" ><a ui-sref="index.chartoptionslist">Chart Options</a></li>
+                    <li ui-sref-active="active" ><a ui-sref="index.redirection">Redirection Options</a></li>
+                    <li ui-sref-active="active"><a ui-sref="index.configurationlist">System Configuration</a></li>
+                    <!-- <li ui-sref-active="active" ><a ui-sref="index.rotatelist">Auto Rotate Page</a></li> -->
+                    <!-- <li ui-sref-active="active" ><a ui-sref="index.statementnewlist">Statement New</a></li> -->
+                </ul>
+            </li>
+            
+        </ul>
+
+    </div>
+</nav>

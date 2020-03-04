@@ -1,0 +1,205 @@
+<div class="wrapper-content animated fadeIn" ng-controller="nonDataSubUsersCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <!-- <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group" ng-if="totalUsers > 0"><b>Total Users: {{totalUsers}}</b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group" ng-if="smartPhoneUsers > 0"><b>SmartPhone Users: {{smartPhoneUsers}}</b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+               <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="dateSelect" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                                
+                        </div> 
+                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-10">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<!-- <b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp; --><b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+        <div class="col-lg-2">
+            <div class="ibox float-e-margins">
+                <span class="ibox-tools dropdown" uib-dropdown class="">
+                    <!-- <a class="dropdown-toggle" href uib-dropdown-toggle>
+                        <span class="pull-right label label-primary">Low Data IMSI &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-save"></i></span>
+                    </a> -->
+                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                    <button class="btn btn-xs btn-primary" ladda="loading" data-style="slide-down"  ng-click="exportIMSI()" >
+                      Non Data IMSI &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-save"></i>
+                    </button>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                   <uib-tab  heading="Area wise Distribution" ng-click="tabSelected('areawiseDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Non Data Subs Area distribution for Date <b style="color:#1ab394;"> {{edate}} </b></span>
+                                        
+                                        <export-module filename="exportLocationNoDataSubsObj.fileName" dataobj="exportLocationNoDataSubs" fileheader="exportLocationNoDataSubsObj.fileHeader"></export-module>
+                                        <div class="pull-right">
+                                        <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+                                            <option value="200">Show 200</option>
+                                            <option value="500">Show 500</option>
+                                            <option value="750">Show 750</option>
+                                            <option value="1000">Show 1000</option>
+                                            <option value="1500">Show 1500</option>
+                                            <option value="2000">Show 2000</option>
+                                            <option value="20000">&gt; 2000</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingMapLocationNoDataSubsDiv"></div>
+                                        <div no-data-found ng-if="noDataMapLocationNoDataSubsDiv"></div>
+                                        
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ui-gmap-google-map id='map' center='mapLocationNoDataSubs.center' zoom='mapLocationNoDataSubs.zoom' options='mapLocationNoDataSubs.options' size="mapLocationNoDataSubs.size" control="mapLocationNoDataSubs.control" >
+                                                    <ui-gmap-markers models="mapLocationNoDataSubsMarker" coords="'self'" icon="'icon'" events="mapLocationNoDataSubs.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+
+                                                </ui-gmap-google-map>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <span ng-if="mapLocationNoDataSubsMarker.length>0">
+                                            <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                                                <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus, mapLocationNoDataSubsMarker,'mapLocationNoDataSubsMarker')" ng-checked="{{checkboxCountLowStatus}}">
+                                                <label for="inlineCheckbox3"> 0- {{lowUsers}} </label>
+                                            </div>
+                                            <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                                                <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus, mapLocationNoDataSubsMarker, 'mapLocationNoDataSubsMarker')"  ng-checked="{{checkboxCountMediumStatus}}">
+                                                <label for="inlineCheckbox2"> {{lowUsers}}-{{mediumUsers}} </label>
+                                            </div>
+                                            <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                                                <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus, mapLocationNoDataSubsMarker, 'mapLocationNoDataSubsMarker')" ng-checked="{{checkboxCountHighStatus}}">
+                                                <label for="inlineCheckbox1"> {{mediumUsers}}-{{highestUsers}} </label>
+                                            </div>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <div class="ibox-content">
+                                            <div >
+                                                <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options="areaDistribution">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>CellID</th>
+                                                            <th>Area</th>
+                                                            <th>Latitude</th>
+                                                            <th>Longitude</th>
+                                                            <th>Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in mapLocationNoDataSubsTable track by $index">
+                                                            <td>{{ element.cellid }}</td>
+                                                            <td>{{ element.Area }}</td>
+                                                            <td>{{ element.latitude }}</td>
+                                                            <td>{{ element.longitude }}</td>
+                                                            <td>{{ element.Count }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Device wise Distribution" ng-click="tabSelected('deviceDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Device wise distribution for Date <b style="color:#1ab394;"> {{edate}} </b></span>
+                                        
+                                        <export-module filename="exportDeviceDistributionObj.fileName" dataobj="exportHandsetSessionDistribution" fileheader="exportDeviceDistributionObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                       <div loading-icon ng-if="loadinghandsetDistributionBubbleDiv"></div>
+                                        <div ng-if="DatahandsetDistributionBubbleDiv">
+                                        <highchart id="handsetDistributionBubble" config="handsetDistributionBubbleChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDatahandsetDistributionBubbleDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="City wise Distribution" ng-click="tabSelected('cityDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>City wise distribution for Date <b style="color:#1ab394;"> {{edate}} </b></span>
+                                        
+                                        <export-module filename="exportCityDistributionObj.fileName" dataobj="exportCitywiseDistribution" fileheader="exportCityDistributionObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingCitywiseDistributionDiv"></div>
+                                        <div ng-if="DataCitywiseDistributionDiv">
+                                            <highchart id="CitywiseDistribution" config="citywiseDistributionChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataCitywiseDistributionDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

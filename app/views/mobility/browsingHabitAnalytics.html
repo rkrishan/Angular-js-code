@@ -1,0 +1,80 @@
+<div class="wrapper-content animated fadeIn" ng-controller="browsingHabitAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <!-- <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>-->
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> 
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.end" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        </div> 
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" ng-if="insideLazyLoad">
+        <div class="col-lg-8">
+            <span><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<!-- <b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp; --><b>Device:</b> {{deviceinfo}}
+            </span>
+        </div>
+        
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!-- <span>OLT CEI Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; OLT <b style="color:#1ab394;">{{OLTSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                    </span> -->
+                    <!-- <export-module filename="'OLT CEI Distribution'" dataobj="exportCEIDistribution" nested="true"></export-module> -->
+                    <export-module filename="eportObjCEI.fileName" dataobj="exportCEIDistribution" fileheader="eportObjCEI.fileHeader"></export-module>
+                    <div class="pull-right">
+                        <select ng-model="select.timeSeg" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                            <option value="{{olt}}" ng-repeat="olt in timeList track by $index">{{olt}}</option>
+                        </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></div>
+                    <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                        <highchart id="" config="CEIDistributionChartOptions" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></div>
+                </div>
+                
+            </div>
+
+            
+        </div>
+    </div>
+</div>

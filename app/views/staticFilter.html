@@ -1,0 +1,130 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-6">
+                <div class="col-sm-3">
+                    <div class="float-e-margins">
+                        <label>Location</label>
+                        <input type="button" value="&darr;" ng-click="location()" />
+                        <div id="location" ng-show="locationTree" style="z-index:999;position:absolute;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="float-e-margins">
+                        <label>RAT</label>
+                        <input type="button" value="&darr;" ng-click="rat('click')"  />
+                        <div id="rat" ng-show="ratTree" style="z-index:999;position:absolute;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="float-e-margins">
+                        <label>Segment</label>
+                        <input type="button" value="&darr;" ng-click="segment()"/>
+                        <div id="segment" ng-show="segmentTree" style="z-index:999;position:absolute;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="float-e-margins">
+                        <label>Devices</label>
+                        <input type="button" value="&darr;" ng-click="device()"/>
+                        <div id="device" ng-show="deviceTree" style="z-index:999;position:absolute;"></div>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-md-6">
+                <div class="float-e-margins">
+                    <form role="form" class="form-inline"  ng-submit="click()">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                            <input type="text" data-ng-datepicker data-ng-options="datepickerOptions" ng-model="date.start" placeholder="From Date" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                            <input type="text" data-ng-datepicker data-ng-options="datepickerOptions" ng-model="date.end" placeholder="To Date" required>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-primary" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-2">
+                <div class="float-e-margins">
+                    <label>Location</label>
+                    <input type="button" value="&darr;" ng-click="location()"/>
+                    <div id="location" ng-show="tree1" style="z-index:999;position:absolute;"></div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="float-e-margins">
+                    <label>RAT</label>
+                    <input type="button" value="&darr;" ng-click="rate()"/>
+                    <div id="rate" ng-show="tree2" style="z-index:999;position:absolute;"></div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="float-e-margins">
+                    <label>Segment</label>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="tree3" style="z-index:999;position:absolute;"></div>
+                </div>
+            </div>
+            
+            <div class="col-md-2">
+                <div class="float-e-margins">
+                    <label>Device</label>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="tree4" style="z-index:999;position:absolute;"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="float-e-margins">
+                    <div id= "btnGroup" class="btn-group" >
+                        <button id="{{btn.index}}" type="button" class="btn btn-xs btn-outline btn-primary {{btnStatus}}" ng-click="fetchData(btn.id,btn.index)" ng-repeat= "btn in btnArrayView">{{btn.val}}</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-xs btn-primary" ng-click="searchData()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Most Popular Devices</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover table-striped no-margins" >    
+                        <thead id="tableheader">
+                            <tr>
+                                <th>Device</th>
+                                <th>Usage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="element in MostPopularDevices">
+                                <td>{{ element.device }}</td>
+                                <td>{{ element.usage }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

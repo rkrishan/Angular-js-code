@@ -1,0 +1,210 @@
+<div class="form-group">
+    <label class="col-md-2">Title</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+    </div>
+    <!-- <div class="col-md-2">
+        <div class="tooltip-demo">
+            <span tooltip-placement="right" uib-tooltip="Title of module"><i class="fa fa-info-circle fa-2x"></i></span>
+        </div>
+    </div> -->
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.data" class="form-control" ng-change="changeDataType(module.data)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'push' || module.data == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateMap(module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validateMap(module.query)">Get Columns</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull' || module.data == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateMap(module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Type</label>
+    <div class="col-md-4">
+        <select ng-model="module.mapType" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="simple">Simple Map</option>
+            <option value="heat">Heat Map</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple'">
+    <label class="col-md-2">Data Value</label>
+    <div class="col-md-4">
+        <select ng-model="module.dataValue" class="form-control" ng-change="mapDataSelected()" required>
+            <option ng-repeat="value in mapColumns" value="{{value.name}}">{{value.name}}</option>
+        </select>
+    </div>
+</div>
+<!-- <div class="form-group">
+    <label class="col-md-2">Longitude</label>
+    <div class="col-md-4">
+        <select class="form-control" name="longitude" ng-model="module.longitude" required>
+            <option ng-repeat="value in mapOtherColumns" value="{{value.name}}">{{value.name}}</option>
+        </select>
+    </div>
+</div> -->
+
+<div class="form-group" ng-if="module.mapType == 'simple' ">
+    <label class="col-md-2">Shape</label>
+    <div class="col-md-4">
+        <select ng-model="module.shape" class="form-control" required>
+            <option value="">Select</option>
+            <option value="circle">Circle</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="plogon">Plogon</option>
+            <option value="polyline">Polyline</option>
+            <option value="marker">Marker</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple' && module.shape != 'marker'">
+    <label class="col-md-2">Color</label>
+    <div class="col-md-4">
+        <input colorpicker ng-model="module.color" type="text">
+        <!-- <color-picker ng-model="module.color" color-picker-format="'hex'"></color-picker> -->
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.shape == 'marker'">
+    <label class="col-md-2">Icon</label>
+    <div class="col-md-4">
+        <select ng-model="module.icon" class="form-control" required>
+            <option value="">Select</option>
+            <option value="standard">Standard</option>
+            <option value="mobile_blue">Mobile - Blue</option>
+            <option value="mobile_cyan">Mobile - Cyan</option>
+            <option value="mobile_green">Mobile - Green</option>
+            <option value="mobile_orange">Mobile - Orange</option>
+            <option value="mobile_red">Mobile - Red</option>
+            <option value="tower_blue">Tower - Blue</option>
+            <option value="tower_red">Tower - Red</option>
+            <option value="tower_green">Tower - Green</option>
+            <option value="tower_black">Tower - Black</option>
+            <option value="tower_orange">Tower - Orange</option>
+            <option value="custom">Custom</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.icon == 'custom'">
+    <label class="col-md-2">Data Range</label>
+    <div class="row col-md-10" ng-repeat="item in choices" ng-if="$index == 0">
+        <div class="col-md-3">
+            <input type="text" class="form-control" ng-model="module.from[item]" placeholder="From" required>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" ng-model="module.to[item]" placeholder="To"
+            required>
+        </div>
+        <div class="col-md-4">
+            <select ng-model="module.customIcon[item]" class="form-control" required>
+                <option value="">Select Icon</option>
+                <option value="mobile_blue">Mobile - Blue</option>
+                <option value="mobile_cyan">Mobile - Cyan</option>
+                <option value="mobile_green">Mobile - Green</option>
+                <option value="mobile_orange">Mobile - Orange</option>
+                <option value="mobile_red">Mobile - Red</option>
+                <option value="tower_blue">Tower - Blue</option>
+                <option value="tower_red">Tower - Red</option>
+                <option value="tower_green">Tower - Green</option>
+                <option value="tower_black">Tower - Black</option>
+                <option value="tower_orange">Tower - Orange</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div ng-if="module.icon == 'custom'">
+    <div class="form-group" ng-repeat="item in choices" ng-if="$index > 0">
+        <label class="col-md-2"></label>
+        <div class="row col-md-10">
+            <div class="col-md-3">
+                <input type="text" class="form-control" ng-model="module.from[item]" placeholder="From" required>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" ng-model="module.to[item]" placeholder="To"
+                required>
+            </div>
+            <div class="col-md-4">
+                <select ng-model="module.customIcon[item]" class="form-control" required>
+                    <option value="">Select Icon</option>
+                    <option value="mobile_blue">Mobile - Blue</option>
+                    <option value="mobile_cyan">Mobile - Cyan</option>
+                    <option value="mobile_green">Mobile - Green</option>
+                    <option value="mobile_orange">Mobile - Orange</option>
+                    <option value="mobile_red">Mobile - Red</option>
+                    <option value="tower_blue">Tower - Blue</option>
+                    <option value="tower_red">Tower - Red</option>
+                    <option value="tower_green">Tower - Green</option>
+                    <option value="tower_black">Tower - Black</option>
+                    <option value="tower_orange">Tower - Orange</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.icon == 'custom'">
+    <div class="s-menu-r" >
+        <a href="" class="button" ng-click="addItem()">Add Item</a>
+    </div>
+
+    <div class="s-menu-r" ng-if="removeBtn">
+        <a href="" class="button" ng-click="removeItem()">Remove Item</a>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple' ">
+    <label class="col-md-2">Info Box</label>
+    <div class="col-md-4">
+        <input type="checkbox" ng-model="module.infobox" ng-click="checkInfobox(module.infobox)">
+    </div>
+</div>
+
+<div class="form-group" ng-if="dataField">
+    <label class="col-md-2">Data Field</label>
+    <div class="col-md-6">
+        <div ng-repeat="item in mapColumns" style="margin-bottom:5px;">
+            <input type="checkbox" ng-click="toggleMapDataField(item, mapDataFieldSelected)" style="margin-right:10px;" />
+            {{ item.name | uppercase}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,220 @@
+<div class="wrapper-content animated fadeIn" ng-controller="appPerformanceBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>App :</b>
+                    <select ng-model="select.app" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{appName}}" ng-repeat="appName in appNameList track by $index">{{appName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="OLT" ng-click="tabSelected('OLT')" ng-if="showTabObj.OLT">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>OLT Latency Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; OLT <b style="color:#1ab394;">{{OLTSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <!-- <export-module filename="'OLT Latency Distribution'" dataobj="exportLatencyDistribution" nested="true"></export-module> -->
+                                        <export-module filename="eportObjLatency.fileName" dataobj="exportLatencyDistribution" fileheader="eportObjLatency.fileHeader"></export-module>
+                                        <div class="pull-right"><b>OLT :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{olt}}" ng-repeat="olt in drpdwnArrayList track by $index">{{olt}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv">
+                                            <highchart id="" config="latencyDistributionChartConfig" ></highchart>
+                                            <p class="text-center" style="font-size: 14px;"><b><span style="color:rgb(13, 251, 89)">0ms-20ms</span>&nbsp;&nbsp;<span style="color:#333333">Excellent</span>&nbsp;&nbsp;<span style="color:rgb(237, 251, 13);"> 20ms-50ms</span>&nbsp;&nbsp;<span style="color:#333333">Good</span>&nbsp;&nbsp;<span style="color:rgb(255, 28, 28);"> &#62;50ms</span>&nbsp;&nbsp;<span style="color:#333333">Bad</span>&nbsp;</b><!-- <small >&nbsp;For Sessions &#62; 1MB</small> --></p>
+                                            <p class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></p>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingLatencyDistributionDiv && noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>OLT CEI Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; OLT <b style="color:#1ab394;">{{OLTSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <!-- <export-module filename="'OLT CEI Distribution'" dataobj="exportCEIDistribution" nested="true"></export-module> -->
+                                            <export-module filename="eportObjCEI.fileName" dataobj="exportCEIDistribution" fileheader="eportObjCEI.fileHeader"></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></div>
+                                        <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                                            <highchart id="" config="CEIDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Area" ng-click="tabSelected('Area')"  ng-if="showTabObj.Area">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Area wise Latency Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; Area <b style="color:#1ab394;">{{AreaSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <!-- <export-module filename="'Area wise Latency Distribution'" dataobj="exportLatencyDistribution" nested="true"></export-module> -->
+                                        <export-module filename="eportObjLatency.fileName" dataobj="exportLatencyDistribution" fileheader="eportObjLatency.fileHeader"></export-module>
+                                        <div class="pull-right"><b>Area :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{area}}" ng-repeat="area in drpdwnArrayList track by $index">{{area}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv">
+                                            <highchart id="" config="latencyDistributionChartConfig" ></highchart>
+                                            <p class="text-center" style="font-size: 14px;"><b><span style="color:rgb(13, 251, 89)">0ms-20ms</span>&nbsp;&nbsp;<span style="color:#333333">Excellent</span>&nbsp;&nbsp;<span style="color:rgb(237, 251, 13);"> 20ms-50ms</span>&nbsp;&nbsp;<span style="color:#333333">Good</span>&nbsp;&nbsp;<span style="color:rgb(255, 28, 28);"> &#62;50ms</span>&nbsp;&nbsp;<span style="color:#333333">Bad</span>&nbsp;</b><!-- <small >&nbsp;For Sessions &#62; 1MB</small> --></p>
+                                            <p class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></p>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingLatencyDistributionDiv && noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv" class="pull-right"><b style="color:#1ab394;">&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Area wise CEI Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; Area <b style="color:#1ab394;">{{AreaSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <!-- <export-module filename="'Area wise CEI Distribution'" dataobj="exportCEIDistribution" nested="true"></export-module> -->
+                                            <export-module filename="eportObjCEI.fileName" dataobj="exportCEIDistribution" fileheader="eportObjCEI.fileHeader"></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></div>
+                                        <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                                            <highchart id="" config="CEIDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Plan" ng-click="tabSelected('Plan')" ng-if="showTabObj.Plan">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Plan wise Latency Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; Plan <b style="color:#1ab394;">{{PlanSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="eportObjLatency.fileName" dataobj="exportLatencyDistribution" fileheader="eportObjLatency.fileHeader"></export-module>
+                                        <div class="pull-right"><b>Plan :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{plan}}" ng-repeat="plan in drpdwnArrayList track by $index">{{plan}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv">
+                                            <highchart id="" config="latencyDistributionChartConfig" ></highchart>
+                                            <p class="text-center" style="font-size: 14px;"><b><span style="color:rgb(13, 251, 89)">0ms-20ms</span>&nbsp;&nbsp;<span style="color:#333333">Excellent</span>&nbsp;&nbsp;<span style="color:rgb(237, 251, 13);"> 20ms-50ms</span>&nbsp;&nbsp;<span style="color:#333333">Good</span>&nbsp;&nbsp;<span style="color:rgb(255, 28, 28);"> &#62;50ms</span>&nbsp;&nbsp;<span style="color:#333333">Bad</span>&nbsp;</b><!-- <small >&nbsp;For Sessions &#62; 1MB</small> --></p>
+                                            <p class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></p>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingLatencyDistributionDiv && noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv" class="pull-right"><b style="color:#1ab394;">&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Plan wise CEI Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; Plan <b style="color:#1ab394;">{{PlanSelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <!-- <export-module filename="'Area wise CEI Distribution'" dataobj="exportCEIDistribution" nested="true"></export-module> -->
+                                            <export-module filename="eportObjCEI.fileName" dataobj="exportCEIDistribution" fileheader="eportObjCEI.fileHeader"></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></div>
+                                        <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                                            <highchart id="" config="CEIDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="City" ng-click="tabSelected('City')"  ng-if="showTabObj.City">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>City wise Latency Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; City <b style="color:#1ab394;">{{CitySelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <!-- <export-module filename="'Area wise Latency Distribution'" dataobj="exportLatencyDistribution" nested="true"></export-module> -->
+                                        <export-module filename="eportObjLatency.fileName" dataobj="exportLatencyDistribution" fileheader="eportObjLatency.fileHeader"></export-module>
+                                        <div class="pull-right"><b>City :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{City}}" ng-repeat="City in drpdwnArrayList track by $index">{{City}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv">
+                                            <highchart id="" config="latencyDistributionChartConfig" ></highchart>
+                                            <p class="text-center" style="font-size: 14px;"><b><span style="color:rgb(13, 251, 89)">0ms-20ms</span>&nbsp;&nbsp;<span style="color:#333333">Excellent</span>&nbsp;&nbsp;<span style="color:rgb(237, 251, 13);"> 20ms-50ms</span>&nbsp;&nbsp;<span style="color:#333333">Good</span>&nbsp;&nbsp;<span style="color:rgb(255, 28, 28);"> &#62;50ms</span>&nbsp;&nbsp;<span style="color:#333333">Bad</span>&nbsp;</b><!-- <small >&nbsp;For Sessions &#62; 1MB</small> --></p>
+                                            <p class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></p>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingLatencyDistributionDiv && noDataLatencyDistributionDiv"></div>
+                                        <div ng-if="!loadingLatencyDistributionDiv && !noDataLatencyDistributionDiv" class="pull-right"><b style="color:#1ab394;">&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>City wise CEI Distribution for App <b style="color:#1ab394;">{{appSelected}}</b> &amp; City <b style="color:#1ab394;">{{CitySelected}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <!-- <export-module filename="'Area wise CEI Distribution'" dataobj="exportCEIDistribution" nested="true"></export-module> -->
+                                            <export-module filename="eportObjCEI.fileName" dataobj="exportCEIDistribution" fileheader="eportObjCEI.fileHeader"></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></div>
+                                        <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                                            <highchart id="" config="CEIDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

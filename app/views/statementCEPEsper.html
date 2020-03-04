@@ -1,0 +1,99 @@
+<form class="form-horizontal" name="myForm" role="form" ng-submit="saveStatement()">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="statement.name" ng-keypress="validateName($event)" ng-required="true" ng-readonly="isReadOnly" placeholder="Name" focus="true">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" type="button" ng-click="validate()">Validate</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Query</label>
+        <div class="col-sm-8">
+            <textarea placeholder="Query" class="form-control" ng-model="statement.query" ng-required="true" ng-readonly="isReadOnly"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-8">
+            <textarea placeholder="Description" class="form-control" ng-model="statement.description" ng-required="true"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Type</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.type" ng-disabled="isReadOnly" required>
+                <option value="">-Select-</option>
+                <option value="replace">Replace</option>
+                <!-- <option value="refresh">Refresh</option> -->
+                <!-- <option value="reset">Reset</option> -->
+                <option value="moving">Moving</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="statement.type == 'replace'">
+        <label class="col-sm-2 control-label">Event Publish</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.eventPublish" ng-disabled="isReadOnly" required>
+                <option value="">-Select-</option>
+                <option value="Individual">Individual</option>
+                <option value="Combined">Combined</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Reset Time</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.resetTime">
+                <option value="">Never</option>
+                <!-- <option value="*, *, *, *, *">1 Min</option>
+                <option value="*/5, *, *, *, *">5 Min</option>
+                <option value="*/10, *, *, *, *">10 Min</option>
+                <option value="*/30, *, *, *, *">30 Min</option> -->
+                <option value="0, *, *, *, *">1 Hr</option>
+                <!-- <option value="0, */4, *, *, *">4 Hrs</option> -->
+                <!-- <option value="0, */12, *, *, *">12 Hrs</option> -->
+                <option value="00, 00, *, *, *">24 Hrs</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="userProfile.userType == 'system administrator'">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-4">
+            <table>
+                <tr>
+                    <td><input icheck type="radio" class="form-control" name="visibility" ng-value="false" ng-model="statement.visibility"></td>
+                    <td><span class="m-l-xs">Private</span></td>
+                    <td>&nbsp;</td>
+                    <td><input icheck type="radio" class="form-control" name="visibility" ng-value="true" ng-model="statement.visibility"></td>
+                    <td><span class="m-l-xs">Public</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- <div class="form-group" ng-show="statement.type == 'reset' || statement.type == 'refresh' ">
+        <label class="col-sm-2 control-label">Key</label>
+        <div class="col-sm-2 checkbox checkbox-primary">
+            <div ng-repeat="item in columns">
+                <input type="checkbox" ng-click="toggleKey(item, statement.key)" /> {{ item }}
+            </div>
+        </div>
+    </div> -->
+
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <div class="col-sm-4 col-sm-offset-2">
+            <button class="btn btn-white" type="button" ng-click="cancelStatement('cep')">Cancel</button>
+            <button class="btn btn-primary" type="submit" ng-hide="isReadOnly || !validated">Save</button><!--  -->
+        </div>
+    </div>
+</form>

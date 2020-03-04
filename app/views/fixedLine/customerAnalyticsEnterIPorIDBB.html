@@ -1,0 +1,28 @@
+<div  ng-controller="BBCustomerAnalyticEnterIPorIDCtrl">
+    <div class="row" >
+        
+        <div class="col-lg-6">
+            <form role="form" class="form-inline" ng-submit="submit() ">
+                <div class="input-group ">
+                    <input type="text" ng-model="customer.ip" placeholder="Enter Customer Id /IP" name="search" class="form-control" minlength="5" maxlength="15" required>
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-lg-6 ">
+            <form role="form" class="form-inline">
+                <div class="form-group pull-right">
+                    <label><h3><b>Date&nbsp;:&nbsp;</b></h3></label>
+                    <div class="input-group date">
+                        <input id="datepick" type="datetime" class="form-control" date-time ng-model="dateSelect" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        <label for="datepick" class="input-group-addon"><i class="fa fa-calendar"></i>  </label>
+                    </div> 
+                </div>
+            </form>
+        </div>
+            
+    </div>
+</div>

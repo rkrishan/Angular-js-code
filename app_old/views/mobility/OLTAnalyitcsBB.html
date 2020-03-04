@@ -1,0 +1,91 @@
+<div class="wrapper wrapper-content animated fadeIn "  ng-controller="oltAnalyticsBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+            
+                <div class="input-group pull-right">
+                    <single-date-picker></single-date-picker>
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <uib-tabset>
+                    <uib-tab heading="Usage Distribution" ng-click="tabClicked('Usage')" ng-if="showTabObj.UsageDistribution">
+                        <div class="panel-body">
+                            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins" >
+                                    <div class="ibox-title">
+                                        <span>OLT wise Usage Distribution for Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                        <export-module filename="exportOLTUsg.fileName" dataobj="exportOLTData" fileheader="exportOLTUsg.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingOLTDiv"></div>
+                                        <div class="ibox float-e-margins" ng-if="DataOLTDiv">
+                                            <highchart id="OLTwiseUsageDistributionMultiLine" config="OLTwiseDistributionMultiLineChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataOLTDiv">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Subscribers Distribution" ng-click="tabClicked('Users')" ng-if="showTabObj.SubscriberDistribution">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>OLT wise Subscribers Distribution for Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportOLTSub.fileName" dataobj="exportOLTData" fileheader="exportOLTSub.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingOLTUsersDiv"></div>
+                                            <div class="ibox float-e-margins" ng-if="DataOLTUsersDiv">
+                                                <highchart id="OLTwiseDistribution" config="OLTwiseUsersDistributionChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDataOLTUsersDiv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab heading="Throughput Distribution" ng-click="tabClicked('Throughput')" ng-if="showTabObj.ThroughputDistribution">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>OLT wise Throughput Distribution for Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportOLTTph.fileName" dataobj="exportOLTData" fileheader="exportOLTTph.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingOLTDiv"></div>
+                                            <div class="ibox float-e-margins" ng-if="DataOLTDiv">
+                                                <highchart id="OLTwiseUsageDistributionMultiLine" config="OLTwiseDistributionMultiLineChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDataOLTDiv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

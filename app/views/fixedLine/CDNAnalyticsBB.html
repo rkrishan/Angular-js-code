@@ -1,0 +1,146 @@
+<div class="wrapper-content animated fadeIn" ng-controller="cdnAnalyticsBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b> CDN :</b>
+                    <select ng-model="select.cdn" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{cdnName}}" ng-repeat="cdnName in cdnNameList track by $index">{{cdnName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Usage" ng-click="tabSelected('Usage')" ng-if="showTabObj.Usage">
+                        <div class="panel-body" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Usage for CDN <b style="color:#1ab394;">{{cdnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="exportCDNUsageObj.fileName" dataobj="exportCDNUsageData" fileheader="exportCDNUsageObj.fileHeader"></export-module>
+                                        </div>
+
+                                        <div loading-icon ng-if="loadingCDNUsageDiv"></div>
+                                        <div ng-if="dataCDNUsageDiv">
+                                            <highchart id="CDNUsage" config="CDNUsageChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataCDNUsageDiv"></div>
+                                        <div ng-if="dataCDNUsageDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Throughput" ng-click="tabSelected('Throughput')" ng-if="showTabObj.Throughput">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Throughput Distribution(Minute wise) for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}} <!--  </span>  --><b style="color:#1ab394;">{{drdwnSelect}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            
+                                            <div loading-icon ng-if="loadingThroughputDiv && !noDataThroughputDiv"></div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv">
+                                                <highchart id="chart2" config="throughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingThroughputDiv && noDataThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Throughput Bucket" ng-click="tabSelected('TpBkt')" ng-if="showTabObj['TpBkt']" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Throughput Bucket Subscribers Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="TpBktUsgDist.fileName" dataobj="exportUsgDistArray" fileheader="TpBktUsgDist.fileHeader"></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
+                                    <div ng-if="DataTpBktDistributionDiv">
+                                        <highchart id="TpBktDistribution" config="TpBktDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataTpBktDistributionDiv">
+                                    </div>
+                                </div>      
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Area" ng-click="tabSelected('Area')" ng-if="showTabObj['Area']" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Area wise Throughput Bucket Distribution for CDN <b style="color:#1ab394;">{{cdnSelect}}</b> &amp; Area <b style="color:#1ab394;">{{select.tabDrpdwn}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="exportPlanTp.fileName" dataobj="exportLatencyDistribution" fileheader="exportPlanTp.fileHeader"></export-module>
+                                        <div class="pull-right"><b>Area :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{area}}" ng-repeat="area in drpdwnArrayList track by $index">{{area}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                    <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
+                                    <div ng-if="DataTpBktDistributionDiv">
+                                        <highchart id="TpBktDistribution" config="TpBktDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataTpBktDistributionDiv">
+                                    </div>
+                                </div>      
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Plan" ng-click="tabSelected('Plan')" ng-if="showTabObj['Plan']" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Plan wise Throughput Bucket Distribution for CDN <b style="color:#1ab394;">{{cdnSelect}}</b> &amp; Plan <b style="color:#1ab394;">{{select.tabDrpdwn}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="eportObjLatency.fileName" dataobj="exportLatencyDistribution" fileheader="eportObjLatency.fileHeader"></export-module>
+                                        <div class="pull-right"><b>Plan :</b>
+                                            <select ng-model="select.tabDrpdwn" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                                                <option value="{{plan}}" ng-repeat="plan in drpdwnArrayList track by $index">{{plan}}</option>
+                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                    <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
+                                    <div ng-if="DataTpBktDistributionDiv">
+                                        <highchart id="TpBktDistribution" config="TpBktDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataTpBktDistributionDiv">
+                                    </div>
+                                </div>      
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

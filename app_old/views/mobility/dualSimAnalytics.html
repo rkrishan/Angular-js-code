@@ -1,0 +1,221 @@
+<div class="wrapper-content animated fadeIn " ng-controller="dualSimAnalyticsCtrl" >
+	<div class="row" >
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+	    <div class="col-lg-12">
+	        <div class="tabs-container" >
+	            <uib-tabset >
+
+	                <uib-tab index="1"  heading="Subscribers Vs Usage" ng-click="tabSelected('usageVsUsers')" >
+	                    <div class="panel-body">
+	                        <div class="col-lg-12">
+	                            <div class="ibox float-e-margins">
+	                            	<div class="ibox-title">
+	                            		<span>Subscribers Vs Usage between <b style="color:#1ab394;">{{sDate}} - {{eDate}} </b> </span>
+	                            		<export-module filename="exportDualSimUserUsage.filename" dataobj="exportUsageVsUsers" fileheader="exportDualSimUserUsage.fileHeader"></export-module>
+	                            	</div>
+
+	                                <div class="ibox-content">
+	                                	<div loading-icon ng-if="loadingUsageVsUsersDiv && exportUsageVsUsers.length==0 "></div>
+                                        <div ng-if="!loadingUsageVsUsersDiv && exportUsageVsUsers.length!=0 " >
+                                            <highchart id="usage" config="userVsUsagesChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingUsageVsUsersDiv && exportUsageVsUsers.length==0 "></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </uib-tab>
+
+	                <uib-tab index="2" heading="Location" ng-click="tabSelected('locationWiseUsageUsers')" >
+                        <div class="panel-body">
+                            <div class="row" >
+                                <div class="col-lg-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Location wise Subscribers between Date <b style="color:#1ab394;"> {{sDate}} - {{eDate}} </b> </span>
+                                                
+                                            <export-module filename="exportMapLocationUsersObj.fileName" dataobj="exportMapLocationUsers" fileheader="exportMapLocationUsersObj.fileHeader"></export-module>
+
+                                            <div class="pull-right">
+                                                <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+                                                    <option value="200">Show 200</option>
+                                                    <option value="500">Show 500</option>
+                                                    <option value="750">Show 750</option>
+                                                    <option value="1000">Show 1000</option>
+                                                    <option value="1500">Show 1500</option>
+                                                    <option value="2000">Show 2000</option>
+                                                    <option value="20000">&gt; 2000</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div>
+                                                <span ng-if="loadingMapLocationUsersDiv" loading-icon></span>
+                                                <span no-data-found ng-if="noDataMapLocationUsersDiv"></span>
+                                            </div>
+                                            <div>
+                                                <ui-gmap-google-map center='mapLocationUsers.center' zoom='mapLocationUsers.zoom' options='mapLocationUsers.options' size="mapLocationUsers.size" control="mapLocationUsers.control">
+                                                    <ui-gmap-markers models="mapLocationUsersMarker" coords="'self'" icon="'icon'" events="mapLocationUsers.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+                                                </ui-gmap-google-map>
+                                            </div>
+                                            <br/>
+                                            <span ng-if="mapLocationUsersMarker.length>0">
+                                                <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                                                    <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus, mapLocationUsersMarker,'mapLocationUsersMarker')" ng-checked="{{checkboxCountLowStatus}}">
+                                                    <label for="inlineCheckbox3"> 0- {{lowUsers}} </label>
+                                                </div>
+                                                <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                                                    <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus, mapLocationUsersMarker, 'mapLocationUsersMarker')"  ng-checked="{{checkboxCountMediumStatus}}">
+                                                    <label for="inlineCheckbox2"> {{lowUsers}}-{{mediumUsers}} </label>
+                                                </div>
+                                                <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                                                    <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus, mapLocationUsersMarker, 'mapLocationUsersMarker')" ng-checked="{{checkboxCountHighStatus}}">
+                                                    <label for="inlineCheckbox1"> {{mediumUsers}}-{{highestUsers}} </label>
+                                                </div>
+                                            </span>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Location wise Usage between Date <b style="color:#1ab394;">{{sDate}} - {{eDate}} </b> </span>
+                                                
+                                            <export-module filename="exportMapLocationUsageObj.fileName" dataobj="exportMapLocationUsage" fileheader="exportMapLocationUsageObj.fileHeader"></export-module>
+
+                                            <div class="pull-right">
+                                                <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+                                                    <option value="200">Show 200</option>
+                                                    <option value="500">Show 500</option>
+                                                    <option value="750">Show 750</option>
+                                                    <option value="1000">Show 1000</option>
+                                                    <option value="1500">Show 1500</option>
+                                                    <option value="2000">Show 2000</option>
+                                                    <option value="20000">&gt; 2000</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div>
+                                                <span ng-if="loadingMapLocationUsageDiv" loading-icon></span>
+                                                <span no-data-found ng-if="noDataMapLocationUsageDiv"></span>
+                                            </div>
+                                            <div>
+                                                <ui-gmap-google-map center='mapLocationUsage.center' zoom='mapLocationUsage.zoom' options='mapLocationUsage.options' size="mapLocationUsage.size" control="mapLocationUsage.control">
+                                                    <ui-gmap-markers models="mapLocationUsageMarker" coords="'self'" icon="'icon'" events="mapLocationUsage.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+                                                </ui-gmap-google-map>
+                                            </div>
+                                            <br/>
+                                            <span ng-if="mapLocationUsageMarker.length>0">
+                                                <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                                                    <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus, mapLocationUsageMarker,'mapLocationUsageMarker')" ng-checked="{{checkboxCountLowStatus}}">
+                                                    <label for="inlineCheckbox3"> 0- {{lowUsage}} </label>
+                                                </div>
+                                                <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                                                    <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus, mapLocationUsageMarker, 'mapLocationUsageMarker')"  ng-checked="{{checkboxCountMediumStatus}}">
+                                                    <label for="inlineCheckbox2"> {{lowUsage}}-{{mediumUsage}} </label>
+                                                </div>
+                                                <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                                                    <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus, mapLocationUsageMarker, 'mapLocationUsageMarker')" ng-checked="{{checkboxCountHighStatus}}">
+                                                    <label for="inlineCheckbox1"> {{mediumUsage}}-{{highestUsage}} </label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox-content">
+                                        <div>
+                                            <table id="locationUsageUsers" datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options="{'aaSorting': [4]}">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cell ID</th>
+                                                        <th>Area</th>
+                                                        <th>Latitude</th>
+                                                        <th>Longitude</th>
+                                                        <th>Subscribers</th>
+                                                        <th>Usage</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="element in locationUsageUsersTable track by $index">
+                                                        <td>{{ element.cellid }}</td>
+                                                        <td>{{ element.Area }}</td>
+                                                        <td>{{ element.latitude }}</td>
+                                                        <td>{{ element.longitude }}</td>
+                                                        <td>{{ element.Users }}</td>
+                                                        <td>{{ element.Usage }}</td>
+                                                       
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+	                
+	                <uib-tab index="3"  heading="Device" ng-click="tabSelected('deviceWiseUsageUsers')" >
+	                    <div class="panel-body">
+	                        <div class="col-lg-12">
+	                            <div class="ibox float-e-margins">
+	                                <div class="ibox-title">
+                                        <span>Device wise Usage between Date <b style="color:#1ab394;"> {{sDate}} - {{eDate}} </b> </span>
+                                            
+                                        <export-module filename="exportDeviceUsageObj.fileName" dataobj="exportDeviceUsageVsUsers" fileheader="exportDeviceUsageObj.fileHeader"></export-module>
+									</div>
+	                                <div class="ibox-content">
+	                                	
+                                        <div loading-icon ng-if="loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length==0 "></div>
+                                        <div ng-if="!loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length!=0 " >
+                                            <highchart id="usage" config="usagesDeviceChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length==0 "></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    	<div class="col-lg-12">
+	                            <div class="ibox float-e-margins">
+	                                <div class="ibox-title">
+                                        <span>Device wise Subscribers between Date <b style="color:#1ab394;"> {{sDate}} - {{eDate}} </b> </span>
+                                            
+                                        <export-module filename="exportDeviceUsersObj.fileName" dataobj="exportDeviceUsageVsUsers" fileheader="exportDeviceUsersObj.fileHeader"></export-module>
+									</div>
+	                                <div class="ibox-content">
+	                                	<div loading-icon ng-if="loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length==0 "></div>
+                                        <div ng-if="!loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length!=0 " >
+                                            <highchart id="usage" config="userDeviceChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingDeviceUsageVsUsersDiv && exportDeviceUsageVsUsers.length==0 "></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </uib-tab>
+	            </uib-tabset>
+	        </div>
+	    </div>
+	</div>
+</div>

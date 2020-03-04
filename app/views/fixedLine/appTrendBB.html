@@ -1,0 +1,141 @@
+<div class="wrapper-content animated fadeIn" ng-controller="appTrendBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+   <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Usage" ng-click="tabSelected('Usage')" ng-if="showTabObj.Usage" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Apps Usage Distribution between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <span>and Apps Usage Growth for date <b style="color:#1ab394;">{{edate}} </b> with Comparision to date <b style="color:#1ab394;">{{sDate}}</b></span>
+                                        <export-module filename="exportAppUsgObj.fileName" dataobj="exportObjData" fileheader="exportAppUsgObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="Visits" ng-click="tabSelected('Visits')"  ng-if="showTabObj.visits">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Apps Visit Distribution between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <span>and Apps Visits Growth for date <b style="color:#1ab394;">{{edate}} </b> with Comparision to date <b style="color:#1ab394;">{{sDate}}</b></span>
+                                        <export-module filename="exportAppVisitsObj.fileName" dataobj="exportObjData" fileheader="exportAppVisitsObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Duration" ng-click="tabSelected('Duration')" ng-if="showTabObj.Duration" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Apps Duration Distribution between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <span>and Apps Duration Growth for date <b style="color:#1ab394;">{{edate}} </b> with Comparision to date <b style="color:#1ab394;">{{sDate}}</b></span>
+                                        <export-module filename="exportAppDurObj.fileName" dataobj="exportObjData" fileheader="exportAppDurObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

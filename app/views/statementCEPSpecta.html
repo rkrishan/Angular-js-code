@@ -1,0 +1,448 @@
+<form class="form-horizontal" name="myForm" role="form" ng-submit="saveStatement()">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" ng-model="statement.name" ng-keypress="validateName($event)" ng-required="true" ng-readonly="isReadOnly" placeholder="Name" focus="true">
+        </div>
+        <!-- <div class="col-md-2">
+            <button class="btn btn-primary" type="button" ng-click="validate()">Validate</button>
+        </div> -->
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Query Builder</label>
+        <div class="col-sm-4">
+            <div class="radio radio-info radio-inline">
+                <input type="radio" id="inlineRadio1" ng-model="statement.queryType" value="selection">
+                <label for="inlineRadio1">Standard</label>
+            </div>
+
+            <div class="radio radio-info radio-inline">
+                <input type="radio" id="inlineRadio2" ng-model="statement.queryType" value="input">
+                <label for="inlineRadio2">Advanced</label>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="statement.queryType == 'selection'"><!--  -->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Standard</label>
+            <div class="col-md-1">
+                <label>Select Stream</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" ng-model="data.stream" ng-change="selectedListData(data.stream)">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.stream">{{item}}</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_stream'" file="'help/help_statement.html'"></info>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-md-1">
+                <label>Aggregation</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" ng-model="data.aggregation" ng-change="data.sum = '';data.aggAlias=''">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.aggregation">{{item}}</option>
+                </select>
+
+                <div ng-if="data.aggregation.trim() == 'count'" ng-init="data.sum = '*'"></div>
+
+                <select class="form-control" ng-model="data.sum" ng-if="data.aggregation.trim() == 'sum' || data.aggregation.trim() == 'avg' || data.aggregation.trim() == 'min' || data.aggregation.trim() == 'max'">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.filter | filter:{type:'INT'}" >{{item.name}}</option>
+                </select>
+                
+                <!-- <select class="form-control" ng-model="data.sum" ng-if="data.aggregation.trim() == 'count' || data.aggregation.trim() == 'count distinct'" ng-required="true"> -->
+                <select class="form-control" ng-model="data.sum" ng-if="data.aggregation.trim() == 'count distinct'" ng-required="true">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.filter" >{{item.name}}</option>
+                </select>
+
+                <div ng-if="data.aggregation !=''">
+                    <input type="text" name="as" placeholder="As" ng-model="data.aggAlias" class="form-control"  ng-blur="selectedAggregationData(data.sum, data.aggregation, 6, $event);">
+
+                    <!-- <input type="text" name="as" placeholder="As" ng-model="data.aggAlias" class="form-control"  ng-if="['sum', 'count', 'avg'].indexOf(data.aggregation.trim()) > -1" required> -->
+                </div>
+
+                <div ng-if="['sum', 'count', 'avg'].indexOf(data.aggregation.trim()) > -1">
+                    where: 
+                    <select class="form-control" ng-model="filter.aggFilter" ng-change="changedAggFilter(filter.aggFilter)">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in list.filter"  value="{{item}}">{{item.name}}</option>
+                    </select>
+                    <div id="aggFilter" class="dropdown-menu dropdown-messages float-e-margins" style="left:15px;padding: 12px 20px 0;">
+                        <div class="dropdown-messages-box">
+                            <a class="pull-right" ng-click="closeAggFilterPopUp();"> <i class="fa fa-remove"></i></a>
+                            <div class="form-group" ng-show="aggFilterType == 'STRING'">
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '='">Equal</button>
+                                
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '!='">Not Equal</button>
+                                
+                                </br>
+                                <input type="text" class="form-control" ng-hide="filter.rdAggFilter == 'IsEmpty' || filter.rdAggFilter == 'notEmpty'" ng-model="filter.txtAggFilter" placeholder="Please Enter value">
+                                
+                                </br>
+                                <span class="text-danger">{{validationMessage}}</span>
+                                <input type="button" value="Add Filter" class="btn btn-block btn-primary" ng-click="addAggFilter(filter, aggFilterType)">
+                            </div>
+
+                            <div class="form-group" ng-show="aggFilterType == 'INT32' || aggFilterType == 'INT64'">
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '='">Equal</button>
+
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '!='">Not Equal</button>
+
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '>'">Greater Than</button>
+
+                                <button class="btn btn-outline btn-primary" type="button" ng-click="filter.rdAggFilter = '<'">Less Than</button>
+
+                                <input type="text" class="form-control" ng-model="filter.txtAggFilter" placeholder="Please enter Numeric Value" numbers-only>
+                                
+                                <input type="text" class="form-control" ng-model="filter.txtAggFilter2" ng-show="filter.rdAggFilter=='Between'" placeholder="Please enter Numberic value" numbers-only>
+                                <br>
+                                <span class="text-danger">{{validationMessage}}</span>
+                                <input type="button" value="Add Filter" class="btn btn-block btn-primary" ng-click="addAggFilter(filter, aggFilterType)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_aggregation'" file="'help/help_statement.html'"></info>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row" ng-if="aggregationSumArray.length > 0">
+                    <div class="chosen-container chosen-container-multi chosen-container-active">
+                        <ol class="chosen-choices">
+                            <li class="search-choice" ng-repeat="flist in aggregationSumArray track by $index ">
+                             {{flist.value}}
+                                <a ng-click="removeAggregation(flist)"><i class="fa fa-remove pull-right" ></i></a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-md-1">
+                <label>Filter</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" tabindex="6" ng-model="filterItem" ng-change="selectedFilterChange(filterItem)">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.filter"  value="{{item}}">{{item.name}}</option>
+                </select>
+                <div id="filterPopup" class="dropdown-menu dropdown-messages float-e-margins" style="left:15px;padding: 12px 20px 0;">
+                    <div class="dropdown-messages-box">
+                        <a class="pull-right" ng-click="closeFilterPopUp();"> <i class="fa fa-remove"></i></a>
+                        <div class="form-group" ng-show="filterType == 'STRING'">
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '='">Equal</button>
+                            
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '!='">Not Equal</button>
+                            
+                            </br>
+                            <input type="text" class="form-control" ng-hide="data.rdFilter =='IsEmpty' || data.rdFilter=='notEmpty'" ng-model="data.txtFilter" placeholder="Please Enter value">
+                            
+                            </br>
+                            <div ng-if="filterList.length > 0">
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="and" ng-model="data.operator" value=" and ">
+                                    <label for="and">And</label>
+                                </div>
+
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="or" ng-model="data.operator" value=" or ">
+                                    <label for="or">Or</label>
+                                </div>
+                            </div>
+                            <span class="text-danger">{{validationMessage}}</span>
+                            <input type="button" value="Add Filter" class="btn btn-block btn-primary" ng-click="addFilter(data, filterType);filterItem = ''">
+                        </div>
+
+                        <div class="form-group" ng-show="filterType == 'INT32' || filterType == 'INT64'">
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '='">Equal</button>
+
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '!='">Not Equal</button>
+
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '>'">Greater Than</button>
+
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="data.rdFilter = '<'">Less Than</button>
+
+                            <input type="text" class="form-control" ng-model="data.txtFilter" placeholder="Please enter Numeric Value" numbers-only>
+                            
+                            <input type="text" class="form-control" ng-model="data.txtFilter2" ng-show="data.rdFilter=='Between'" placeholder="Please enter Numberic value" numbers-only>
+                            <br>
+                            <div ng-if="filterList.length > 0">
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="and" ng-model="data.operator" value=" and ">
+                                    <label for="and">And</label>
+                                </div>
+
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="or" ng-model="data.operator" value=" or ">
+                                    <label for="or">Or</label>
+                                </div>
+                            </div>
+                            <span class="text-danger">{{validationMessage}}</span>
+                            <input type="button" value="Add Filter" class="btn btn-block btn-primary" ng-click="addFilter(data, filterType);filterItem = ''">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_filter'" file="'help/help_statement.html'"></info>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row" ng-if="filterList.length > 0">
+                    <div class="chosen-container chosen-container-multi chosen-container-active">
+                        <ol class="chosen-choices">
+                            <li class="search-choice" ng-repeat="flist in filterList track by $index">
+                                {{flist.column}} <b>{{flist.filter}}</b> {{flist.value}} {{flist.value2}} 
+                                <a ng-click="removeFilter(flist)"><i class="fa fa-remove pull-right" ></i></a>
+                            </li>
+                        </ol>
+                        {{filterTxt}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-md-1">
+                <label>Group by</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" ng-model="data.groupby">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in list.filter">{{item.name}}</option>
+                </select>
+                <input type="text" name="as" placeholder="As" ng-model="data.groupAlias" class="form-control" ng-if="data.groupby !=''" ng-blur="selectGroupChange(data.groupby, 9, $event)" ng-required="true">
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_groupby'" file="'help/help_statement.html'"></info>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row" ng-if="grouplist.length > 0">
+                    <div class="chosen-container chosen-container-multi chosen-container-active">
+                        <div class="chosen-choices">
+                            <li class="search-choice" ng-repeat="flist in grouplist track by $index">
+                                {{flist.value}}
+                                <a ng-click="removeGroup(flist)"><i class="fa fa-remove pull-right" ></i></a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-md-1">
+                <label>Sort by</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" tabindex="9" ng-model="data.sort" ng-change="sortingToggle(data.sort)">
+                    <option value="">Select</option>
+                    <option ng-repeat="item in sortList">{{item}}</option>
+                </select>
+                <div id="sorting" class="dropdown-menu dropdown-messages float-e-margins" style="padding: 12px 20px 0;">
+                    <div class="dropdown-messages-box">
+                        <a class="pull-right" ng-click="sortingToggle('sort');"> <i class="fa fa-remove"></i></a>
+                        <div class="form-group">
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="selectedOrder(data.sort, 'asc')">Ascending</button>
+
+                            <button class="btn btn-outline btn-primary" type="button" ng-click="selectedOrder(data.sort, 'desc')">Descending</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_sortby'" file="'help/help_statement.html'"></info>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row" ng-if="sortingList.length > 0">
+                    <div class="chosen-container chosen-container-multi chosen-container-active">
+                        <ul class="chosen-choices">
+                            <li class="search-choice" ng-repeat="item in sortingList track by $index">{{item.key}} {{item.sort}}
+                                <a ng-click="removeSorting(item)"> <i class="fa fa-remove pull-right" ></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-md-1">
+                <label>Limit</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" ng-model="data.limit" placeholder="Row Limit" numbers-only>
+            </div>
+            <div class="col-md-1">
+                <info content="'statement_cep_specta_limit'" file="'help/help_statement.html'"></info>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="statement.queryType == 'input'">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-8">
+            <textarea placeholder="Query" class="form-control" ng-model="statement.query" ng-required="true"></textarea>
+        </div>
+    </div>
+    <!-- <div ng-if="statement.queryType == 'input'">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Counter</label>
+            <div class="col-sm-2">
+                <label>Stream</label>
+                <input type="text" class="form-control" ng-model="data.stream" placeholder="Stream" required>
+            </div>
+
+            <div class="col-sm-2">
+                <label>Group by</label>
+                <input type="text" class="form-control" ng-model="data.groupby" placeholder="Group by" required>
+            </div>
+
+            <div class="col-md-2">
+                <label>Sort</label>
+                <input type="text" class="form-control" ng-model="data.sort" placeholder="Sort" required>
+            </div>
+
+            <div class="col-md-2">
+                <label>Order</label>
+                <input type="text" class="form-control" ng-model="data.order" placeholder="asc/desc" required>
+            </div>
+
+            <div class="col-md-2">
+                <label>Limit</label>
+                <input type="text" class="form-control" ng-model="data.limit" placeholder="Limit" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-4">
+                <label>Aggregation</label>
+                <textarea class="form-control" ng-model="data.aggregation" placeholder="Aggregation" required></textarea>
+            </div>
+
+            <div class="col-sm-4">
+                <label>Filter</label>
+                <textarea class="form-control" ng-model="data.filter" placeholder="Filter" required></textarea>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="col-sm-8">
+            <textarea placeholder="Description" class="form-control" ng-model="statement.description" ng-required="true"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Type</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.type" ng-disabled="isReadOnly" required>
+                <option value="">-Select-</option>
+                <option value="replace">Replace</option>
+                <!-- <option value="refresh">Refresh</option> -->
+                <!-- <option value="reset">Reset</option> -->
+                <option value="moving">Moving</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="statement.type == 'replace'">
+        <label class="col-sm-2 control-label">Event Publish</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.eventPublish" ng-disabled="isReadOnly" required>
+                <option value="">-Select-</option>
+                <option value="Individual">Individual</option>
+                <option value="Combined">Combined</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="form-group" ng-init="statement.flushTime = 'min'">
+        <label class="col-sm-2 control-label">Flush Frequency</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.flushTime">
+                <!-- <option value="">-Select-</option> -->
+                <option value="min">Min</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Reset Time</label>
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="statement.resetTime" ng-if="statement.flushTime == 'min'" ng-init="statement.resetTime = 'min'" required>
+                <!-- <option value="">-Select-</option> -->
+                <option value="min">Min</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+
+            <select class="form-control" ng-model="statement.resetTime" ng-if="statement.flushTime == 'hour'" ng-init="statement.resetTime = 'hour'" required>
+                <!-- <option value="">Select</option> -->
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+
+            <select class="form-control" ng-model="statement.resetTime" ng-if="statement.flushTime == 'day'" ng-init="statement.resetTime = 'day'" required>
+                <!-- <option value="">Select</option> -->
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="userProfile.userType == 'system administrator'">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-4">
+            <table>
+                <tr>
+                    <td><input icheck type="radio" class="form-control" name="visibility" ng-value="false" ng-model="statement.visibility"></td>
+                    <td><span class="m-l-xs">Private</span></td>
+                    <td>&nbsp;</td>
+                    <td><input icheck type="radio" class="form-control" name="visibility" ng-value="true" ng-model="statement.visibility"></td>
+                    <td><span class="m-l-xs">Public</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- <div class="form-group" ng-show="statement.type == 'reset' || statement.type == 'refresh' ">
+        <label class="col-sm-2 control-label">Key</label>
+        <div class="col-sm-2 checkbox checkbox-primary">
+            <div ng-repeat="item in columns">
+                <input type="checkbox" ng-click="toggleKey(item, statement.key)" /> {{ item }}
+            </div>
+        </div>
+    </div> -->
+
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <div class="col-sm-4 col-sm-offset-2">
+            <button class="btn btn-white" type="button" ng-click="cancelStatement('cep')">Cancel</button>
+            <button class="btn btn-primary" type="submit" >Save</button><!-- ng-hide="isReadOnly || !validated" -->
+        </div>
+    </div>
+</form>

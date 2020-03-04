@@ -1,0 +1,84 @@
+<div class=" wrapper-content animated fadeIn" ng-controller="appGrowthTrendCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <!-- <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+
+                <div class="form-group"><b>{{currentPage}}</b>
+                    <select ng-model="select.App" ng-change="appSelected()" style="height:24px;font-size:10px;padding:0px 12px;" >
+                        <option value="{{select.App}}">{{select.App}}</option>
+                        <option value="{{appName}}" ng-repeat="appName in appNameList track by $index">{{appName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker> 
+                    </form>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <!-- <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div> -->
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"><b>App Growth Trend</b>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <span class="pull-right label label-primary">Export</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportAppDistribution,'excel', 'Top Devices with High Latency')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportAppDistribution,'csv', 'Top Devices with High Latency')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingLatencyBarDiv"></div>
+                    <div ng-if="DataLatencyBarDiv">
+                        <highchart id="DevicesHighLatencyBar" config="HighLatencyBarChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataLatencyBarDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

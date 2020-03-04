@@ -1,0 +1,32 @@
+<div class="wrapper-content animated fadeIn " ng-controller="usageTrendRptCtrl" >
+	<div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+            <div class="form-group"><b>{{models}}:&nbsp;&nbsp;</b>
+                <select ng-model="select.app" style="height:24px;font-size:10px;padding:0px 12px;">
+                    <option value="{{select.app}}">{{select.app}}</option>
+                    <option value="{{planName}}" ng-repeat="planName in drpdwmListArray track by $index">{{planName}}</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="input-group pull-right">
+                <date-range-picker></date-range-picker>
+            </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <export-module filename="' Usage Trend'" dataobj="exportUsageTrend" ></export-module>
+                    <div loading-icon ng-if="loadingUsageTrendDiv"></div>
+                    <div ng-if="dataUsageTrendDiv">
+                        <highchart id="chart2" config="usageTrendBarChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataUsageTrendDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

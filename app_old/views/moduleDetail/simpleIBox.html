@@ -1,0 +1,117 @@
+<div class="form-group">
+    <label class="col-sm-6">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Label</label>
+    <div class="col-sm-6">{{module.label}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Label Color</label>
+    <div class="col-sm-6">{{colorType[module.labelColor]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement</label>
+    <div class="col-sm-6">{{module.statementName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement Id</label>
+    <div class="col-sm-6">{{module.query}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Plot</label>
+    <div class="col-sm-6">{{module.plot}}</div>
+</div>
+
+<div ng-if="module.plotKey !== ''">
+    <div class="form-group">
+        <label class="col-sm-6">Plot Key</label>
+        <div class="col-sm-6">{{module.plotKey}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Plot Value</label>
+        <div class="col-sm-6">{{module.plotValue}}</div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Value</label>
+    <div class="col-sm-6">{{module.kpi}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Color</label>
+    <div class="col-sm-6">{{module.color}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Remark</label>
+    <div class="col-sm-6">{{module.remark}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6" >Decimal Value</label>
+    <div class="col-sm-6">{{module.dataDecimal}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Unit</label>
+    <div class="col-sm-6">{{module.unit}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Auto adjust unit</label>
+    <div class="col-sm-6">{{module.unitAdjustFlag}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Indicator</label>
+    <div class="col-sm-6">{{module.indicator || 'No'}}</div>
+</div>
+
+<!-- Indicator Start -->
+<div ng-if="module.indicator">
+    <div class="form-group">
+        <label class="col-sm-6">Indicator ToolTip</label>
+        <div class="col-sm-6">{{module.indicatorTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Indicator Query</label>
+        <div class="col-sm-6">{{module.indicatorQuery}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Danger</label>
+        <div class="col-sm-6">{{module.danger}}</div>
+    </div>
+</div>
+<!-- Indicator End -->
+
+<div class="form-group">
+    <label class="col-sm-6">Is Clickable</label>
+    <div class="col-sm-6">{{module.clickable}}</div>
+</div>
+
+<div ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-sm-6">ToolTip</label>
+        <div class="col-sm-6">{{module.clickableTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Page</label>
+        <div class="col-sm-6">{{redirectPage}}</div>
+    </div>
+</div>

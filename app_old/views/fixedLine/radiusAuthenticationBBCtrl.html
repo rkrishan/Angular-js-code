@@ -1,0 +1,66 @@
+<div class="wrapper-content animated fadeInRight" ng-controller="radiusAuthenticationBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+                <form class="form-inline" ng-submit="click()">
+                        <div class="pull-right">
+                            <single-date-picker></single-date-picker>
+                            <button class="btn btn-sm btn-primary " type="submit" >Submit</button>
+                        </div>
+                </form>
+        </div>
+    </div>        
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12" >
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!-- <h5>Top {{models}}</h5> -->
+                    <!-- <span>Radius Authentication Failure : <b style="color:#1ab394;"> </b> <b style="color:#1ab394;">{{sDate}} </b></span> -->
+                    <!-- <export-module filename="'Top Country wise Distribution'" dataobj="topModelsObj" nested="true"></export-module> -->
+                    <export-module filename="exportObj.fileName" dataobj="topModelsObj" fileheader="exportObj.fileHeader"></export-module>
+                    <div class="pull-right"><b>Top :</b>
+                        <select ng-model="select.rowCount" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                            <option value="50" >50</option>
+                            <option value="100">100</option>
+                            <option value="500" >500</option>
+                        </select>
+                        &nbsp;&nbsp;&nbsp;
+                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                        
+                         <button type="button" class="btn btn-primary btn-sm pull-right"  ng-click= "getTransactionDaywise()" title="complete Download Data"><i class="fa fa-download"></i>
+                        </button>
+                        <toaster-container toaster-options="{'time-out': 10000}"></toaster-container>
+                    </div>
+                </div>
+                
+
+                <div class="ibox-content">
+                    <div class="spiner-example" ng-if="loadingDiv">
+                        <div snipper-circle></div>
+                    </div>
+                    <div class="table-responsive" ng-if="dataDiv" >
+                        <table id="top10Models" class="table table-hover table-bordered no-margins">
+                            <thead >
+                                <tr>
+                                    <th style="text-align:center; width:50em; size:35; background-color: rgba(0, 0, 0, 0.15);  border: 1px solid grey;" ng-repeat="data in colHeader track by $index" >{{data}}
+                                    </th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat= 'data in keysTopModel '>
+                                    {{data}}
+                                    <td style="text-align:center; border: 1px solid rgba(0, 0, 0, 0.15);" ng-repeat="rowData in data track by $index ">{{rowData}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <span no-data-found ng-if="noDataDiv"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+

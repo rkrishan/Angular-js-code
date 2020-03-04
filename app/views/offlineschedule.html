@@ -1,0 +1,78 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Offline Schedule</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Add New Schedule</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(data)">
+                        <div class="form-group" >
+                            <label class="col-sm-1 control-label">Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.name" placeholder="Name" ng-required="true" ng-readonly="isreadOnly" ng-blur="isUnique(data.name)">
+                                <span class="text-danger">{{errMsg}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-1 control-label">Description</label>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" ng-model="data.description" placeholder="Description" ng-required="true"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Group</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.group" placeholder="Group" ng-required="true" ng-readonly="isreadOnly">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Plugin</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.plugin" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in pluginList" value="{{item.plugin}}" ng-selected="data.plugin == item.plugin">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Frequency</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.frequency" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in ['Minute', 'Hourly', 'Daily', 'Weekly', 'Monthly']" value="{{item}}" ng-selected="data.plugin == item">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Priority</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.priority" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in [1, 2, 3, 4, 5]" value="{{item}}" ng-selected="data.priority == item">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ui-sref="index.offlineschedulelist">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

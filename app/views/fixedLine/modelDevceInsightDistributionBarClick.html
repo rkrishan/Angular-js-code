@@ -1,0 +1,17 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <a class="pull-right" ng-click="cancel()"><i class="fa fa-times"></i></a>
+        <h4 class="modal-title" >{{Device}} - Segment wise {{usagecount}} </h4>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper wrapper-content animated fadeIn" >
+            <div class="ibox-content">
+                <div loading-icon ng-if="loadingSegmentWiseMultiineDiv"></div>
+                <div ng-if="DataSegmentWiseMultiineDiv">
+                    <highchart id="chart2" config="segmentWiseDeviceChartConfig" ></highchart>
+                </div>
+                 <div no-data-found ng-if="noDataSegmentWiseMultiineDiv"></div>
+            </div>
+        </div>
+    </div>
+</div>

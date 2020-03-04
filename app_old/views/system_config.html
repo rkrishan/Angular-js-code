@@ -1,0 +1,305 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">System Config</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <uib-tabset>
+                    <uib-tab heading="Plan Config" ng-click="loadList('plan')" active="active.plan">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.planconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="listPlan.length > 0">
+                                <table datatable class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>Plan</th>
+                                            <th>Plan Speed</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in listPlan">
+                                            <th> {{item.Plan}} </th>
+                                            <th> {{item.PlanSpeed}} </th>
+                                            <td>
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deletePlan(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Segment Config" ng-click="loadList('segment')" active="active.segment">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.segmentconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="segmentlist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>Segment</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in segmentlist">
+                                            <th> {{item.Segment}} </th>
+                                            <td>
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deleteSegment(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="DNS Config" ng-click="loadList('dns')" active="active.dns">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.dnsconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="dnslist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>IP</th>
+                                            <!-- <th>IPv6</th> -->
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in dnslist">
+                                            <td> {{ item.ip}} </td>
+                                            <!-- <th> {{item.ipv6}} </th> -->
+                                            <td>
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deleteDNS(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="City Config" ng-click="loadList('city')" active="active.city">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.cityconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="citylist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>City</th>
+                                            <th>Country</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in citylist">
+                                            <th> {{item.City}} </th>
+                                            <th> {{item.Country}} </th>
+                                            <td>
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deleteCity(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Area Config" ng-click="loadList('area')" active="active.area">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.areaconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="arealist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>Area</th>
+                                            <th>City</th>
+                                            <!-- <th>Circle</th>
+                                            <th>Country</th> -->
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in arealist">
+                                            <th> {{item.Area}} </th>
+                                            <th> {{item.City}} </th>
+                                           <!--  <th> {{item.Circle}} </th>
+                                            <th> {{item.Country}} </th> -->
+                                            <td>
+                                                <!-- <button class="btn btn-primary btn-xs" type="button" ui-sref="index.areaconfig({id: item._id})"><i class="fa fa-share" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"></i> Edit</button> -->
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deleteArea(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Bras Config" ng-click="loadList('bras')" active="active.bras">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.brasconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="braslist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>Bras</th>
+                                            <!-- <th>City</th>
+                                            <th>Circle</th>
+                                            <th>Country</th> -->
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in braslist">
+                                            <th> {{item.Bras}} </th>
+                                            <!-- <th> {{item.City}} </th>
+                                            <th> {{item.Circle}} </th>
+                                            <th> {{item.Country}} </th> -->
+                                            <td>
+                                                <!-- <button class="btn btn-primary btn-xs" type="button" ui-sref="index.areaconfig({id: item._id})"><i class="fa fa-share" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"></i> Edit</button> -->
+                                                <!-- <button class="btn btn-warning btn-xs" type="button" ng-click="deleteBras(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button> -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Node Config" ng-click="loadList('node')" active="active.node">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <button type="button" class="btn btn-w-m btn-primary" ui-sref="index.nodeconfig">Add New</button>
+                            </div>
+                            <div class="ibox-content" ng-if="nodelist.length > 0">
+                                <table datatable="ng" class="table table-striped table-bordered table-hover">
+                                    <thead> 
+                                        <tr>
+                                            <th>Node</th>
+                                            <th>Bras</th>
+                                            <th>City</th>
+                                            <th>Threshold 1 (Bytes)</th>
+                                            <th>Threshold 2 (Bytes)</th>
+                                            <th>Maximum (Bytes)</th>
+                                            <th>Gauge Plot</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in nodelist">
+                                            <th> {{item.Node}} </th>
+                                            <th> {{item.Bras}} </th>
+                                            <th> {{item.City}} </th>
+                                            <th> {{item.threshold1}} </th>
+                                            <th> {{item.threshold2}} </th>
+                                            <th> {{item.capacity}} </th>
+                                            <th ng-init="item.AutoPlot = item.AutoPlot ? true : false"> <input icheck type="checkbox" class="form-control" ng-model="item.AutoPlot" ng-change="checkAutoPlot(item)"></th> 
+                                            <td>
+                                                <button class="btn btn-primary btn-xs" type="button" ui-sref="index.nodeconfig({id: item._id})"><i class="fa fa-share" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"></i> Edit</button>
+
+                                                <button class="btn btn-warning btn-xs" type="button" ng-click="deleteNode(item, $index)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Local Environment" ng-click="loadList('LE')" active="active.lenv" ng-if="userProfile.userType.trim() == 'system administrator'">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <form class="form-horizontal" name="myForm" role="form" ng-submit="updateEnv(env)">
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Operator</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" ng-model="env.operator" placeholder="Operator" ng-required="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Country</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" ng-model="env.country" ng-required="true">
+                                                <option value="">- Select</option>
+                                                <option ng-repeat="item in countryList" ng-selected="item.Country == env.country" value="{{item.Country}}">{{item.Country}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Circle</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" ng-model="env.circle" placeholder="Circle" ng-required="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Circle id</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" ng-model="env.circleid" placeholder="Circle id" ng-required="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">TimeZone</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" ng-model="env.tzoffset" ng-required="true">
+                                                <option ng-repeat="item in timeZoneList" value="{{item}}">{{item.tzname}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Node Desc</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" ng-model="env.nodedesc" ng-required="true">
+                                                <option value="">- Select</option>
+                                                <option ng-repeat="item in nodedescList" ng-selected="item == env.nodedesc" value="{{item}}">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-2 control-label">Default Decimal</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" ng-model="env.defdecimal" ng-required="true">
+                                                <option value="">- Select</option>
+                                                <option ng-repeat="item in [0, 1, 2, 3]" value="{{item}}">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

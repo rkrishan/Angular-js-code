@@ -1,0 +1,144 @@
+<div class="wrapper-content animated fadeIn " ng-controller="videoAnalyticsCtrlBB">
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="input-group pull-right" nf-if="UsageVsUsers || duration">
+                <single-date-picker></single-date-picker>
+                <div class="input-group-btn">
+                    <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                </div>
+            </div>
+            <div class="float-e-margins pull-right" nf-if="throughput || CEI">
+                <form role="form" class="form-inline" ng-submit="click()">
+                    <date-range-picker></date-range-picker>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="User and Usage" ng-click="tabSelected('UsageAndUsers')" >
+                        <div class="panel-body" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Usage Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="'Usage Distribution'" dataobj="exportMultilineData" ></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingMultilineDiv && !noDataMultilineDiv"></div>
+                                        <div ng-if="!loadingMultilineDiv && !noDataMultilineDiv">
+                                            <highchart id="Usage" config="multilineChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingMultilineDiv && noDataMultilineDiv"></div>
+                                        <div ng-if="!loadingMultilineDiv && !noDataMultilineDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Users Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="'Users Distribution'" dataobj="exportStackedBarData" ></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingStackedBarDiv && !noDataStackedBarDiv"></div>
+                                        <div ng-if="!loadingStackedBarDiv && !noDataStackedBarDiv">
+                                            <highchart id="Users" config="stackedBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingStackedBarDiv && noDataStackedBarDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Duration" ng-click="tabSelected('duration')"  >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Duration Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="'Users Distribution'" dataobj="exportStackedBarData" ></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingStackedBarDiv && !noDataStackedBarDiv"></div>
+                                        <div ng-if="!loadingStackedBarDiv && !noDataStackedBarDiv">
+                                            <highchart id="Users" config="stackedBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingStackedBarDiv && noDataStackedBarDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Throughput" ng-click="tabSelected('throughput')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Throughput Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="'Usage Distribution'" dataobj="exportMultilineData" ></export-module>
+                                        </div>
+                                        <div loading-icon ng-if="loadingMultilineDiv && !noDataMultilineDiv"></div>
+                                        <div ng-if="!loadingMultilineDiv && !noDataMultilineDiv">
+                                            <highchart id="Usage" config="multilineChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="!loadingMultilineDiv && noDataMultilineDiv"></div>
+                                        <div ng-if="!loadingMultilineDiv && !noDataMultilineDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="CEI" ng-click="tabSelected('CEI')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Youtube Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <export-module filename="'Youtube CEI Distribution'" dataobj="exportYoutubeData" ></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingYoutubeDiv && !noDataYoutubeDiv"></div>
+                                    <div ng-if="!loadingYoutubeDiv && !noDataYoutubeDiv">
+                                        <highchart id="Users" config="youtubeChartConfig" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="!loadingYoutubeDiv && !noDataYoutubeDiv"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>NetFlix Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <export-module filename="'NetFlix CEI Distribution'" dataobj="exportNetFlixData" ></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingNetFlixDiv && !noDataNetFlixDiv"></div>
+                                    <div ng-if="!loadingNetFlixDiv && !noDataNetFlixDiv">
+                                        <highchart id="Users" config="netFlixChartConfig" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="!loadingNetFlixDiv && !noDataNetFlixDiv"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Video Distribution for Date between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                        <export-module filename="'Video CEI Distribution'" dataobj="exportVideoData" ></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingVideoDiv && !noDataVideoDiv"></div>
+                                    <div ng-if="!loadingVideoDiv && !noDataVideoDiv">
+                                        <highchart id="Users" config="videoChartConfig" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="!loadingVideoDiv && !noDataVideoDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                </uib-tabset>
+            </div>
+        </div>  
+    </div>
+
+</div>

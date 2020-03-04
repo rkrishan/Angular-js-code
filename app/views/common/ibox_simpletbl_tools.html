@@ -1,0 +1,62 @@
+<div class="ibox-tools dropdown" uib-dropdown>
+    <a class="dropdown-toggle" href uib-dropdown-toggle ng-show="userProfile.userType != 'user'">
+        <i class="fa fa-wrench"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-user" ng-show="userProfile.userType != 'user'">
+        <li><a ng-click="detail(component.component)" title="Detail">Details of module</a></li>
+        <li><a ng-click="removeComponent(component)" title="Remove">Remove Module</a></li>
+    </ul>
+</div>
+
+<div class="ibox-tools dropdown" uib-dropdown ng-if="userProfile.export && component.component.data == 'DBPull'">
+    <a class="dropdown-toggle " href uib-dropdown-toggle>
+        <i class="fa fa-save" ></i>
+    </a>
+    <!-- <a class="dropdown-toggle" href uib-dropdown-toggle>
+        <span class="pull-right label label-primary">Export</span>
+    </a> -->
+    <!-- <ul class="dropdown-menu">
+        <li>
+            <a ng-click="exportModule(component.component, 'pdf');">Export to PDF</a>
+        </li>
+        <li ng-if="displaydata[component.component._id].statement.type === 'replace'">
+            <a ng-click="exportSimplejsonObj(displaydata[component.component._id], 'excel')">Export to Excel</a>
+        </li>
+        <li ng-if="displaydata[component.component._id].statement.type === 'refresh'">
+            <a ng-click="exportModule(component.component, 'excel')">Export to Excel</a>
+        </li>
+        <li ng-if="displaydata[component.component._id].statement.type === 'replace'">
+            <a ng-click="exportSimplejsonObj(displaydata[component.component._id], 'csv')">Export to CSV</a>
+        </li>
+        <li ng-if="displaydata[component.component._id].statement.type === 'refresh'">
+            <a ng-click="exportModule(component.component, 'csv')">Export to CSV</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'png')">PNG</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'doc')">MS-Word</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'powerpoint')">MS-Powerpoint</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'txt')">TXT</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'sql')">SQL</a>
+        </li>
+    </ul> --> 
+    <ul class="dropdown-menu">
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'excel')">Export to Excel</a>
+        </li>
+        
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'csv')">Export to CSV</a>
+        </li>
+    </ul>
+</div>
+<div class="ibox-tools" ng-if="component.component.label">
+    <span ng-class="component.component.labelColor"> {{component.component.label}}</span>
+</div>

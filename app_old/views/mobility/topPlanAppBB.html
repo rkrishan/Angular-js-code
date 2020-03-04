@@ -1,0 +1,26 @@
+<div class="wrapper-content animated fadeIn" ng-controller="topPlanAppBBCtrl">
+    <div class="row">
+    	<div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+            	<div class="form-group"><b>{{currentPage}}</b>
+                    <select ng-model="select.plan" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{select.plan}}">{{select.plan}}</option>
+                        <option value="{{planName}}" ng-repeat="planName in planNameList track by $index">{{planName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row"> 
+    	<div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+                <div loading-icon ng-if="loadingUsageVsUsersDiv && !noDataUsageVsUsersDiv"></div>
+                <div ng-if="!loadingUsageVsUsersDiv && !noDataUsageVsUsersDiv">
+                    <highchart id="UsageVsUsers" config="UsageVsUsersChartConfig" ></highchart>
+                </div>
+                <div no-data-found ng-if="!loadingUsageVsUsersDiv && noDataUsageVsUsersDiv"></div>
+            </div>
+        </div>
+    </div>
+</div>

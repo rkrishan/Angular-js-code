@@ -1,0 +1,842 @@
+<module-label></module-label>
+
+<div class="form-group">
+    <label class="col-md-2">Header</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Header" class="form-control" ng-model="module.header">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Footer</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Footer" class="form-control" ng-model="module.footer">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.data" class="form-control" ng-change="changeDataType(module.data)" required>
+            <option value="">Select</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'push' || module.data == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateChart(module.query);changedStatement(statementList, module.query)" required>
+            <option value="">Select</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validateChart(module.query)">Get Data Points</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull' || module.data == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateChart(module.query);changedStatement(statementList, module.query)" required>
+            <option value="">Select</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option value="">Select</option>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="plot">
+    <label class="col-md-2">Plot</label>
+    <div class="col-md-2">
+        <select ng-model="module.plotKey" class="form-control">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" placeholder="Value" class="form-control" ng-model="module.plotValue">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Chart Type</label>
+    <div class="col-md-3">
+        <button type="button" class="btn" ng-click="chartType()">Select Chart<span class="caret"></span></button>
+        <br>
+        <label>{{selectedChart}}</label>
+        <!-- <select name="chartType" ng-model="module.chartType" class="form-control" ng-click="changeChartType()">
+            <option value="">-Select-</option>
+            <option value="Pie">Pie</option>
+            <option value="Line">Line</option>
+            <option value="MultiLine">Multi Line</option>
+            <option value="Bar">Bar</option>
+            <option value="Doughnut">Doughnut</option>
+            <option value="Scatter">Scatter</option>
+            <option value="Bubble">Bubble</option>
+            <option value="StackedBar">Stacked Bar</option>
+            <option value="StackedBarHorizontal">Stacked Bar Horizontal</option>
+            <option value="Pyramid">Pyramid</option>
+            <option value="LinePlushBar">Line Plus Bar</option>
+        </select> -->
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Number of Data Element</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="# of Data Element" class="form-control" ng-model="module.dataelement" >
+    </div>
+</div>
+
+<!-- <div class="form-group" ng-if="module.chartType == 'StackedBar' || module.chartType == 'StackedBarHorizontal' || module.chartType == 'Pyramid' || module.chartType == 'MultiLine' || module.chartType == 'Scatter' || module.chartType == 'Bubble' || module.chartType == 'LinePlushBar' ">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select name="libType" ng-model="module.libType" class="form-control" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="highchart">Highchart</option>
+            <option value="flot">flot</option>
+        </select>
+    </div>
+</div> -->
+
+<!--
+<div class="form-group" ng-if="module.chartType == 'Pie' || module.chartType == 'Line' || module.chartType == 'Doughnut' ">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select class="form-control" name="libType" ng-model="module.libType" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="ChartJS">ChartJS</option>
+            <option value="D3">D3</option>
+            <option value="flot">Flot</option>
+            <option value="highchart">Highchart</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.chartType == 'Bar'">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select name="libType" ng-model="module.libType" class="form-control" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="ChartJS">ChartJS</option>
+            <option value="D3">D3</option>
+            <option value="highchart">Highchart</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.chartType == 'StackedBar' || module.chartType == 'StackedBarHorizontal' || module.chartType == 'Pyramid' || module.chartType == 'MultiLine' || module.chartType == 'Scatter' || module.chartType == 'Bubble' || module.chartType == 'LinePlushBar' ">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select name="libType" ng-model="module.libType" class="form-control" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="highchart">Highchart</option>
+            <option value="flot">flot</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.chartType == 'PolarArea' || module.chartType == 'Radar'">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select name="libType" ng-model="module.libType" class="form-control" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="ChartJS">ChartJS</option>
+            <option value="flot">Flot</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="">
+    <label class="col-md-2">Library</label>
+    <div class="col-md-4">
+        <select name="libType" ng-model="module.libType" class="form-control" ng-change="changeLibType(module.libType, module.chartType)" required >
+            <option value="">-Select-</option>
+            <option value="D3">D3</option>
+            <option value="highchart">Highchart</option>
+        </select>
+    </div>
+</div> -->
+
+<!-- Chart options -->
+<!-- <div class="form-group" ng-if="module.chartType && module.libType">
+    <label class="col-md-2">Chart Options</label>
+    <div class="col-md-4">
+        <select name="options" ng-model="module.options" class="form-control" required>
+            <option value="">-Select-</option>
+            <option ng-repeat="item in chartOptions" value="{{item._id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div> -->
+
+<!-- Pie chart -->
+<div ng-if="(module.chartType | lowercase) == 'pie' || (module.chartType | lowercase) == 'pyramid'">
+    <div class="form-group">
+        <label class="col-md-2">Height</label>
+        <div class="col-md-4">
+            <select ng-model="module.height" class="form-control" required>
+                <option value="">Select</option>
+                <option value="300">300 Px</option>
+                <option value="350">350 Px</option>
+                <option value="400">400 Px</option>
+                <option value="450">450 Px</option>
+                <option value="500">500 Px</option>
+                <option value="550">550 Px</option>
+                <option value="600">600 Px</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Data Format</label>
+        <div class="col-md-4">
+            <select name="pieChartLabel" ng-model="module.dataFormat" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option value="seriesData">Series Data</option>
+                <option value="individual">Individual Data</option>
+            </select>
+        </div>
+    </div>
+    
+    <div ng-if="module.dataFormat=='seriesData'">
+        <div class="form-group">
+            <label class="col-md-2">Label</label>
+            <div class="col-md-4">
+                <select name="pieChartLabel" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                    <option value="">Select</option>
+                    <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2">Series</label>
+            <div class="col-md-4">
+                <select ng-model="module.chartData" class="form-control" required>
+                    <option value="">Select</option>
+                    <option ng-repeat="value in chartSeriesOptions track by $index" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+
+            <div ng-if="module.chartData">
+                <div class="col-md-2">
+                    <input type="checkbox" ng-model="color[module.chartData]" /> Set color
+                </div>
+
+                <div class="col-md-2">
+                    <div ng-if="color[module.chartData] == true">
+                        <input type="text" class="form-control" colorpicker ng-model="module.pieColor[module.chartData]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-if="module.dataFormat=='individual'">
+        <div class="form-group">
+            <label class="col-md-2">DataLabel</label>
+            <div class="col-md-10">
+                <div ng-repeat="item in chartSeriesOptions track by $index" >
+                    <div class="row col-md-12">
+                        <div class="col-md-4">
+                            <input type="checkbox" ng-click="toggleLineChartSeries(item, lineChartSeriesOptionSelected)" /> {{ item }}
+                        </div>
+                        
+                        <div class="col-md-6" ng-if="lineChartSeriesOptionSelected.indexOf(item) > -1">
+                            <input type="checkbox" ng-model="color[item]" /> Set color
+                            <div style="float: right;" ng-if="color[item] == true && color[item] != ''">
+                                <input colorpicker ng-model="module.pieColor[item]" type="text">
+                                <!-- <color-picker ng-model="module.pieColor[item]" color-picker-format="'hex'"></color-picker> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Line chart -->
+<div ng-if="(module.chartType | lowercase) == 'line' || (module.chartType | lowercase) == 'bar'">
+    <div class="form-group">
+        <label class="col-md-2">X-axis Label</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Type For X-axis Data</label>
+        <div class="col-md-4">
+            <select name="labelType" ng-model="module.labelType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="time">Time</option>
+                <option value="value">Value</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time' ">
+        <label class="col-md-2">Show Time in</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.timeType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="sec">Second</option>
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Series(s)</label>
+        <div class="col-md-10">
+            <div ng-repeat="item in chartSeriesOptions">
+                <div class="row col-md-12">
+                    <div class="col-md-4">
+                        <input type="checkbox" ng-click="toggleLineChartSeries(item, lineChartSeriesOptionSelected)" />
+                        {{ item }} 
+                    </div>
+                    <div class="col-md-6" ng-show="lineChartSeriesOptionSelected.indexOf(item) > -1">
+                        <input type="checkbox" ng-model="color[item]" /> Set color
+                        <div style="float: right;" ng-if="color[item] == true && color[item] != ''">
+                            <input colorpicker ng-model="module.lineColor[item]" type="text">
+                            <!-- <color-picker ng-model="module.lineColor[item]" color-picker-format="'hex'"></color-picker> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Y-axis Label</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="yAxislabel" ng-model="module.yAxislabel" placeholder="Y Axis label" required>
+        </div>
+    </div>
+</div>
+
+<!-- stackedbar chart -->
+<div ng-if="(module.chartType | lowercase) == 'stackedbar' || module.chartType == 'StackedBarHorizontal' || module.chartType == 'MultiLine' || module.chartType == 'Bubble'">
+    <div class="form-group">
+        <label class="col-md-2">X-axis Label</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Type For X-axis Data</label>
+        <div class="col-md-4">
+            <select name="labelType" ng-model="module.labelType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="time">Time</option>
+                <option value="value">Value</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time' ">
+        <label class="col-md-2">Show Time in</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.timeType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="sec">Second</option>
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Y-axis Series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.ySeries" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.series" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}" ng-if="module.ySeries != value">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Y-axis Label</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="yAxislabel" ng-model="module.yAxislabel" placeholder="Y Axis label" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Show Subscribers</label>
+        <div class="col-md-2">
+            <input icheck type="checkbox" ng-model="module.isSubscribers">
+        </div>
+    </div>
+    
+    <div ng-if="module.isSubscribers">
+        <div class="form-group">
+            <label class="col-md-2">Statement For Subscribers</label>
+            <div class="col-md-4">
+                <select ng-model="module.subscribersQuery" class="form-control" ng-change="onChangeSubscriberQuery(module.subscribersQuery)" required>
+                    <option value="">Select</option>
+                    <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2">Subscribers</label>
+            <div class="col-md-4">
+                <select ng-model="module.subscribers" class="form-control" required>
+                    <option value="">Select</option>
+                    <option ng-repeat="value in subscribersColumns" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doughnut chart-->
+<div ng-if="(module.chartType | lowercase) == 'doughnut'">
+    <div class="form-group">
+        <label class="col-md-2">Label </label>
+        <div class="col-md-4">
+            <select name="doughnutChartLabel" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Series</label>
+        <div class="col-md-4">
+            <select name="doughnutChartData" ng-model="module.chartData" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Polararea chart-->
+<div ng-if="(module.chartType | lowercase) == 'polararea'">
+    <div class="form-group">
+        <label class="col-md-2">Label </label>
+        <div class="col-md-4">
+            <select name="polarAreaChartLabel" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Series</label>
+        <div class="col-md-4">
+            <select name="polarAreaChartData" ng-model="module.chartData" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Radar chart -->
+<div ng-if="(module.chartType | lowercase) == 'radar'">
+    <div class="form-group">
+        <label class="col-md-2">Label</label>
+        <div class="col-md-4">
+            <select name="radarChartLabel" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Series(s)</label>
+        <div class="col-md-10">
+            <div ng-repeat="item in chartSeriesOptions">
+                <input type="checkbox" ng-click="toggleRadarChartSeries(item, radarChartSeriesOptionSelected)" />
+                {{ item }}
+            </div>
+        </div>
+    </div>    
+</div>
+
+<!-- Scatter chart -->
+<div ng-if="(module.chartType | lowercase) == 'scatter'">
+    <div class="form-group">
+        <label class="col-md-2">Label</label>
+        <div class="col-md-4">
+            <select ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Type For X-axis Data</label>
+        <div class="col-md-4">
+            <select name="labelType" ng-model="module.labelType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="time">Time</option>
+                <option value="value">Value</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time' ">
+        <label class="col-md-2">Show Time in</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.timeType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="second">Second</option>
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-2">Series(s)</label>
+        <div class="col-md-10">
+            <div class="row" ng-repeat="item in chartSeriesOptions">
+                <div class="col-md-4">
+                    <input type="checkbox" ng-click="toggleScatterSeries(item, scatterChartSeriesOptionSelected)" />{{ item }}
+                </div>
+
+                <!-- <div class="col-md-12" ng-if="scatterChartSeriesOptionSelected.indexOf(item) > -1">
+                    <div class="col-md-3">
+                        <select ng-model="module.shape[item]" class="form-control" required>
+                            <option value="">- Shape</option>
+                            <option value="circle">Circle</option>
+                            <option value="cross">Cross</option>
+                            <option value="triangle-up">Triangle-up</option>
+                            <option value="triangle-down">Triangle-down</option>
+                            <option value="diamond">Diamond</option>
+                            <option value="square">Square</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" ng-model="module.size[item]" placeholder="Size">
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Line + Bar chart -->
+<div ng-if="module.chartType == 'LinePlushBar'">
+    <div class="form-group">
+        <label class="col-md-2">X-axis Label</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Type For X-axis Data</label>
+        <div class="col-md-4">
+            <select name="labelType" ng-model="module.labelType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="time">Time</option>
+                <option value="value">Value</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time' ">
+        <label class="col-md-2">Show Time in</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.timeType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="sec">Second</option>
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Line Series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.lineSeries" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Line Series Unit</label>
+        <div class="col-md-4">
+            <select ng-model="module.lineUnit" class="form-control" required>
+                <option value="">Select</option>
+                <option value="count">Count</option>
+                <option value="usage">Usage</option>
+                <option value="speed">Speed</option>
+                <option value="percent">%</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Line Series Color</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" colorpicker ng-model="module.lineColor">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Bar Series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.barSeries" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}" ng-if="module.lineSeries != value">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Bar Series Color</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" colorpicker ng-model="module.barColor">
+        </div>
+    </div>
+</div>
+
+<!-- Area Range Line chart -->
+<div ng-if="module.chartType == 'AreaRangeLine'">
+    <div class="form-group">
+        <label class="col-md-2">X-axis Label</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.labels" class="form-control" ng-change="chartLabelSelected()" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartColumns" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Type For X-axis Data</label>
+        <div class="col-md-4">
+            <select name="labelType" ng-model="module.labelType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="time">Time</option>
+                <option value="value">Value</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time' ">
+        <label class="col-md-2">Show Time in</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.timeType" class="form-control" required>
+                <option value="">Select</option>
+                <option value="sec">Second</option>
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+                <option value="day">Day</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">From series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.fromSeries" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">To Series</label>
+        <div class="col-md-4">
+            <select name="labels" ng-model="module.toSeries" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="value in chartSeriesOptions" value="{{value}}" ng-if="module.fromSeries != value">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Range Color</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control" colorpicker ng-model="module.color">
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.chartUnit" class="form-control" required>
+            <option value="">Select</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Second query Selection</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.IncludeURL">
+    </div>
+</div>
+
+
+<!-- Indicator Start -->
+<div ng-if="module.IncludeURL">
+
+    <div class="form-group">
+        <label class="col-md-2">Data 2 </label>
+        <div class="col-md-4">
+            <select ng-model="module.data_1" class="form-control"  ng-change="changeDataType_2(module.data_1)" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+            </select>
+        </div>
+    </div>    
+    
+    
+    <div class="form-group" ng-if="module.data_1.trim() == 'push' || module.data_1.trim() == 'pull'">
+            <label class="col-md-2">Data Source 2 </label>
+            <div class="col-md-4">
+                <select ng-model="module.query2" class="form-control" ng-change="validate_2(module.query2);changedStatement_2(statementList_1, module.query2)" required>
+                    <option value="">- SELECT</option>
+                    <option ng-repeat="opt in statementList_1" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+                </select>
+            </div>
+        
+            <!-- <div class="col-md-2">
+                <button class="btn btn-primary" type="button" ng-click="validate(module.query)">Get Data Points</button>
+            </div> -->
+    </div>
+    
+    <div class="form-group" ng-if="module.data_1.trim() == 'DBPull' || module.data_1.trim() == 'DBStream'">
+        <label class="col-md-2">Data Source 2</label>
+        <div class="col-md-4">
+            <select ng-model="module.query2" class="form-control" ng-change="changeDBpull_2(module.query2);changedStatement_2(statementList_1, module.query2)" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="opt in statementList_1" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+            </select>
+        </div>
+    </div>
+    
+        <div class="form-group">
+            <label class="col-md-2">Select Column </label>
+            <div class="col-md-4">
+                <select name="iboxKpi" ng-model="module.kpi_1" class="form-control" required>
+                    <option value="">Select </option>
+                    <option ng-repeat="value in columns_2" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label class="col-md-2">Corresponding Column</label>
+            <div class="col-md-4">
+                <select name="iboxKpi" ng-model="module.kpi_2" class="form-control" required>
+                    <option value="">- SELECT</option>
+                    <option ng-repeat="value in columns_2" value="{{value}}">{{value}}</option>
+                </select>
+            </div>
+        </div>
+    
+    </div>
+    
+        
+    <!-- Indicator End -->
+
+<div class="form-group">
+    <label class="col-md-2">Apply fix ordering</label>
+    <div class="col-md-2">
+        <input icheck type="checkbox" ng-model="module.fixOrder">
+    </div>
+</div>
+
+
+
+<div class="form-group">
+    <label class="col-md-2">Auto adjust unit</label>
+    <div class="col-md-4">
+        <input icheck type="radio" ng-value="no" ng-model="module.chartUnitAdjustFlag" name="chartUnitAdjustFlag">No
+        <input icheck type="radio" value="yes" ng-model="module.chartUnitAdjustFlag" name="chartUnitAdjustFlag"> Yes
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Is Clickable</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.clickable">
+    </div>
+</div>
+
+<!-- isClickable Start -->
+<div ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-md-2">ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.clickableTooltip" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Page</label>
+        <div class="col-md-4">
+            <select ng-model="module.page" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="item in redirectionOption" value="{{item.fileId}}|{{item.table}}">{{item.file}} | {{item.page}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+<!-- isClickable End -->

@@ -1,0 +1,107 @@
+<div class="wrapper-content animated fadeIn " ng-controller="cellCongestionAnalyticsCtrl" >
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group" ><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <single-date-picker></single-date-picker>
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}<!-- &nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}} --></p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Cell Congestion for Date <b style="color:#1ab394;"> {{edate}} </b></span>
+                
+                    <export-module filename="exportCellCongestionObj.fileName" dataobj="exportCellCongestion" fileheader="exportCellCongestionObj.fileHeader"></export-module>
+                    <div class="pull-right">
+                        <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+                            <option value="200">Show 200</option>
+                            <option value="500">Show 500</option>
+                            <option value="750">Show 750</option>
+                            <option value="1000">Show 1000</option>
+                            <option value="1500">Show 1500</option>
+                            <option value="2000">Show 2000</option>
+                            <option value="20000">&gt; 2000</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <span loading-icon ng-if="loadingCellCongestionDiv"></span>
+                        <span no-data-found ng-if="noDataCellCongestionDiv"></span>
+                    </div>
+                    <br/>
+                    <div >
+                        <ui-gmap-google-map id='map' center='CellCongestion.center' zoom='CellCongestion.zoom' options='CellCongestion.options' size="CellCongestion.size" control="CellCongestion.control">
+                            <ui-gmap-markers models="CellCongestionMarkers" coords="'self'" icon="'icon'" events="CellCongestion.events" options="'options'" fit='true' >
+                                <ui-gmap-windows show="show">
+                                    <div ng-non-bindable><b>{{title}}</b></div>
+                                </ui-gmap-windows>
+                            </ui-gmap-markers>
+                        </ui-gmap-google-map>
+                    </div>
+                    <br/>
+                    <span ng-if="CellCongestionMarkers.length>0">
+                        <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus, CellCongestionMarkers,'CellCongestionMarkers')" ng-checked="{{checkboxCountLowStatus}}">
+                            <label for="inlineCheckbox3"> {{low}} </label>
+                        </div>
+                        <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                            <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus, CellCongestionMarkers,'CellCongestionMarkers')"  ng-checked="{{checkboxCountMediumStatus}}">
+                            <label for="inlineCheckbox2"> {{medium}} </label>
+                        </div>
+                        <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                            <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus, CellCongestionMarkers,'CellCongestionMarkers')" ng-checked="{{checkboxCountHighStatus}}">
+                            <label for="inlineCheckbox1"> {{highest}} </label>
+                        </div>
+                    </span>
+                    <br/>
+                    <div class="ibox-content">
+                        <div >
+                            <table id="CellCongestion" datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <thead>
+                                    <tr>
+                                        <th>Cell ID</th>
+                                        <th>Area</th>
+                                        <th>Latitude</th>
+                                        <th>Longitude</th>
+                                        <th>Congested</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="element in CellCongestionTable">
+                                        <td>{{ element.cellid }}</td>
+                                        <td>{{ element.Area }}</td>
+                                        <td>{{ element.latitude }}</td>
+                                        <td>{{ element.longitude }}</td>
+                                        <td>{{ element.Congested }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

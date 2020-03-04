@@ -1,0 +1,34 @@
+<div ng-controller="deviceGeoDistributionCtrl">
+    <form class='form-horizontal' name='myForm' role='form' ng-submit='saveFilterOption(filter)'>
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>
+                Usage &nbsp;&nbsp; 
+            </label>
+            <div class='col-sm-2' >
+                <div class='float-e-margins'>
+                    <select ng-model='filter.operator' class='input-sm' style='width:100px;' >
+                        <option ng-repeat='item in operator' value='{{item.operator}}'>{{item.operator}}</option></select>
+                </div>
+            </div>
+            <div class='col-sm-2'>
+                <input class='form-control' ng-model='filter.usage' placeholder='Usage'>
+            </div>
+            <div class='col-sm-2' >
+                <div class='float-e-margins'>
+                    <select ng-model='filter.unit' class='input-sm' style='width:100px;'>
+                        <option ng-repeat='item in unit' value='{{item.unit}}'>{{item.unit}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class='hr-line-dashed'>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-8 col-sm-offset-2'>
+                <button class='btn btn-primary pull-right' type='submit'>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

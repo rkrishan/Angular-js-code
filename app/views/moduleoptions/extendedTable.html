@@ -1,0 +1,140 @@
+<div class="form-group">
+    <label class="col-md-2">Title</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Table Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+    </div>
+</div>
+
+<module-label></module-label>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.data" class="form-control" ng-change="changeDataType(module.data)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'push' || module.data == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateTable(module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validateTable(module.query)">Get Columns</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull' || module.data == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validateTable(module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Number of Data Element</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="# of Data Element" class="form-control" ng-model="module.dataelement" >
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Column Name</label>
+    <div class="col-md-4">
+        <select name="labels" ng-model="module.colName" class="form-control" ng-change="tableLabelSelected()" required>
+            <option ng-repeat="value in tableColumns" value="{{value.name}}">{{value.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Row Name</label>
+    <div class="col-md-4">
+        <select name="labels" ng-model="module.rowName" class="form-control" required>
+            <option ng-repeat="value in tableColumns" value="{{value.name}}" ng-if="value.name != module.labels">{{value.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Row Data</label>
+    <div class="col-md-4">
+        <select name="labels" ng-model="module.rowData" class="form-control" ng-change="tableLabelSelected()" required>
+            <option ng-repeat="value in tableOtherColumns" value="{{value.name}}" ng-if="value.name != module.heading">{{value.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.unit" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Apply fix ordering</label>
+    <div class="col-md-2">
+        <input icheck type="checkbox" ng-model="module.fixOrder">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Search</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.searching" value="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Sort</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.sort" value="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Pagination</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.paging" value="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Info Record</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.info" value="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Per Page</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.length" value="true">
+    </div>
+</div>

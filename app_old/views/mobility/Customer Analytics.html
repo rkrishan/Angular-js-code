@@ -1,0 +1,528 @@
+<div class="wrapper-content animated fadeIn" ng-controller="CustomerAnalyticsCtrl">
+    <div class="row" >
+        
+        <div class="col-lg-6">
+            <form role="form" class="form-inline" ng-submit="submit() ">
+                <div class="input-group">
+                    <input type="text" ng-model="customer.imsi" placeholder="Enter MSISDN or IMSI" name="search" class="form-control" minlength="10" required>
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-lg-6 ">
+            <form role="form" class="form-inline" ng-if="datepickerShow">
+                <div class="form-group pull-right">
+                    <label><h3><b>Date : </b></h3></label>
+                    <div class="input-group date">
+                        <input id="datepick" type="datetime" class="form-control" date-time ng-model="dateSelect" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        <label for="datepick" class="input-group-addon"><i class="fa fa-calendar"></i>  </label>
+                    </div> 
+                </div>
+            </form>
+        </div>
+        
+    </div>
+    <br/>
+    
+    <div class= "row">
+        
+        <div class="col-lg-12 " ng-if="showUserDetails">
+            <div class="ibox-content" style="font-size: 90%;">
+                <form class="form-inline">
+                    <div class="form-group" ng-if="imsi.length>0">IMSI&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{imsi}}</strong> </span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="brand.length>0">Device&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{brand}}{{model}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="Capability.length>0">Capability&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{Capability}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="simSlot.length>0">SimSlot&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{simSlot}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="segment.length>0">Segment&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{segment}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="lastKnownCell.length>0">Last known Cell&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{lastKnownCell}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="billPlan.length>0">Bill Plan&nbsp;:&nbsp;<span style="color: #1ab394"><strong ng-if= "speed != ''">{{billPlan}} </strong><strong ng-if= "speed == ''">{{billPlan}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    <br>
+                    <span class="form-group">for <span style="color: #1ab394"><strong>{{dateSelect}}</strong></span>&nbsp;&nbsp;<i style="color:#1ab394;" class="fa fa-hand-o-right"></i>&nbsp;&nbsp;</span>
+
+                    <div class="form-group" ng-if="usage.length>0">Usage&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{usage}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="peakThroughput.length>0" class="form-group">Peak Throughput(Overall)&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{peakThroughput}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="PeakThroughputUncached.length>0" class="form-group">Peak Throughput(Uncached)&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{PeakThroughputUncached}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="PeakThroughputCached.length>0" class="form-group">Peak Throughput(Cached)&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{PeakThroughputCached}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div class="form-group" ng-if="pdpCreate.length>0">PDP Create&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{pdpCreate}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="pdpUpdate.length>0">PDP Update&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{pdpUpdate}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="pdpDelete.length>0">PDP Delete&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{pdpDelete}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="lastAPN.length>0">APN&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{lastAPN}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div class="form-group" ng-if="updateTime.length>0">Last Updated&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{updateTime}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    <br/>
+    
+    <div class="row" ng-if="showUserDetails">
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab index="0" heading="Usage" ng-click="tabSelected('usage')" >
+                        <div class="panel-body">
+                            
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <!--<div class="ibox-title">
+                                            <h5>Hourly usage </h5>
+                                        </div>-->
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingUsageDiv"></div>
+                                            <div ng-if="dataUsageDiv">
+                                                <!--<nvd3 options="options" data="data"></nvd3> -->
+                                                <highchart id="chart2" config="usageBarChartConfig" ></highchart>
+                                            </div>
+                                            <div class="text-center " ng-if="noDataUsageDiv">
+                                                <h3 class="font-bold">No Data Found</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-lg-3">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Last 5 Locations </h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div >
+                                                <table class="table table-striped table-bordered table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Location</th>
+                                                            <th>Usage(MB)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in last5LocationUsage">
+                                                            <td>{{ element.cellid }}</td>
+                                                            <td>{{ element.Usage }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Top Protocol Usage </h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                        <div no-data-found ></div>
+                                            <!-- <div >
+                                                <table class="table table-striped table-bordered table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Protocol</th>
+                                                            <th>Usage(MB)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in topProtocolUsage">
+                                                            <td>{{ element.Protocol }}</td>
+                                                            <td>{{ element.Usage }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> --> 
+                            </div>
+                            
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingUsageDiv"></div>
+                                            <div ng-if="dataUsageDiv">
+                                                <table datatable="ng" dt-options="dataTableOptionsDetails" class="table table-striped table-bordered table-hover no-margins" >
+                                                    <thead>
+                                                        <tr>
+                                                            <th >Hourly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th ng-repeat="col in colArray">
+                                                                <!--<form  class="form-inline">-->
+                                                                <p >
+                                                                    {{col}}&nbsp;
+                                                                    <!-- <a title="Transaction Details" ng-click="transactionDetailsTab==hourSelected(col)">
+                                                                        <i class="fa fa-external-link-square"></i>
+                                                                    </a> -->
+                                                                </p>
+                                                                <!-- </form>-->
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                        <tr ng-repeat= "row in rowDataArray track by $index ">
+                                                            <td  style="font-size:12px">{{row[0]}}</td>
+                                                            <td style="font-size:11px" ng-repeat="col in row[1] track by $index"> 
+                                                                <span  ng-if="col.spanClass!=''">
+                                                                    <a class="{{col.spanClass}}" ng-click="tableClick(col.val, $index,row[0])"> {{col.val}}</a>
+                                                                </span>
+                                                                <!-- <span class="{{col.spanClass}}" ng-if="col.spanClass==''">
+                                                                    {{col.val}}
+                                                                </span> -->
+
+                                                                <span title="Excellent" ng-if= "  row[0] == 'CEICached' && col.val=='E'"><i class="fa fa-3x fa-smile-o"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEICached' && col.val=='G'"><i class="fa fa-3x fa-meh-o"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEICached' && col.val=='B'"><i class="fa fa-3x fa-frown-o"></i></span>
+
+                                                                    <span title="Excellent" ng-if= "  row[0] == 'CEI' && col.val=='E'"><i class="fa fa-3x fa-smile-o"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEI' && col.val=='G'"><i class="fa fa-3x fa-meh-o"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEI' && col.val=='B'"><i class="fa fa-3x fa-frown-o"></i></span>
+
+                                                                    <span title="Excellent" ng-if= "  row[0] == 'CEIUnCached' && col.val=='E'"><i class="fa fa-3x fa-smile-o"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEIUnCached' && col.val=='G'"><i class="fa fa-3x fa-meh-o"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEIUnCached' && col.val=='B'"><i class="fa fa-3x fa-frown-o"></i></span>
+
+                                                                    <span ng-if= "row[0] != 'CEI' && row[0] != 'CEIUnCached' && row[0] != 'CEICached' && col.spanClass==''">{{col.val}}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div> 
+                                            <div class="text-center " ng-if="noDataUsageDiv">
+                                                <h3 class="font-bold">No Data Found</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-lg-3">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Handover Distribution </h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div >
+                                                <table class="table table-striped table-bordered table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Distribution</th>
+                                                            <th>Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr >
+                                                            <td>4G-3G</td>
+                                                            <td>9</td>
+                                                        </tr>
+                                                        <tr >
+                                                            <td>3G-2G</td>
+                                                            <td>5</td>
+                                                        </tr>
+                                                        <tr >
+                                                            <td>4G-2G</td>
+                                                            <td>2</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class="col-lg-3">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>RAT Distribution </h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div >
+                                                <table class="table table-striped table-bordered table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>RAT</th>
+                                                            <th>Usage(MB)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in ratDistribution">
+                                                            <td>{{element.RAT}}</td>
+                                                            <td>{{element.Usage}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                            
+                        </div>
+                    </uib-tab>
+                    <uib-tab index="1" heading="App" ng-click="tabSelected('app')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <!-- <div class="ibox-title">
+                                            <h5>App wise Usage </h5>
+                                        </div> -->
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingHourlyAppUsageDiv"></div>
+                                            <div ng-if="dataHourlyAppUsageDiv">
+                                                <highchart id="hourlyAppUsage" config="hourlyAppUsageChartConfig" ></highchart>
+                                            </div >
+                                            <div class="text-center " ng-if="noDataHourlyAppUsageDiv">
+                                                    <h3 class="font-bold">No Data Found</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <!-- <div class="ibox-title">
+                                            <h5>App wise Usage </h5>
+                                        </div> -->
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingAppUsageDiv"></div>
+                                            <div ng-if="dataAppUsageDiv">
+                                                <nvd3 ng-if="dataAppUsageDiv" options="optionsHorizontalBar" data="dataHorizontalBar" api="api"></nvd3> 
+                                            </div>
+                                            <div class="text-center " ng-if="noDataAppUsageDiv">
+                                                    <h3 class="font-bold">No Data Found</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </uib-tab>
+                     <uib-tab index="2" heading="Throughput" ng-click="tabSelected('throughput')">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Throughput</h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingThroughputDiv"></div>
+                                            <div ng-if="dataThroughputDiv">
+                                                <highchart id="chart2" config="throughputChartConfig" ></highchart>
+                                            </div>
+                                            <div class="text-center " ng-if="noDataThroughputDiv">
+                                                    <h3 class="font-bold">No Data Found</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab index="3" heading="Transaction Details" ng-click="tabSelected('transactionDetails')" active="transactionDetailsTab.active">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-inline">
+                                                        <div class="form-group"><b>Hour</b>
+                                                            <select class="form-control" ng-model="select.hour" style="height:24px;font-size:10px;padding:0px 12px;">
+                                                                <option value="{{select.hour}}">{{select.hour}}</option>
+                                                                <option value="{{hourList}}" ng-repeat="hourList in hourList track by $index">{{hourList}}</option>
+                                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="form-group"><b>Min</b>
+                                                            <select class="form-control" ng-model="selectMin.min" style="height:24px;font-size:10px;padding:0px 12px;">
+                                                                <option value="{{selectMin.min}}">{{selectMin.min}}</option>
+                                                                <option value="{{minList}}" ng-repeat="minList in minList track by $index">{{minList}}</option>
+                                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="form-group ">
+                                                               <button type="button" class="btn btn-w-xs btn-info btn-xs pull-right" ng-click= "filterClicked()">Filter</button>
+                                                        </div>
+                                                        <div class="form-group pull-right">
+                                                               <button type="button" class="btn btn-w-s btn-info btn-xs pull-right" ng-click= "minSelected(imsi)">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                            <br>
+                                            <p ng-if="infoLine">Showing results for: {{protocol}} {{usageFilter}}</p>
+                                            <div class="table-responsive">
+                                                <table datatable="ng" dt-options="transactionDetailsOptions" class=" table table-responsive table-hover table-striped no-margins" >    
+                                                    <thead id="tableheader">
+                                                        <tr>
+                                                            <th style="font-size:12px">Date</th>
+                                                            <th style="font-size:12px">Duration</th>
+                                                            <th style="font-size:12px">AppProtocol</th>
+                                                            <th style="font-size:12px">DestinationIP</th>
+                                                            <th style="font-size:12px">App</th>
+                                                            <th style="font-size:12px"></th>
+                                                            <th style="font-size:12px">SourcePort</th>
+                                                            <th style="font-size:12px">DestinationPort</th>
+                                                            <th style="font-size:12px">URL/IP</th>
+                                                            <th style="font-size:12px">Usage</th>
+                                                            <th style="font-size:12px">UpUsage</th>
+                                                            <th style="font-size:12px">DownUsage</th>
+                                                            <th style="font-size:12px"></th>
+                                                            <th style="font-size:12px">Throughput</th>
+                                                            <th style="font-size:12px">DataLatency</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in transactionDetail track by $index" >
+                                                            <td ng-bind-html="element.Date">{{ element.Date }}</td>
+                                                            <td ng-bind-html="element.Duration">{{ element.Duration }}</td>
+                                                            <td >{{ element.AppProtocol }}</td>
+                                                            <td >{{ element.DestinationIP }}</td>
+                                                            <td >{{ element.App }}</td>
+                                                            <td >
+                                                                <a ng-if="element.App == 'Youtube' && element.DownUsage != '0B'" title="User Analytics" ng-click="transactionTableSelectedRow(element.key, 'vpsVsAvgPktsSize')">
+                                                                    <i class="fa fa-external-link-square"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td >{{ element.SourcePort }}</td>
+                                                            <td >{{ element.DestinationPort }}</td>
+                                                            <td >{{ element.URL }}</td>
+                                                            <td >{{ element.Usage }}</td>
+                                                            <td >{{ element.UpUsage }}</td>
+                                                            <td >{{ element.DownUsage }}</td>
+                                                            <td >
+                                                                <a ng-if="element.DownUsage != '0B'" title="User Analytics" ng-click="transactionTableSelectedRow(element.key, 'vps')">
+                                                                    <i class="fa fa-external-link-square"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td >{{ element.Throughput }}</td>
+                                                            <td >{{ element.DataLatency }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    <uib-tab index="5" heading="GTPc Transaction Details" ng-click="tabSelected('GTPctransactionDetails')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingGTPctransactionDetailsDiv && !noDataGTPctransactionDetailsDiv"></div>
+                                            
+                                            <div class="table-responsive" ng-if="!loadingGTPctransactionDetailsDiv && !noDataGTPctransactionDetailsDiv">
+                                                <table datatable="ng" dt-options="transactionDetailsOptions" class=" table table-hover table-striped no-margins" >    
+                                                    <thead id="tableheader">
+                                                        <tr >
+                                                            <th style="font-size:12px" ng-repeat="(key,value) in colObj">{{key}}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in transactionDetailGTPc track by $index" >
+                                                            <td ng-repeat="(key,value) in element">{{value}}</td>
+                                                            
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div no-data-found ng-if="!loadingGTPctransactionDetailsDiv && noDataGTPctransactionDetailsDiv"></div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    <uib-tab index="4" heading="Usage Last 30 Days" ng-click="tabSelected('usage30Days')">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Usage</h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingUsageDiv"></div>
+                                                    <div ng-if="dataUsageDiv">
+                                                        <highchart id="chart2" config="scatterChartConfig" ></highchart>
+                                                    </div>
+                                                    <div class="text-center " ng-if="noDataUsageDiv">
+                                                        <h3 class="font-bold">No Data Found</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                   <div loading-icon ng-if="loadingUsageDiv"></div>
+                                                    <div ng-if="dataUsageDiv">
+                                                        <highchart id="chart1" config="barChartConfig" ></highchart>
+                                                    </div>
+                                                    <div class="text-center " ng-if="noDataUsageDiv">
+                                                        <h3 class="font-bold">No Data Found</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>App Distrubution</h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingAppDistributionDiv"></div>
+                                                    <div ng-if="dataAppDistributionDiv">
+                                                        <highchart id="chartApp" config="appPieChartConfig" ></highchart>
+                                                    </div>
+                                                    <div class="text-center " ng-if="noDataAppDistributionDiv">
+                                                        <h3 class="font-bold">No Data Found</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingAppDistributionDiv"></div>
+                                                    <div ng-if="dataAppDistributionDiv">
+                                                        <highchart id="chartAppPie" config="appBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div class="text-center " ng-if="noDataAppDistributionDiv">
+                                                        <h3 class="font-bold">No Data Found</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

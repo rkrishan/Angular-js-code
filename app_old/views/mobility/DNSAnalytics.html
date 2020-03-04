@@ -1,0 +1,139 @@
+<div class="wrapper-content animated fadeIn" ng-controller="dnsAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b> DNS :</b>
+                    <select ng-model="select.dns" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{dnsName}}" ng-repeat="dnsName in dnsNameList track by $index">{{dnsName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Requests" ng-click="tabSelected('Requests')" ng-if="showTabObj.Requests">
+                        <div class="panel-body" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Requests for DNS <b style="color:#1ab394;">{{dnsSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <export-module filename="exportDNSReqObj.fileName" dataobj="exportDNSReqData" fileheader="exportDNSReqObj.fileHeader"></export-module>
+                                        </div>
+
+                                        <div loading-icon ng-if="loadingDNSReqDiv"></div>
+                                        <div ng-if="dataDNSReqDiv">
+                                            <highchart id="DNSReq" config="DNSReqChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataDNSReqDiv"></div>
+                                        <div ng-if="dataDNSReqDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Success-Failure" ng-click="tabSelected('SuccessFailure')" ng-if="showTabObj.SuccessFailure" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Success-Failure for DNS <b style="color:#1ab394;">{{dnsSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="SuccessFailure.fileName" dataobj="exportSuccessFailureArray" fileheader="SuccessFailure.fileHeader"></export-module>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingSuccessFailureDiv"></div>
+                                        <div ng-if="DataSuccessFailureDiv">
+                                            <highchart id="SuccessFailure" config="SuccessFailureChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataSuccessFailureDiv"></div>
+                                        <div ng-if="DataSuccessFailureDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Failure %" ng-click="tabSelected('FailureTrend')" ng-if="showTabObj.FailureTrend">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Failure % for DNS <b style="color:#1ab394;">{{dnsSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <export-module filename="FailureTrend.fileName" dataobj="exportDNSFailureTrendData" fileheader="FailureTrend.fileHeader"></export-module>
+                                        </div>
+
+                                        <div loading-icon ng-if="loadingDNSFailureDiv"></div>
+                                        <div ng-if="dataDNSFailureDiv">
+                                            <highchart id="FailureTrend" config="DNSFailureChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataDNSFailureDiv"></div>
+                                        <div ng-if="dataDNSFailureDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Resolution Time Distribution" ng-click="tabSelected('ResolutionTime')" ng-if="showTabObj.ResolutionTime">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Resolution Time Distribution for DNS <b style="color:#1ab394;">{{dnsSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="ResolutionTime.fileName" dataobj="exportResolutionTime" fileheader="ResolutionTime.fileHeader"></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingResolutionTimeDiv"></div>
+                                    <div ng-if="DataResolutionTimeDiv">
+                                        <highchart id="ResolutionTime" config="ResolutionTimeChartConfig" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataResolutionTime"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Failure Reasons" ng-click="tabSelected('FailureReasons')" ng-if="showTabObj.FailureReasons" >
+                        <div class="panel-body">
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Failure Reasons Distribution for DNS <b style="color:#1ab394;">{{dnsSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <export-module filename="FailureReasons.fileName" dataobj="exportFailureReason" fileheader="FailureReasons.fileHeader"></export-module> 
+                                        </div>
+
+                                        <div loading-icon ng-if="loadingFailureReasonDiv"></div>
+                                        <div ng-if="DataFailureReasonDiv">
+                                            <highchart id="FailureReasons" config="FailureReasonChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataFailureReasonDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

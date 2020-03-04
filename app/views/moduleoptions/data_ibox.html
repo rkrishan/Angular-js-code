@@ -1,0 +1,127 @@
+<div class="form-group">
+    <label class="col-md-2">Title</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Data IBox Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.data" class="form-control" ng-change="changeDataType(module.data)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'push' || module.data == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="validate(module.query);changedStatement(statementList, module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validate(module.query)">Get Data Points</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull' || module.data == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query" class="form-control" ng-change="changeDBpull(module.query);changedStatement(statementList, module.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="plot">
+    <label class="col-md-2">Plot</label>
+    <div class="col-md-2">
+        <select ng-model="module.plotKey" class="form-control">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" placeholder="Value" class="form-control" ng-model="module.plotValue">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data Value</label>
+    <div class="col-md-4">
+        <select name="iboxKpi" ng-model="module.kpi" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Color</label>
+    <div class="col-md-4">
+        <input type="text" class="form-control" colorpicker ng-model="module.color">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Remark</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Remark" class="form-control" ng-model="module.remark">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Decimal Value</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Data Value" class="form-control" ng-model="module.dataDecimal" ng-required="true">
+    </div>
+</div>
+
+<!-- <div class="form-group" ng-if="module.data == 'pull'">
+    <label class="col-md-2">Pull Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in frequencyList" value="{{item.id}}">{{item.value}}</option>
+        </select>
+    </div>
+</div> -->
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.unit" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Auto adjust unit</label>
+    <div class="col-md-4">
+        <input icheck type="radio" ng-value="no" ng-model="module.unitAdjustFlag" name="unitAdjustFlag">No
+        <input icheck type="radio" value="yes" ng-model="module.unitAdjustFlag" name="unitAdjustFlag"> Yes
+    </div>
+</div>
+
+
+

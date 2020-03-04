@@ -1,0 +1,91 @@
+<div class="form-group">
+    <label class="col-sm-6">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Label</label>
+    <div class="col-sm-6">{{module.label}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Label Color</label>
+    <div class="col-sm-6">{{colorType[module.labelColor]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.dataKpi]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement</label>
+    <div class="col-sm-6">{{module.statementNameKpi}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement Id</label>
+    <div class="col-sm-6">{{module.queryKpi}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Value</label>
+    <div class="col-sm-6">{{module.valueKpi}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Decimal Value</label>
+    <div class="col-sm-6">{{module.dataDecimal}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Unit</label>
+    <div class="col-sm-6">{{module.unit}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Auto adjust unit</label>
+    <div class="col-sm-6">{{module.unitAdjustFlag}}</div>
+</div>
+
+<!-- Indicator Start -->
+<div class="form-group">
+    <label class="col-sm-6">Indicator</label>
+    <div class="col-sm-6">{{module.indicator}}</div>
+</div>
+
+<div ng-if="module.indicator">
+    <div class="form-group">
+        <label class="col-sm-6">Indicator ToolTip</label>
+        <div class="col-sm-6">{{module.indicatorTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Indicator Query</label>
+        <div class="col-sm-6">{{module.indicatorQuery}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Danger</label>
+        <div class="col-sm-6">{{module.danger}}</div>
+    </div>
+</div>
+<!-- Indicator End -->
+
+<!-- Clicable -->
+<div class="form-group">
+    <label class="col-sm-6">Is Clickable</label>
+    <div class="col-sm-6">{{module.clickableIbox}}</div>
+</div>
+
+<div ng-if="module.clickableIbox">
+    <div class="form-group">
+        <label class="col-sm-6">ToolTip</label>
+        <div class="col-sm-6">{{module.clickableTooltipIbox}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Page</label>
+        <div class="col-sm-6">{{redirectPageIbox}}</div>
+    </div>
+</div>

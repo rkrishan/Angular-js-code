@@ -1,0 +1,119 @@
+﻿<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Chart Option</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Configure Chart Options</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save()">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" ng-model="item.name" ng-required="true" ng-readonly="isReadOnly" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name Space</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" ng-model="item.nameSpace" ng-required="true" ng-readonly="isReadOnly" placeholder="Name Space">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Chart</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="item.chartType" ng-disabled="isReadOnly" required>
+                                    <option value="">-Select-</option>
+                                    <option value="Pie">Pie</option>
+                                    <option value="Line">Line</option>
+                                    <option value="MultiLine">Multi Line</option>
+                                    <option value="Bar">Bar</option>
+                                    <option value="Doughnut">Doughnut</option>
+                                    <option value="PolarArea">PolarArea</option>
+                                    <option value="Radar">Radar</option>
+                                    <option value="Scatter">Scatter</option>
+                                    <option value="StackedBar">Stacked Bar</option>
+                                    <option value="StackedBarHorizontal">Stacked Bar Horizontal</option>
+                                    <option value="Pyramid">Pyramid</option>
+                                    <option value="Bubble">Bubble</option>
+                                    <option value="LinePlushBar">Line Plush Bar</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="item.chartType == 'Pie' || item.chartType == 'Bar' || item.chartType == 'Line' || item.chartType == 'Doughnut' ">
+                            <label class="col-sm-2 control-label">Library</label>
+                            <div class="col-sm-6">
+                                <select name="libType" ng-model="item.libType" class="form-control" required >
+                                    <option value="">-Select-</option>
+                                    <option value="ChartJS">ChartJS</option>
+                                    <option value="D3">D3</option>
+                                    <option value="flot">Flot</option>
+                                    <option value="highchart">Highchart</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="item.chartType == 'PolarArea' || item.chartType == 'Radar' ">
+                            <label class="col-sm-2 control-label">Library</label>
+                            <div class="col-sm-6">
+                                <select name="libType" ng-model="item.libType" class="form-control" required >
+                                    <option value="">-Select-</option>
+                                    <option value="ChartJS">ChartJS</option>
+                                    <option value="flot">Flot</option>
+                                    <option value="highchart">Highchart</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="item.chartType == 'Scatter' || item.chartType == 'StackedArea'">
+                            <label class="col-sm-2 control-label">Library</label>
+                            <div class="col-sm-6">
+                                <select name="libType" ng-model="item.libType" class="form-control" required >
+                                    <option value="">-Select-</option>
+                                    <option value="D3">D3</option>
+                                    <option value="highchart">Highchart</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="item.chartType == 'StackedBar' || item.chartType == 'StackedBarHorizontal' || item.chartType == 'Pyramid' || item.chartType == 'MultiLine' || item.chartType == 'Bubble' || item.chartType == 'LinePlushBar'">
+                            <label class="col-sm-2 control-label">Library</label>
+                            <div class="col-sm-6">
+                                <select name="libType" ng-model="item.libType" class="form-control" required>
+                                    <option value="">-Select-</option>
+                                    <option value="highchart">Highchart</option>
+                                    <option value="flot">Flot</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Options</label>
+                            <div class="col-sm-6">
+                                <textarea placeholder="Options" class="form-control" ng-model="item.options" ng-required="true" rows="18"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        

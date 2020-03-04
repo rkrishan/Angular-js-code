@@ -1,0 +1,106 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="PlanReportCtrl">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="col-md-3 control-label"><h3>Select Plan:</h3></label>
+                <div class="col-md-4">
+                    <select class="form-control" ng-model="select.plan" ng-change="planSelected()">
+                        <option value="{{select.plan}}">{{select.plan}}</option>
+                        <option value="{{planName}}" ng-repeat="planName in planNameList track by $index">{{planName}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="float-e-margins pull-right">
+                <form role="form" class="form-inline"  ng-submit="dateRangeSubmit()">
+                    <div class="input-daterange" id="datepicker">
+                        <div class="form-group">
+                            <input  type="text"  ng-model="date.start" required placeholder="From Date"/>
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="form-group">
+                            <input  type="text"  ng-model="date.end" required  placeholder="To Date">
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <tabset >
+                    <tab index="0" heading="Usage Vs Users" ng-click="tabSelected('UsageVsUsers')" >
+                        <div class="panel-body"></div>
+                    </tab>
+                    <tab index="1" heading="Top 20 Areas" ng-click="tabSelected('Top20Areas')" >
+                        <div class="panel-body"></div>
+                    </tab>
+                    <tab index="2" heading="Segment wise Disribution" ng-click="tabSelected('SegmentApps')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="col-md-6">
+                                            <div class="ibox float-e-margins">
+                                                <highchart id="segmentDistributionPie" config="segmentDistributionPieChartConfig" ></highchart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab index="3" heading="App Distribution" ng-click="tabSelected('AppDistribution')" active="transactionDetailsTab.active">
+                        <div class="panel-body">
+                            <div class="row"></div>
+                        </div>
+                    </tab>
+                    <tab index="4" heading="Handset wise Distribution" ng-click="tabSelected('HandsetwiseDistribution')" active="true">
+                        <div class="panel-body">
+                             <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Handset Distribution Count</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <highchart id="handsetDistributionBubble" config="handsetDistributionBubbleChartConfig" ></highchart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Handset Distribution Usage</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <highchart id="handsetDistributionBar" config="handsetDistributionBarChartConfig" ></highchart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>OLT wise Distribution Usage</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <highchart id="oltDistributionBar" config="oltDistributionBarChartConfig" ></highchart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

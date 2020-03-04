@@ -1,0 +1,63 @@
+<div class="form-group">
+    <label class="col-sm-6">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.gauge.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement</label>
+    <div class="col-sm-6">{{module.gauge.statementName}}</div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-6">Statement Id</label>
+    <div class="col-sm-6">{{module.gauge.query}}</div>
+</div>
+
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-sm-6">Frequency</label>
+    <div class="col-sm-6">{{module.gauge.frequency}}</div>
+</div>
+
+<div ng-if="module.gauge.plotKey !== ''">
+    <div class="form-group">
+        <label class="col-sm-6">Plot Key</label>
+        <div class="col-sm-6">{{module.gauge.plotKey}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Plot Value</label>
+        <div class="col-sm-6">{{module.gauge.plotValue}}</div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Value</label>
+    <div class="col-sm-6">{{module.gauge.kpi}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6" >Decimal Value</label>
+    <div class="col-sm-6">{{module.gauge.dataDecimal}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6" >Maximum Value</label>
+    <div class="col-sm-6">{{module.gauge.max}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6" >Threshold Value 1</label>
+    <div class="col-sm-6">{{module.gauge.threshold1}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6" >Threshold Value 2</label>
+    <div class="col-sm-6">{{module.gauge.threshold2}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Unit</label>
+    <div class="col-sm-6">{{module.unit}}</div>
+</div>

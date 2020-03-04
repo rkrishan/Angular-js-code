@@ -1,0 +1,653 @@
+<div   ng-controller="customerDetailsBBCtrl">
+<br>
+    <div class="row" >
+        
+        <div class="col-lg-6">
+            <form role="form" class="form-inline" ng-submit="submit() ">
+                <div class="input-group">
+                    <input type="text" ng-model="customer.enterIPorId" placeholder="Enter Subscriber Id" name="search" class="form-control" minlength="0" maxlength="20" required>
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                    </div>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="input-group" ng-if="showUserDetails" style="padding-top: 2px;">
+                    <button ng-if="showDwnldBtn" type="button" class="btn btn-primary btn-sm pull-right"  ng-click= "getTransactionDaywise()" title="Select date and click to download subscriber session records for yesterday or before"><i class="fa fa-download"></i></button>
+                </div>
+                
+            </form>
+        </div>
+        
+        <div class="col-lg-6 ">
+            <form role="form" class="form-inline" style="display:inherit" ng-if="datepickerShow">
+
+                <div class="form-group pull-right">
+                    <label><h3>Date : </h3></label>
+                    <div class="input-group date">
+                        <single-date-picker></single-date-picker>
+                        <label for="datepick" class="input-group-addon"><i class="fa fa-calendar"></i> </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div> 
+                </div>
+                
+                <!-- <div ng-if="churnT" class="form-group pull-right">
+                    <label><h3 class="badge badge-danger"><b>Churn Threat</b></h3></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+            </form>
+        </div>
+        
+    </div>
+    
+    <div class= "row">
+        
+        <div class="col-lg-12 " ng-if="showUserDetails">
+            <div style="font-size: 90%;" class="ibox-content">
+                <form class="form-inline">
+                    <!-- <div class="form-group">IP&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{sourceip}}</strong> </span>&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+                    
+                    <!-- <div ng-if="IPId.length>0" class="form-group">{{IPorId}}&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{IPId}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+                    
+                    <div ng-if="ip.length>0" class="form-group">IP&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{ip}}</strong> </span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="name.length>0" class="form-group">Name&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{name}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="lookupid.length>0" class="form-group">LookupID&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{lookupid}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="billPlan.length>0" class="form-group">Bill Plan&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{billPlan}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="upgradeDegradeSub.length>0" class="form-group">Previous Bill Plan&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{upgradeDegradeSub}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <!-- <div ng-if="subscriberid.length>0" class="form-group">Subscriber Id&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{subscriberid}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+
+                    <div ng-if="speed!=''" class="form-group">Plan Speed&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{speed}} Mbps</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="quotaLeft!='' && quotaLeft!='Unlimited'" class="form-group">Quota Left (GB)&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{quotaLeft}} of {{quota}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="quotaLeft=='Unlimited'" class="form-group">Quota Left (GB)&nbsp;:&nbsp;<span style="color: #1ab394"><strong >{{quotaLeft}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="segment.length>0" class="form-group">Segment&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{segment}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="node.length>0" class="form-group">OLT <!-- DSLAM -->&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{node}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <!-- <div ng-if="updatedolt.length>0" class="form-group">Updated OLT DSLAM&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{updatedolt}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+                    
+                    <div ng-if="splitter.length>0" class="form-group">Splitter <!-- DSLAM -->&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{splitter}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="pon.length>0" class="form-group">PON&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{pon}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="status.length>0" class="form-group">Status &nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{status}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="area.length>0" class="form-group">Area&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{area}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="city.length>0" class="form-group">City&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{city}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="emailid.length>0" class="form-group">E-mail&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{emailid}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="phone1.length>0" class="form-group">Phone&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{phone1}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="cpe.length>0" class="form-group">CPE&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{cpe}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="classification.length>0" class="form-group">Classification&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{classification}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    <br>
+                    
+                    <span class="form-group">for <span style="color: #1ab394"><strong>{{edate}}</strong></span>&nbsp;&nbsp;<i style="color:#1ab394;" class="fa fa-hand-o-right"></i>&nbsp;&nbsp;</span>
+                    
+                    <div ng-if="usageTotal.length>0" class="form-group">Usage&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{usageTotal}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="PeakThroughputOverall.length>0" class="form-group">Peak Throughput(Overall)&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{PeakThroughputOverall}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="PeakThroughputUncached.length>0" class="form-group">Peak Throughput(Uncached)&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{PeakThroughputUncached}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+                    <div ng-if="updateTime.length>0 && dateSelect == tdDate && datepickerShow" class="form-group">Last Updated&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{updateTime}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    
+                    <div ng-if="deviceShow && devicesConnected.length>0" class="form-group">Devices Connected&nbsp;:&nbsp;<span style="color: #1ab394"><strong>{{devicesConnected}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row" ng-if="showUserDetails">
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+
+                    <uib-tab index="0" heading="Usage" ng-click="tabSelected('usage')" ng-if="showTabObj.Usage">
+                        <div class="panel-body">
+                            
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Hourly Usage Distribution for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                        </div>
+                                        <div class="ibox-content">
+                                        <!-- <export-module filename="'Subscriber Details hourly'" dataobj="exportSubsciberDetail" nested="'true'"></export-module> -->
+                                            <div loading-icon ng-if="loadingUsageDiv && !noDataUsageDiv"></div>
+                                            <div ng-if="!loadingUsageDiv && !noDataUsageDiv">
+                                                <highchart id="chart2" config="usageBarChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingUsageDiv && noDataUsageDiv">
+                                            </div>
+                                            <div ng-if="!loadingUsageDiv && !noDataUsageDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingUsageDiv && !noDataUsageDiv"></div>
+                                            <div ng-if="!loadingUsageDiv && !noDataUsageDiv" >
+                                                <table datatable="ng" dt-options="dataTableOptionsDetails" class="table table-striped table-hover no-margins" >{{dev}}
+                                                    <thead>
+                                                        <tr>
+                                                            <th >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                            <th ng-repeat="col in colArray">
+                                                                <p >
+                                                                    {{col}}<br>
+                                                                    <!-- <a title="Transaction Details" ng-click="transactionDetailsTab==hourSelected(col)">
+                                                                        <i class="fa fa-external-link-square"></i>
+                                                                    </a> -->
+                                                                </p>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                        <tr ng-repeat= "row in rowDataArray track by $index ">
+                                                            <td  style="font-size:12px">{{row[0]}}</td>
+                                                            
+                                                            <td style="font-size:11px" ng-repeat="col in row[1] track by $index"> 
+                                                                <span  ng-if="col.spanClass!='' ">
+                                                                    <label class="{{col.spanClass}}" ng-click="tableClick(col.val, $index,row[0])"> {{col.val}}</label>
+                                                                </span>
+                                                                <!-- <span class="{{col.spanClass}}" ng-if="col.spanClass==''">
+
+                                                                    <span title="Excellent" ng-if= "row[0] == 'CEI' && col.val=='E'"><i class="fa fa-3x fa-smile-o"></i></span>
+                                                                    <span title="Good" ng-if= "row[0] == 'CEI' && col.val=='G'"><i class="fa fa-3x fa-meh-o"></i></span>
+                                                                    <span title="Bad" ng-if= "row[0] == 'CEI' && col.val=='B'"><i class="fa fa-3x fa-frown-o"></i></span> -->
+
+                                                                    <span title="Excellent" ng-if= "row[0] =='CEICached' && col.val=='E'" ><i class="fa fa-3x fa-smile-o" style="color:#1ab394;"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEICached' && col.val=='G'" ><i class="fa fa-3x fa-meh-o" style="color:#23c6c8;"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEICached' && col.val=='B'" ><i class="fa fa-3x fa-frown-o" style="color:#ed5565;"></i></span>
+
+                                                                    <!-- <a title="Excellent" ng-if= "  row[0] == 'CEI' && col.val=='E'" ng-click="ceiClicked($index, col.val, sID, edate, node)"><i class="fa fa-3x fa-smile-o" style="color:#1ab394;"></i></a>
+                                                                    <a title="Good" ng-if= " row[0] == 'CEI' && col.val=='G'" ng-click="ceiClicked($index, col.val, sID, edate, node)"><i class="fa fa-3x fa-meh-o" style="color:#23c6c8;"></i></a>
+                                                                    <a title="Bad" ng-if= " row[0] == 'CEI' && col.val=='B'" ng-click="ceiClicked($index, col.val, sID, edate, node)"><i class="fa fa-3x fa-frown-o" style="color:#ed5565;"></i></a>-->
+                                                                    
+                                                                    <span title="Excellent" ng-if= "row[0] == 'CEI' && col.val=='E'" ><i class="fa fa-3x fa-smile-o" style="color:#1ab394;"></i></span>
+                                                                    <span title="Good" ng-if= "row[0] == 'CEI' && col.val=='G'" ><i class="fa fa-3x fa-meh-o" style="color:#23c6c8;"></i></span>
+                                                                    <span title="Bad" ng-if= "row[0] == 'CEI' && col.val=='B'" ><i class="fa fa-3x fa-frown-o" style="color:#ed5565;"></i></span>
+
+                                                                    <span title="Excellent" ng-if= "  row[0] == 'CEIUnCached' && col.val=='E'" ><i class="fa fa-3x fa-smile-o" style="color:#1ab394;"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEIUnCached' && col.val=='G'" ><i class="fa fa-3x fa-meh-o" style="color:#23c6c8;"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEIUnCached' && col.val=='B'" ><i class="fa fa-3x fa-frown-o" style="color:#ed5565;"></i></span>
+
+                                                                    <span title="Excellent" ng-if= "  row[0] == 'CEIVideo' && col.val=='E'" ><i class="fa fa-3x fa-smile-o" style="color:#1ab394;"></i></span>
+                                                                    <span title="Good" ng-if= " row[0] == 'CEIVideo' && col.val=='G'" ><i class="fa fa-3x fa-meh-o" style="color:#23c6c8;"></i></span>
+                                                                    <span title="Bad" ng-if= " row[0] == 'CEIVideo' && col.val=='B'" ><i class="fa fa-3x fa-frown-o" style="color:#ed5565;"></i></span>
+
+                                                                    <span ng-if= "row[0] != 'CEI' && row[0] != 'CEIVideo' && row[0] != 'Usage' && row[0] != 'CEIUnCached' && row[0] != 'CEICached' && col.spanClass==''">{{col.val}}</span>
+                                                                    <a ng-if= "row[0] == 'Usage' " ng-click="ceiClicked($index, col.val, sID, splitter,edate, node)">{{col.val}}</a>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div> 
+                                            <div no-data-found ng-if="!loadingUsageDiv && noDataUsageDiv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="1" heading="App" ng-click="tabSelected('app')" ng-if="showTabObj.App">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Hourly Apps Distribution for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <!-- <export-module filename="exportAppHrlyObj.fileName" dataobj="exportAppUsageHourlyDetail" fileheader="exportAppHrlyObj.fileHeader"></export-module> -->
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingHourlyAppUsageDiv && !noDataHourlyAppUsageDiv"></div>
+                                            <div ng-if="!loadingHourlyAppUsageDiv && !noDataHourlyAppUsageDiv">
+                                                <highchart id="hourlyAppUsage" config="hourlyAppUsageChartConfig" ></highchart>
+                                            </div >
+                                            <div no-data-found ng-if="!loadingHourlyAppUsageDiv && noDataHourlyAppUsageDiv">
+                                            </div>
+                                            <div ng-if="!loadingHourlyAppUsageDiv && !noDataHourlyAppUsageDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Apps Distribution for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportAppDistObj.fileName" dataobj="exportAppUsageDetail" fileheader="exportAppDistObj.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingAppUsageDiv && !noDataAppUsageDiv"></div>
+                                            <div ng-if="!loadingAppUsageDiv && !noDataAppUsageDiv">
+                                                <nvd3 options="optionsHorizontalBar" data="dataHorizontalBar" api="api"></nvd3> 
+                                            </div>
+                                            <div no-data-found ng-if="!loadingAppUsageDiv && noDataAppUsageDiv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="2" heading="Throughput" ng-click="tabSelected('throughput')" ng-if="showTabObj.Throughput">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Minute wise Down Throughput for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportTpmObj.fileName" dataobj="exportDownTpmDetail" fileheader="exportTpmObj.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingDownThroughputDiv && !noDataDownThroughputDiv"></div>
+                                            <div ng-if="!loadingDownThroughputDiv && !noDataDownThroughputDiv">
+                                                <highchart id="chart2" config="downthroughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingDownThroughputDiv && noDataDownThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingDownThroughputDiv && !noDataDownThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Minute wise Up Throughput for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportTpmObj.fileName" dataobj="exportUpTpmDetail" fileheader="exportTpmObj.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingUpThroughputDiv && !noDataUpThroughputDiv"></div>
+                                            <div ng-if="!loadingUpThroughputDiv && !noDataUpThroughputDiv">
+                                                <highchart id="chart2" config="upthroughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingUpThroughputDiv && noDataUpThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingUpThroughputDiv && !noDataUpThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="7" heading="App Throughput" ng-click="tabSelected('appThroughput')" ng-if="showTabObj.appThroughput">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Minute wise App Throughput for Subscriber: <b style="color:#1ab394;">{{sID}}</b> for App: <b style="color:#1ab394;">{{subsApp}}</b>,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportAppTpmObj.fileName" dataobj="exportTpmDetail" fileheader="exportAppTpmObj.fileHeader"></export-module>
+                                            <div class="pull-right"><b>App :</b>
+                                                <select ng-model="subsApp" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectedSubAppValue(subsApp)">
+                                                    <option value="{{subApps}}" ng-repeat="subApps in subAppArrayList track by $index">{{subApps}}</option>
+                                                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingThroughputDiv && !noDataThroughputDiv"></div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv">
+                                                <highchart id="chart2" config="throughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingThroughputDiv && noDataThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="7" heading="CDN Throughput" ng-click="tabSelected('CDNThroughput')" ng-if="showTabObj.CDNThroughput">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Minute wise CDN Throughput for Subscriber: <b style="color:#1ab394;">{{sID}}</b> for CDN: <b style="color:#1ab394;">{{subsCDN}}</b>,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="exportAppTpmObj.fileName" dataobj="exportTpmDetail" fileheader="exportAppTpmObj.fileHeader"></export-module>
+                                            <div class="pull-right"><b>CDN :</b>
+                                                <select ng-model="subsCDN" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectedSubCDNValue(subsCDN)">
+                                                    <option value="{{subCDN}}" ng-repeat="subCDN in subCDNArrayList track by $index">{{subCDN}}</option>
+                                                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingThroughputDiv && !noDataThroughputDiv"></div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv">
+                                                <highchart id="chart2" config="throughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingThroughputDiv && noDataThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                  
+                    <uib-tab index="3" heading="Transaction Details" ng-click="tabSelected('transactionDetails')" active="transactionDetailsTab" ng-if="showTabObj.TransactionDetails">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Transaction Details for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <!-- <export-module filename="'Transaction Details'" dataobj="exportTransactionDetails" ></export-module> -->
+                                        </div>  
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <form class="form-inline" ng-submit="minSelected()">
+                                                        <div class="form-group">
+                                                            <b>Hour:</b>
+                                                            <select class="form-control" ng-model="select.hour" placeholder="Select Hour">
+                                                                <option value="{{select.hour}}">{{select.hour}}</option>
+                                                                <option value="{{hourList}}" ng-repeat="hourList in hourList track by $index">{{hourList}}</option>
+                                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="form-group"><b>Min:</b>
+                                                            <select class="form-control" ng-model="selectMin.min" >
+                                                                <option value="{{selectMin.min}}">{{selectMin.min}}</option>
+                                                                <option value="{{minList}}" ng-repeat="minList in minList track by $index">{{minList}}</option>
+                                                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                                                        </div>
+                                                        <div class="form-group pull-right">
+                                                            <button type="button" class="btn btn-info btn-xs pull-right" ng-click= "resetFilter()" title="Reset Filter"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="form-group pull-right">
+                                                            <button type="button" class="btn btn-info btn-xs pull-right" ng-click= "filterClicked()" title="Add Filter"><i class="fa fa-filter" ></i></button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </div>
+                                                        
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <p ng-if="infoLine">Showing results for <b style="color:#1ab394;">Hour : {{getHour}}</b> <span ><b style="color:#1ab394;">{{protocol}}</b> <b style="color:#1ab394;">{{appInfo}}</b> <b style="color:#1ab394;">{{urlInfo}}</b> <b style="color:#1ab394;">{{usage}}</b> <b style="color:#1ab394;">{{tp}}</b></span></p>
+                                            <div class="table-responsive">
+                                                <table datatable="ng" dt-options="transactionDetailsOptions" class=" table table-responsive table-hover table-striped no-margins" >    
+                                                    <thead id="tableheader">
+                                                        <tr>
+                                                            <th style="font-size:12px">Time</th>
+                                                            <th style="font-size:12px">Duration</th>
+                                                            <th style="font-size:12px">AppProtocol</th>
+                                                            <th style="font-size:12px">DestinationIP</th>
+                                                            <th style="font-size:12px">App</th>
+                                                            <!-- <th style="font-size:12px"></th> -->
+                                                            <th style="font-size:12px">SourcePort</th>
+                                                            <th style="font-size:12px">DestinationPort</th>
+                                                            <th style="font-size:12px">URL/IP</th>
+                                                            <th style="font-size:12px">Usage</th>
+                                                            <th style="font-size:12px">UpUsage</th>
+                                                            <th style="font-size:12px">DownUsage</th>
+                                                            <!-- <th style="font-size:12px"></th> -->
+                                                            <th style="font-size:12px">Throughput</th>
+                                                            <th style="font-size:12px">DataLatency(ms)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in transactionDetail track by $index" >
+                                                            <td ng-bind-html="element.Date">{{ element.Date }}</td>
+                                                            <td ng-bind-html="element.Duration">{{ element.Duration }}</td>
+                                                            <td >{{ element.AppProtocol }}</td>
+                                                            <td >{{ element.DestinationIP }}</td>
+                                                            <td >{{ element.App }}</td>
+                                                            <!-- <td >
+                                                                <a ng-if="element.App == 'Youtube' && element.DownUsage != '0B'" title="User Analytics" ng-click="transactionTableSelectedRow(element.key, 'vpsVsAvgPktsSize')">
+                                                                    <i class="fa fa-external-link-square"></i>
+                                                                </a>
+                                                            </td> -->
+                                                            <td >{{ element.SourcePort }}</td>
+                                                            <td >{{ element.DestinationPort }}</td>
+                                                            <td >{{ element.URL }}</td>
+                                                            <td >{{ element.Usage }}</td>
+                                                            <td >{{ element.UpUsage }}</td>
+                                                            <td >{{ element.DownUsage }}</td>
+                                                           <!--  <td >
+                                                                <a ng-if="element.DownUsage != '0B'" title="User Analytics" ng-click="transactionTableSelectedRow(element.key, 'vps')">
+                                                                    <i class="fa fa-external-link-square"></i>
+                                                                </a>
+                                                            </td> -->
+                                                            <td >{{ element.Throughput }}</td>
+                                                            <td >{{ element.DataLatency }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="6" heading="AAA Transaction Details" ng-click="tabSelected('transactionAAADetails')" active="TransactionAAADetailsTab" ng-if="TransactionOperator">
+                        <div class="panel-body" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>AAA Transaction Details for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                        </div>  
+                                        <div class="ibox-content">
+                                            <table datatable="ng" class=" table table-responsive table-hover table-striped no-margins" >    
+                                                <thead id="tableheader">
+                                                    <tr>
+                                                        <th style="font-size:12px">Time</th>
+                                                        <th style="font-size:12px">Duration</th>
+                                                        <th style="font-size:12px">OpType</th>
+                                                        <th style="font-size:12px">Request</th> 
+                                                        <th style="font-size:12px">IP</th>
+                                                        <th style="font-size:12px">Account Status</th>
+                                                        <th style="font-size:12px">Response</th> 
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="element in transactionAAADetail " >
+                                                        <td ng-bind-html="element.Date">{{ element.Date }}</td>
+                                                        <td ng-bind-html="element.Duration">{{ element.Duration }}</td>
+                                                        <td >{{ element.OpType }}</td>
+                                                        <td >{{ element.Request }}</td>
+                                                        <td >{{ element.IP }}</td>
+                                                        <td >{{ element.AccountStatus }}</td>
+                                                        <td >{{ element.Response }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="4" heading="Historical Usage" ng-click="tabSelected('usage30Days')" ng-if="showTabObj.UsageLast30Days">
+                        <div class="panel-body">
+                            <div class="row">
+                                <!-- ng-if="datepickerShow" -->
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="col-lg-12">
+                                            <form role="form" class="form-inline" style="display:inherit" ng-submit="submitUsersDateRange() ">
+                                                <div class="form-group pull-right">
+                                                    <div class="input-group date">
+                                                        <form role="form" class="form-inline">
+                                                            <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                                                                <div class="form-group" >
+                                                                    <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                                                                </div>
+                                                                <button style="margin-bottom: 0px;" class="btn btn-sm btn-primary" type="submit">Submit</button>
+                                                            </div>
+                                                            
+                                                        </form>
+                                                    </div> 
+                                                </div>
+                                                
+                                            </form>
+                                        </div> 
+                                    </div>
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Usage Day wise for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,between  <b style="color:#1ab394;">{{startDate}} - {{endDate}}</b></span>
+
+                                            <export-module filename="exportUsgDist30DaysObj.fileName" dataobj="exportUsgDist30DaysDetail" fileheader="exportUsgDist30DaysObj.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <!-- <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingUsageDiv && !noDataUsageDiv"></div>
+                                                    <div ng-if="!loadingUsageDiv && !noDataUsageDiv">
+                                                        <highchart id="chart2" config="scatterChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="!loadingUsageDiv && noDataUsageDiv">
+                                                    </div>
+                                                    <div ng-if="!loadingUsageDiv && !noDataUsageDiv" class="pull-right"> <b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div> -->
+                                            <div class="col-md-12">
+                                                <div class="ibox float-e-margins">
+                                                   <div loading-icon ng-if="loadingUsageDiv && !noDataUsageDiv"></div>
+                                                    <div ng-if="!loadingUsageDiv && !noDataUsageDiv">
+                                                        <highchart id="chart1" config="barChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="!loadingUsageDiv && noDataUsageDiv">
+                                                    </div>
+                                                    <div ng-if="!loadingUsageDiv && !noDataUsageDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>App Distribution for Subscriber: <b style="color:#1ab394;">{{sID}}</b> ,between  <b style="color:#1ab394;">{{startDate}} - {{endDate}}</b></span>
+                                            <export-module filename="exportAppDist30DaysObj.fileName" dataobj="exportAppDist30DaysDetail" fileheader="exportAppDist30DaysObj.fileHeader"></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingAppDistributionDiv && !noDataAppDistributionDiv"></div>
+                                                    <div ng-if="!loadingAppDistributionDiv && !noDataAppDistributionDiv">
+                                                        <highchart id="chartApp" config="appPieChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="!loadingAppDistributionDiv && noDataAppDistributionDiv">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingAppDistributionDiv && !noDataAppDistributionDiv"></div>
+                                                    <div ng-if="!loadingAppDistributionDiv && !noDataAppDistributionDiv">
+                                                        <highchart id="chartAppPie" config="appBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="!loadingAppDistributionDiv && noDataAppDistributionDiv">
+                                                    </div>
+                                                    <div ng-if="!loadingAppDistributionDiv && !noDataAppDistributionDivs" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="8" heading="Usage Month wise" ng-click="tabSelected('usageMonthwise')" ng-if="showTabObj.usageMonthwise">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="col-lg-12 ">
+                                            <div class="btn-group  pull-right">
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['3m']" uib-btn-checkbox ng-click="statusMnthBtn(true, false, false)">3 Months</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['6m']" uib-btn-checkbox ng-click="statusMnthBtn(false, true, false)">6 Months</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['9m']" uib-btn-checkbox ng-click="statusMnthBtn(false, false, true)">9 Months</label>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Month wise Usage for Subscriber: <b style="color:#1ab394;">{{sID}}</b> between <b style="color:#1ab394;">{{sMonth}} - {{eMonth}} </b></span>
+                                            <export-module filename="exportUsageMonthwiseObj.fileName" dataobj="exportUsageMonthwiseData" fileheader="exportUsageMonthwiseObj.fileHeader"></export-module>
+                                        </div>
+
+                                        <div loading-icon ng-if="loadingUsageMonthwiseDiv"></div>
+                                        <div ng-if="DataUsageMonthwiseDiv">
+                                            <highchart id="UsageMonthwise" config="UsageMonthwiseChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageMonthwiseDiv"></div>
+                                        <div ng-if="DataUsageMonthwiseDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="10" heading="Profile" ng-click="tabSelected('profile')" ng-if="showTabObj.profile">
+                        <div class="panel-body">
+                            <div loading-icon ng-if="loadingProfileDiv"></div>
+                            <div ng-if="dataProfileDiv" class="ibox-content">
+                                <div class="row">
+                                    <div class="col-lg-1">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <i class="fa fa-user-circle-o fa-primary fa-5x" style="color:#1ab394; font-size: 8em"></i><br>
+                                        <span style="color:#1ab394; "><b><h3>{{customerId}}</h3></b></span>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <form class="form-horizontal col-lg-6" name="userform" role="form">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-borderd" style=" border: 1px solid #e7eaec;">
+                                                <tbody>
+                                                    <tr ng-repeat="(key, value) in profile"> 
+                                                        <td>{{key}}</td>
+                                                        <td>:&nbsp;&nbsp;&nbsp;&nbsp;{{value}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- <div class="form-group" ng-repeat="(key, value) in profile">
+                                            <label class="col-sm-1 "></label>
+                                            <label class="col-sm-2 ">{{key}}</label>
+                                            <label class="col-sm-1 "> :</label>
+                                            <span class="col-sm-8 ">{{value}}</span>
+                                        </div> -->
+                                    </form>
+                                    <div class="col-lg-3"></div>
+                                </div>
+                            </div>
+                            <div no-data-found ng-if="noDataProfileDiv"></div>
+                        </div>
+                    </uib-tab>
+
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

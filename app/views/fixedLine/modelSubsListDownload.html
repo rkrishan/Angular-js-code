@@ -1,0 +1,38 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <a class="pull-right" ng-click="cancel()"><i class="fa fa-times"></i></a>
+        <h5 class="modal-title" >{{header}}</h5>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper wrapper-content animated fadeIn" >
+            <div class="ibox-title">
+                <h5>{{title}} </h5>
+                <export-module filename="title" dataobj="exportSubList" fileheader="header"></export-module>
+            </div>
+            <div class="ibox-content">
+                <div loading-icon ng-if="loadingDiv && !noDataDiv" ></div>
+                <div  ng-if="!loadingDiv && !noDataDiv">
+                    <table id="planUsage" datatable="ng" dt-options="dataTableOptions" class=" table table-responsive table-hover no-margins" >    
+                            <thead id="tableheader">
+                                <tr >
+                                    <th ng-repeat="(key, value) in SubListData[0]">{{key}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="obj in SubListData track by $index">
+                                    <td ng-repeat="(key, value) in obj ">{{value}}</td>
+                                    <td>
+                                        <a title="Subscriber Details" ng-click="stateGo(SubListData[$index].Subscriber)">
+                                            <i class="fa fa-external-link-square"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <div no-data-found ng-if="!loadingDiv && noDataDiv"></div>
+            </div>
+        </div>
+    </div>
+</div>

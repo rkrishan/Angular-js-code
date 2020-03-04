@@ -1,0 +1,209 @@
+<div class="wrapper-content animated fadeIn" ng-controller="appAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <!-- <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+
+                <div class="input-group pull-right">
+                    <!--<div class="input-daterange" id="datepicker">
+                        <input type="text"  ng-model="date.start" required placeholder="From Date"/>
+                        <input type="text"  ng-model="date.end" required  placeholder="To Date">
+                        <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                    </div>-->
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange" data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Smmit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+   <!--  <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div> -->
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Usage" ng-click="tabSelected('Usage')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class=" dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'excel', 'Usage')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'csv', 'Usage')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="Visits" ng-click="tabSelected('Visits')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class=" dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'excel', 'Visits')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'csv', 'Visits')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Duration" ng-click="tabSelected('Duration')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class=" dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'excel', 'Duration')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppsMultiineChart,'csv', 'Duration')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingAppsMultiineDiv"></div>
+                                                    <div ng-if="DataAppsMultiineDiv">
+                                                        <highchart id="chart2" config="AppsMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsMultiineDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsBarDiv"></div>
+                                                    <div ng-if="DataAppsBarDiv">
+                                                        <highchart id="chart1" config="AppsBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

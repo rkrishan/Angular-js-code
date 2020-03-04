@@ -1,0 +1,456 @@
+<div class="wrapper-content animated fadeIn" ng-controller="planAnalyticsBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><!--  <b ng-if="currentPage=='OLT'">DSLAM :</b>
+                                        <b ng-if="currentPage!='OLT'"> --><b> {{currentPage}} :</b>
+                    <select ng-model="select.plan" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{planName}}" ng-repeat="planName in planNameList track by $index">{{planName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Usage Vs {{UsersOrVisits}}" ng-click="tabSelected('UsageVsUsers')" ng-if="showTabObj.UsageVsUsers">
+                        <div class="panel-body" active="true">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Usage Vs {{UsersOrVisits}} Distribution for<!--  <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(exportUserVsUsage,'excel', 'Usage Vs '+UsersOrVisits)">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportUserVsUsage,'csv', 'Usage Vs '+UsersOrVisits)">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsageVsUsersDiv"></div>
+                                        <div ng-if="DataUsageVsUsersDiv">
+                                            <highchart id="UsageVsUsers" config="UsageVsUsersChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageVsUsersDiv"></div>
+                                        <div ng-if="DataUsageVsUsersDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="{{PlanOrOLT}} wise Distribution" ng-click="tabSelected('OLTDistribution')" ng-if="showTabObj.OLTorPlanwiseDistribution" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>{{PlanOrOLT}} Usage Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <div class="col-lg-12 pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown>
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportUsageDistribution,'excel', PlanOrOLT+' wise Usage Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportUsageDistribution,'csv', PlanOrOLT+' wise Usage Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv">
+                                            <highchart id="OLTDistribution" config="usageDistributionChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>{{PlanOrOLT}} Subscribers Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> -->{{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <div class="col-lg-12 pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'excel', PlanOrOLT+' Users Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'csv', PlanOrOLT+' Users Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsersDistributionDiv"></div>
+                                        <div ng-if="DataUsersDistributionDiv">
+                                            <highchart id="OLTDistribution" config="usersDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersDistributionDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Segment wise Distribution" ng-click="tabSelected('segmentWiseDistribution')" ng-if="showTabObj.SegmentwiseDistribution">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Segment Usage Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsageDistribution,'excel', 'Segment Usage Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsageDistribution,'csv', 'Segment Usage Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv">
+                                            <highchart id="SegmentUsageDistribution" config="usageDistributionChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" >
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Segment Subscribers Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'excel', 'Segment Users Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'csv', 'Segment Users Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsersDistributionDiv"></div>
+                                        <div ng-if="DataUsersDistributionDiv">
+                                            <highchart id="SegmentUsersDistribution" config="usersDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersDistributionDiv"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <!-- <uib-tab  heading="CEI" ng-click="tabSelected('CEI')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>CEI Distribution for {{currentPage}} <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportCEIDistribution,'excel', 'CEI')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportCEIDistribution,'csv', 'CEI')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div loading-icon ng-if="loadingCEIDiv"></div>
+                                    <div ng-if="DataCEIDiv">
+                                        <highchart id="SegmentUsersDistribution" config="CEIDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataCEIDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> -->
+                    
+                    <uib-tab  heading="{{PlanOrApp}} wise Distribution" ng-click="tabSelected('AppDistribution')" ng-if="showTabObj.ApporPlanwiseDistribution" >
+                        <div class="panel-body">
+                            <div class="row" ng-if="PlanOrApp== 'Plan'">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Top 20 {{PlanOrApp}} Usage Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span> 
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown>
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(exportAppPlanUsageDistribution,'excel', PlanOrApp+' wise Usage Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportAppPlanUsageDistribution,'csv', PlanOrApp+' wise Usage Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingAppPlanUsageDistributionDiv"></div>
+                                        <div ng-if="DataAppPlanUsageDistributionDiv">
+                                            <highchart id="AppPlanDistributionBar" config="appPlanUsageDistributionChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataAppPlanUsageDistributionDiv"></div>
+                                        <div ng-if="DataAppPlanUsageDistributionDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="PlanOrApp== 'App'">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>{{PlanOrApp}} Usage Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <div class="col-lg-12 pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown>
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportUsageDistribution,'excel', 'OLT wise Usage Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportUsageDistribution,'csv', 'OLT wise Usage Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv">
+                                            <highchart id="OLTDistribution" config="usageDistributionChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageDistributionDiv"></div>
+                                        <div ng-if="DataUsageDistributionDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>{{PlanOrApp}} Subscribers Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> -->{{currentPage}} <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <div class="col-lg-12 pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'excel', 'OLT Users Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataNestedExport(exportUsersDistribution,'csv', 'OLT Users Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsersDistributionDiv"></div>
+                                        <div ng-if="DataUsersDistributionDiv">
+                                            <highchart id="OLTDistribution" config="usersDistributionChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersDistributionDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                   <uib-tab  heading="Latency Distribution" ng-click="tabSelected('Latency')" ng-if="currentPage != 'Plan' && showTabObj.LatencyDistribution">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Latency Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle title="Export">
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportCEIDistribution,'excel', 'CEI')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportCEIDistribution,'csv', 'CEI')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div loading-icon ng-if="loadingCEIDiv"></div>
+                                    <div ng-if="DataCEIDiv">
+                                        <highchart id="SegmentUsersDistribution" config="CEIDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataCEIDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                   <uib-tab  heading="Throughput" ng-click="tabSelected('Throughput')" ng-if="showTabObj.Throughput">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Throughput Distribution(Minute wise) for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}} <!--  </span>  --><b style="color:#1ab394;">{{drdwnSelect}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="'Throughput Minute wise'" dataobj="exportSubscriberThroughput" ></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            
+                                            <div loading-icon ng-if="loadingThroughputDiv && !noDataThroughputDiv"></div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv">
+                                                <highchart id="chart2" config="throughputChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingThroughputDiv && noDataThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingThroughputDiv && !noDataThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Peak Throughput Vs Subscribers (Hourly) for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}} <!--  </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="'Throughput Hourly'" dataobj="exportSubscriberHourlyThroughput" ></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            
+                                            <div loading-icon ng-if="loadingHourlyThroughputDiv && !noDataHourlyThroughputDiv"></div>
+                                            <div ng-if="!loadingHourlyThroughputDiv && !noDataHourlyThroughputDiv">
+                                                <highchart id="chart2" config="throughputHourlyChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingHourlyThroughputDiv && noDataHourlyThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingHourlyThroughputDiv && !noDataHourlyThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="OLT Utilization" ng-click="tabSelected('OLTUtilization')" ng-if="currentPage == 'OLT' && showTabObj.OLTUtilization">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <span>Plateau Distribution(Minute wise) for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}}  <!-- </span> --><b style="color:#1ab394;">{{drdwnSelect}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                                            <export-module filename="'Plateau Throughput Minute wise'" dataobj="exportPlateauThroughput" ></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            
+                                            <div loading-icon ng-if="loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv"></div>
+                                            <div ng-if="!loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv">
+                                                <highchart id="chart2" config="throughputPlateauChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingPlateauThroughputDiv && noDataPlateauThroughputDiv">
+                                            </div>
+                                            <div ng-if="!loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Country Distribution" ng-click="tabSelected('countryDistribution')" ng-if="currentPage == 'App' && showTabObj.CountryDistribution">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <!-- <span>CountryDistribution for <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                            </span>
+                                            <export-module filename="'Country Distribution'" dataobj="exportCountryDistribution" ></export-module>
+                                        </div>
+                                        <div class="ibox-content">
+                                            
+                                            <div loading-icon ng-if="loadingCountryDistributionDiv && !noDataCountryDistributionDiv"></div>
+                                            <div ng-if="!loadingCountryDistributionDiv && !noDataCountryDistributionDiv">
+                                                <highchart id="chart2" config="countryDistributionChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="!loadingCountryDistributionDiv && noDataCountryDistributionDiv">
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

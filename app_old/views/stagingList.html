@@ -1,0 +1,157 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Staging</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight" ng-if="mainView">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addnew()">Add Staging</button>
+                </div>
+                <div class="ibox-content" ng-if="analysisList.length > 0">
+                    <table datatable="ng" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in analysisList">
+                                <td>{{ item.type | capitalize }}</td>
+                                <td>{{ item.name  }} </td>
+                                <td>{{ item.description  }}</td>
+                                <td >
+                                <button class="btn btn-info btn-xs" type="button" ng-click="edit(item)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-edit"></i> Edit</button>
+                                
+                                <button class="btn btn-danger btn-xs" type="button" ng-click="remove($index, item)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                
+                                <!-- <button class="btn btn-success" type="button" ng-click="assign(item)" ng-show="userProfile.userType == 'admin'"><i class="fa fa-share-square"></i> Assign</button> -->
+
+                                <button class="btn btn-warning btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+
+                                    <!-- <span style="cursor:pointer">
+                                        <i class="fa fa-edit" ng-click="edit($index)" ng-show="userProfile.userType=='admin' || item.type=='self'">
+                                        </i>
+                                        <i class="fa fa-remove" ng-click="remove($index, item)" ng-show="userProfile.userType=='admin' || item.type=='self'">
+                                        </i>
+                                        <i class="fa fa-arrow-right" ng-click="detail(item)"></i>
+                                    </span> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For dashboard -->
+<div class="wrapper wrapper-content animated fadeInRight" ng-if="assignList">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">    
+                    <h2>{{selected.name}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="row form-group">
+                        <label class="col-lg-2">Assign to</label>
+                        <div class="col-lg-4">
+                            <select ng-model="data.assignTo" class="form-control" ng-change="changeAssign(data.assignTo)">
+                                <option value="">Select</option>
+                                <option ng-repeat="item in selectList">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table datatable="ng" class="table table-striped table-bordered table-hover " ng-if="itemList">
+                        <thead>
+                            <tr>
+                                <th width="10"></th>
+                                <th >{{data.assignTo}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in itemList">
+                                <td ng-if="data.assignTo == 'Group'">
+                                    <input type="checkbox" ng-checked="confirmGroupArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                </td>
+
+                                <td ng-if="data.assignTo == 'User'">
+                                    <input type="checkbox" ng-checked="confirmUserArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                </td>
+
+                                <td ng-if="data.assignTo == 'User'">{{item.firstName | capitalize}}  {{item.lastName | capitalize}}</td>
+
+                                <td ng-if="data.assignTo == 'Group'">{{item.title | capitalize}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row form-group">
+                        <div class="col-sm-12  col-sm-offset-4">
+                            <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                            <button class="btn btn-primary" type="button" ng-click="save(data)" ng-if="itemList">Save</button>
+                        </div>
+                        <!-- ng-disabled="cnfrmBtn" -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="ibox float-e-margins fadeInRight" ng-if="assignList">
+                <div class="ibox-title">    
+                    <h2>{{selected.name}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="row form-group">
+                        <label class="col-lg-2">Assign to</label>
+                        <div class="col-lg-4">
+                            <select ng-model="data.assignTo" class="form-control" ng-change="changeAssign(data.assignTo)">
+                                <option value="">Select</option>
+                                <option ng-repeat="item in selectList">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table datatable="ng" class="table table-striped table-bordered table-hover " ng-if="itemList">
+                        <thead>
+                            <tr>
+                                <th width="10"></th>
+                                <th >{{data.assignTo}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in itemList">
+                                <td ng-if="data.assignTo == 'Group'">
+                                    <input type="checkbox" ng-checked="confirmGroupArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                </td>
+
+                                <td ng-if="data.assignTo == 'User'">
+                                    <input type="checkbox" ng-checked="confirmUserArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                </td>
+
+                                <td ng-if="data.assignTo == 'User'">{{item.firstName | capitalize}}  {{item.lastName | capitalize}}</td>
+
+                                <td ng-if="data.assignTo == 'Group'">{{item.title | capitalize}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row form-group">
+                        <div class="col-sm-12  col-sm-offset-4">
+                            <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                            <button class="btn btn-primary" type="button" ng-click="save(data)" ng-if="itemList">Save</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div> -->

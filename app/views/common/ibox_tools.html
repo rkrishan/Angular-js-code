@@ -1,0 +1,37 @@
+<div class="ibox-tools dropdown" uib-dropdown ng-show="userProfile.userType != 'user'">
+    <!-- <span class="label label-success" ng-if="displaydata[component.component._id].statement.dataSource == 'DBPull'"><a ui-sref="index.schedule({statementId:displaydata[component.component._id].statement.statementId, name: component.component.title, day:report.day})">Schedule</a></span>
+ -->
+    <a class="dropdown-toggle" href uib-dropdown-toggle>
+        <i class="fa fa-wrench"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-user">
+        <!-- <li><a ui-sref="##.share({id:component.component._id, width:component.component.width})" target="new">Share Module</a></li><li><a ui-sref="##.share({id:component.component._id, width:component.component.width})" target="new">Share Module</a></li> -->
+        <li><a ng-click="detail(component.component)">Details of Module</a></li>
+        <li><a ng-click="removeComponent(component)" title="Remove">Remove Module</a></li>
+    </ul>
+</div>
+
+<div class="ibox-tools dropdown" uib-dropdown ng-if="userProfile.export && component.componentType == 'simple_charts' && component.component.data == 'DBPull'"><!-- && userProfile.userType != 'user' -->
+    <a class="dropdown-toggle " href uib-dropdown-toggle>
+        <i class="fa fa-save" ></i>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'excel')">Export to Excel</a>
+        </li>
+        
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'csv')">Export to CSV</a>
+        </li>
+        <!-- <li>
+            <a ng-click="exportModule(component.component, 'png')">PNG</a>
+        </li> -->
+    </ul>
+</div>
+
+<!--for displaying label name -->
+<!-- <div class="ibox-tools" ng-if="component.component.label">
+    <span ng-class="component.component.labelColor"> {{component.component.label}}</span>
+</div> -->
+
+<!-- Adding OLT Name  -->

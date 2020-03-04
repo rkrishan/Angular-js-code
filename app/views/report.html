@@ -1,0 +1,190 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Report</h3>
+</div>
+
+<style type="text/css">
+    .datepicker-days tr:hover {
+        background-color: #808080;
+    }
+</style>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Report</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" role="form" ng-submit="save(data)">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-lg-4">
+                                <input type="text" placeholder="Name" class="form-control" ng-model="data.name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-lg-4">
+                                <textarea placeholder="Description" class="form-control" ng-model="data.description" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Type</label>
+                            <div class="col-lg-4">
+                                <select class="form-control" ng-model="data.type" required>
+                                    <option value="">-Select-</option>
+                                    <option value="static">System Generated</option>
+                                    <option value="dynamic">User Configurable</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="data.type == 'static'">
+                            <label class="col-lg-2 control-label">File</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" ng-model="data.file" placeholder="File Name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="data.type == 'dynamic'">
+                            <label class="col-lg-2 control-label">Choose Filter</label>
+                            <div class="col-lg-6">
+                                <!-- <div ng-repeat="item in filter" style="margin-bottom:5px; display: flex;">
+                                    <input icheck type="checkbox" ng-model="data.filter[item]" style="margin-right:10px;" />
+                                    <span class="m-l-xs">{{ item | uppercase}} </span>
+                                    <info content="'create_reportFilter_'+item" file="'help/help_report.html'"></info>
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <tr ng-repeat="item in filter">
+                                                <td style="display: flex;">
+                                                    <input icheck type="checkbox" ng-model="data.filter[item]" ng-change="checkType(item, data.filter[item])">
+                                                    <span class="m-l-xs">{{ item | uppercase}} </span>
+                                                    <info content="'create_reportFilter_'+item" file="'help/help_report.html'"></info>
+                                                </td>
+                                                <td ng-if="item != 'Usage'">
+                                                    <input icheck type="radio" ng-model="data.filterType[item]" value="single" ng-disabled="!data.filter[item]">
+                                                    <span class="m-l-xs">Single</span>
+                                                </td>
+                                                <td ng-if="item != 'Usage'">
+                                                    <input icheck type="radio" ng-model="data.filterType[item]" value="multiple" ng-disabled="!data.filter[item]">
+                                                    <span class="m-l-xs">Multiple</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Date Range -->
+                                <div class="row" style="margin-bottom:5px;">
+                                    <!-- ng-true-value="'date'" -->
+                                    <div class="col-lg-3">
+                                        <input icheck type="checkbox" ng-model="data.filter.date" ng-disabled="data.filter.singleDatepicker">
+                                        <span class="m-l-xs">Date Range</span>
+                                    </div>
+                                  <!--   <div class="col-lg-5" ng-if="data.filter.date">
+                                        <input type="text" class="form-control" ng-model="data.filter.day" placeholder="Days" required numbers-only maxlength="2">
+                                    </div> -->
+
+                                      <div class="col-lg-5" ng-if="data.filter.date">
+                                        <select name="view" ng-model="data.view" class="form-control" required = 'true' ng-change="ischeck(data.view)">
+                                              <option value="">Select</option>
+                                              <option value="Month">Month</option>
+                                              <option value="Week">Week</option>
+                                              <option value="Day">Day</option>
+                                        </select>
+                                        <div ng-show ="data.view == 'Day'">
+                                            <input type="text" class="form-control" ng-model="data.filter.day" placeholder="Days" numbers-only maxlength="2">
+                                        </div>
+                                        <div ng-show ="data.view == 'Month'">
+                                            <input type="text" class="form-control" ng-model="data.filter.Month" placeholder="Month"  numbers-only maxlength="2">
+                                        </div>
+                                        <div ng-show ="data.view == 'Week'">
+                                            <input type="text" class="form-control" ng-model="data.filter.Week" placeholder="Week" numbers-only maxlength="2">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-left:0px; margin-bottom:5px;" ng-if="data.filter.date" ng-show="isShow">
+                                    <div class="col-lg-8">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <tr>
+                                                <th>Granularity</th>
+                                                <th></th>
+                                                <th>Default</th>
+                                            </tr>
+                                            <tr ng-repeat="item in ['Minute', 'Hour', 'Day', 'Week', 'Month']">
+                                                <td>{{item}}</td>
+                                                <td><input icheck type="checkbox" name="Granularity" value="{{item}}" ng-model="data.granularity[item]" ng-change="checkGranularity(item)"></td>
+
+                                                <td><input icheck type="radio" name="GranularityDefault" value="{{item}}" ng-model="data.GranularityDefault" required ng-disabled="!data.granularity[item]"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- <input type="text" class="form-control" ng-model="data.month" placeholder="Month" required data-provide="datepicker" data-date-min-view-mode="months" data-date-autoclose="true" data-date-format="mm/yyyy" ng-if="data.dateMode == 'months'">
+                                    
+                                    <input type="text" id="daysView" class="form-control" ng-model="data.day" placeholder="Days" data-provide="datepicker" data-date-min-view-mode="days" data-date-autoclose="true" data-date-format="yyyy/mm/dd" ng-if="data.dateMode == 'days'" required ng-change="daysView(this)"> -->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <!-- ng-true-value="'singleDatepicker'" -->
+                                        <input icheck type="checkbox" name="dateFilter" ng-model="data.filter.singleDatepicker" style="margin-right:10px;" ng-disabled="data.filter.date">
+                                        <span class="m-l-xs">Datepicker</span>
+                                    </div>
+                                    <div class="col-lg-5" ng-if="data.filter.singleDatepicker">
+                                        <select name="view" ng-model="data.view" class="form-control" required = 'true'>
+                                              <option value="">Select</option>
+                                              <option value="Month">Month</option>
+                                              <option value="Week">Week</option>
+                                              <option value="Day">Day</option>
+                                        </select>
+                                        <div ng-show ="data.view == 'Day'">
+                                            <input type="text" class="form-control" ng-model="data.filter.day" placeholder="Days" numbers-only maxlength="2">
+                                        </div>
+                                        <div ng-show ="data.view == 'Month'">
+                                            <input type="text" class="form-control" ng-model="data.filter.Month" placeholder="Month"  numbers-only maxlength="2">
+                                        </div>
+                                        <div ng-show ="data.view == 'Week'">
+                                            <input type="text" class="form-control" ng-model="data.filter.Week" placeholder="Week" numbers-only maxlength="2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Serial No.</label>
+                            <div class="col-lg-4">
+                                <input type="text" placeholder="Serial No." class="form-control" ng-model="data.serialno" required numbers-only>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Use Case</label>
+                            <div class="col-lg-4">
+                                <select class="form-control" ng-model="data.useCase">
+                                    <option value="">-Select-</option>
+                                    <option ng-repeat="item in useCaseList" value="{{item._id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button class="btn btn-primary" type="submit" >Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

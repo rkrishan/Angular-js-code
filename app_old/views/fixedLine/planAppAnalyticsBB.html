@@ -1,0 +1,16 @@
+<div  ng-controller="planAppAnalyticsBBCtrl">
+    <div class="row" >
+        <div class="col-lg-6" ng-repeat= "data in appDistAcrossPlansObject track by $index">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{data[1]}} App Distribution</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div flot class="flot-chart-content" dataset="data[0]" options="optionsFlotPie" ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

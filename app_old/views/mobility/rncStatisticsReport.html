@@ -1,0 +1,68 @@
+<div class="wrapper-content animated fadeIn" ng-controller="rncStatisticsReportCtrl">
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <form class="form-inline" ng-submit="click()">
+                        <div class="form-group"><b>CEI</b>&nbsp;&nbsp;
+                        </div>
+
+                    </form>
+                    
+                    <div class="ibox-tools dropdown pull-right" uib-dropdown>
+                        <a class="dropdown-toggle" href uib-dropdown-toggle>
+                            <span class="pull-right label label-primary">Export</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="expotNestedjsonObj(topModelsObj, 'excel')">Export to Excel</a>
+                            </li>
+                            <li>
+                                <a ng-click="expotNestedjsonObj(topModelsObj, 'csv')">Export to CSV</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="ibox-content">
+                        <div loading-icon ng-if="loadingBarChartCEIDiv"></div>
+                        <div ng-if="true">
+                            <highchart id="BarChart" config="rncFailureDrilldownConfig" ></highchart>
+                        </div>
+                        <div no-data-found ng-if="noDataBarChartCEIDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <form class="form-inline" ng-submit="click()">
+                    pie drilldown
+                        <div class="form-group pull-right">
+                            <span class="label label-primary">LTE</span>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row" >
+                        <div class="col-lg-12">
+                            <div class="ibox-content">
+                                <div loading-icon ng-if="loadingBarChartCEIDiv"></div>
+                                <div >
+                                    <highchart id="pieChart" config="pieDrilldownConfig" ></highchart>
+                                </div>
+                                <div no-data-found ng-if="noDataBarChartCEIDiv"></div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>

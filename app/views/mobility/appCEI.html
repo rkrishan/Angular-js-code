@@ -1,0 +1,67 @@
+<div class="wrapper-content animated fadeIn" ng-controller="appCEICtrl">
+	<div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker>
+                        
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b>App wise CEI<!-- </b></span>&nbsp;:&nbsp;&nbsp;:&nbsp;for Date&nbsp;:&nbsp;{{date.end}} -->
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown >
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="getNestedExport(exportQoSDeviceWise,'excel', 'QoS Device Wise')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="getNestedExport(exportQoSDeviceWise,'csv', 'QoS Device Wise')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingQoSDeviceWiseDiv"></div> 
+                    <div ng-if="DataQoSDeviceWiseDiv">
+                        <div class="table-responsive">
+                            <table datatable  class="table table-striped table-bordered table-hover ">
+                                <tbody >
+                                    <tr>
+                                        <td>  </td>
+                                        <td ng-repeat="elementData in columns track by $index">{{elementData}}</td>
+                                    </tr>
+                                    <tr ng-repeat="rowData in rowDataArray track by $index" ng-click="rowClick($index)">
+                                        <td ng-repeat="element in rowData track by $index" ng-bind-html="element"></td>
+                                    </tr>
+                                    
+                                </tbody>
+                               <!--  <thead>
+                                    <tr>
+                                        <th>Device</th>
+                                        <th ng-repeat="elementData in columns track by $index">{{elementData}}</th>
+                                    </tr>
+                                </thead> -->
+                                
+                            </table>
+                        </div>
+                    </div>
+                    <div no-data-found ng-if="noDataQoSDeviceWiseDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,327 @@
+ <div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Alert Configuration</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{pagetitle}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(data)">
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.name" placeholder="Name" ng-required="true">
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label class="col-sm-1 control-label">Type</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.statementType" ng-change="changeStatementType(data.statementType, 'onChange')" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option value="CEP">CEP</option>
+                                    <option value="DBStream">DB Stream</option>
+                                    <option value="DBPull">DB Pull</option>
+                                </ >
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" >Priority</label>
+                            <div class="col-sm-4">
+                                <input icheck type="radio" value="High" name="Priority" ng-model="data.priority" style="margin-left:20px;" ng-required="true" >
+                                <span class="m-l-xs">High</span>
+                            
+                                <input icheck type="radio" value="Medium" name="Priority" ng-model="data.priority" style="margin-left:20px;" ng-required="true">
+                                <span class="m-l-xs">Medium</span>
+
+                                <input icheck type="radio" value="Low" name="Priority" ng-model="data.priority" style="margin-left:20px;" ng-required="true">
+                                <span class="m-l-xs">Low</span>
+                            </div>
+                        </div>
+                                            
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" >Repeat Frequency</label>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" ng-model="data.repeatfreqValue" placeholder="Value" ng-required="true" numbers-only>
+                            </div>
+                            <div class="col-sm-1">
+                                <select class="form-control" ng-model="data.repeatfreqUnit" ng-required="true">
+                                    <option value="Min">Minute</option>
+                                    <option value="Hour">Hour</option>
+                                    <option value="Day">Day</option>
+                                    <!-- <option value="Week">Week</option>
+                                    <option value="Month">Month</option> -->
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <info  content="'alert_repeat_frequency'" file="'help/help_alert.html'"></info>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" >Days</label>
+                            <div class="col-sm-offset-2">
+                                   <label  ng-repeat="day in daylist" class="col-sm-1" >
+                                        <input type="checkbox" checklist-model="data.days" checklist-value="day"> {{day}} 
+                                   </label>                                   
+                                    <label>
+                                            <input type="checkbox"   
+                                            ng-model="data.IsAllChecked" ng-change="checkAll(data.IsAllChecked)" />All
+                                    </label>        
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                                <label class="col-sm-2 control-label">Time</label>
+                                
+                                        <div class="col-sm-8" class="custom-control custom-radio" class="col-sm-2 control-label">
+                                                <input type="radio" class="radio-inline" ng-model="data.ApplytoAll" 
+                                                ng-value="true" ng-require="true" class="custom-control-input" id="defaultUnchecked" name="choseType">
+                                                <label class="custom-control-label" >Apply to All </label>
+                                                
+
+                                                <input type="radio" class="radio-inline" ng-model="data.ApplytoAll" 
+                                                 ng-value="false" ng-required="true"class="custom-control-input" id="defaultUnchecked" name="choseType">
+                                                <label class="custom-control-label" >Select Manually </label>
+
+                                             <div ng-show="data.ApplytoAll==true">
+                                               <select class="col-sm-3" ng-model="data.selectedTime"
+                                                data-placeholder="Select time frame for all Days"
+                                                chosen multiple 
+                                                ng-change="getselectval(data.selectedTime)"
+                                                ng-options = "value for value in timefameList">
+                                               </select>                                      
+                                            </div>
+                                            
+                                            <div class="form-group" ng-show="data.ApplytoAll==false">
+                                                    <div class="col-sm-1" ng-repeat="day in data.days"  >
+                                                        <select   
+                                                        ng-model="data.dayTimeSlot[day]" 
+                                                        chosen="{width:'100%'}" 
+                                                        data-placeholder="{{day}}" 
+                                                        chosen multiple 
+                                                        ng-options = "value for value in timefameList">
+                                                        </select>
+
+                                                    </div>
+                                            </div> 
+                                            
+                            
+                                      </div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Statement</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.statementId" ng-change="changeStatement(data.statementId, 'onChange')" ng-required="true">
+                                    <option value="">-Select Statement-</option>
+                                    <option ng-repeat="item in statementList | orderBy : 'name'" value="{{item.statementId}}" ng-selected="data.statementId == item.statementId">{{item.name}} - {{item.eventPublish}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3" ng-show="noColumn">
+                                <span class="text-danger">Fields could not be fetched.</span>
+                            </div>
+                        </div>
+
+                        <div ng-repeat="row in rows">
+                            <div class="form-group" ng-if="row != 0">
+                                <div class="col-sm-2 col-sm-offset-4">
+                                    <!-- <select class="form-control" ng-model="data.criteria[row].join" required>
+                                        <option value="">Select</option>
+                                        <option value="AND">AND</option>
+                                        <option value="OR">OR</option>
+                                    </select> -->
+
+                                    <input icheck type="radio" value="AND" name="andor{{row}}" ng-model="data.criteria[row].join" ng-required="true" id="and">
+                                    <label class="m-l-xs" for="and">AND</label>
+
+                                    <input icheck type="radio" value="OR" name="andor{{row}}" ng-model="data.criteria[row].join" ng-required="true" id="or">
+                                    <label class="m-l-xs" for="or">OR</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Column</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="data.criteria[row].field" ng-required="true" ng-change="changeColumn(data.criteria[row].field, row)">
+                                        <option value="">-Select Column-</option>
+                                        <option ng-repeat="item in column[row]" value="{{item}}" ng-selected="item == data.criteria[row].field">{{item | removeSpaces}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="data.criteria[row].src" ng-required="true">
+                                        <option value="">-Compaire with-</option>
+                                        <option value="Absolute Value">Absolute Value</option>
+                                        <option value="Historical Value">Historical Value</option>
+                                    </select>
+                                </div>
+
+                                <!-- <div class="col-sm-2" ng-if="data.criteria[row].src.trim() == 'Historical Value'">
+                                    <select class="form-control" ng-model="data.criteria[row].comparedur" ng-required="true">
+                                        <option value="">-Select-</option>
+                                        <option value="yesterday">Yesterday`s Value</option>
+                                        <option value="yesterdayavg">Yesterday`s Average</option>
+                                        <option value="weeklyavg">Weekly Average</option>
+                                    </select>
+                                </div> -->
+                                <div class="col-sm-2" ng-if="data.criteria[row].src.trim() == 'Historical Value'">
+                                    <select class="form-control" ng-model="data.criteria[row].comparedur" ng-change="changedComparedur(data.criteria[row].comparedur, row)" ng-required="true">
+                                        <option value="">-Select-</option>
+                                        <option ng-repeat="item in duration" value="{{item.id}}">{{item.title}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                             <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-1">
+                                    <select class="form-control" ng-model="data.criteria[row].operator" ng-required="true">
+                                        <option value="">-Select Operator-</option>
+                                        <option value="="> = </option>
+                                        <option value=">"> &gt; </option>
+                                        <option value=">="> &gt;=</option>
+                                        <option value="<"> &lt; </option>
+                                        <option value="<="> &lt;=</option>
+                                        <option value="between"> between</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <select class="form-control" ng-model="data.criteria[row].unit" ng-if="!data.criteria[row].src || (data.criteria[row].src.trim() == '' || !unithideshow[row])" disabled>
+                                        <option value="">-Select Unit-</option>
+                                    </select>
+                                    <select class="form-control" ng-model="data.criteria[row].unit" ng-if="data.criteria[row].src.trim() == 'Absolute Value' && unithideshow[row]">
+                                        <option value="">-Select Unit-</option>
+                                        <optgroup label="Usage">
+                                            <option value="bytes">Bytes</option>
+                                            <option value="kb">KB</option>
+                                            <option value="mb">MB</option>
+                                            <option value="gb">GB</option>
+                                        </optgroup>
+                                        <optgroup label="Bandwidth">
+                                            <option value="bps">bps</option>
+                                            <option value="kbps">Kbps</option>
+                                            <option value="mbps">Mbps</option>
+                                            <option value="gbps">Gbps</option>
+                                        </optgroup>
+                                        <optgroup label="Count">
+                                            <option value="K">K</option>
+                                            <option value="Mn">Mn</option>
+                                        </optgroup>
+                                        <optgroup label="Percent">
+                                            <option value="percent">percent</option>
+                                        </optgroup>
+                                    </select>
+
+                                    <select class="form-control" ng-model="data.criteria[row].unit" ng-if="data.criteria[row].src.trim() == 'Historical Value' && unithideshow[row]">
+                                        <option value="">-Select Unit-</option>
+                                        <optgroup label="Percent">
+                                            <option value="percent">percent</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-2" ng-if="data.criteria[row].valueType != 'QUERYSTRING'">
+                                    <input type="text" class="form-control" ng-model="data.criteria[row].value" placeholder="Value" ng-required="true">
+                                </div>
+
+                                <div class="col-sm-2" ng-if="data.criteria[row].operator.trim() == 'between'">
+                                    <input type="text" class="form-control" ng-model="data.criteria[row].value2" placeholder="Value 2" ng-required="true">
+                                </div>
+
+                                <div class="col-sm-1" ng-if="data.criteria[row].valueType == 'STRING'">
+                                    <select class="form-control" ng-model="data.criteria[row].stringIs" ng-required="true">
+                                        <option value="=">=</option>
+                                        <option value="!=">!=</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-2" ng-if="data.criteria[row].valueType == 'QUERYSTRING'">
+                                    <select class="form-control" ng-model="data.criteria[row].value" ng-required="true">
+                                        <option value="">Select</option>
+                                        <option ng-repeat="item in indicatorList" value="{{item.statementId}}" >{{item.name}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-1" ng-if="row == 0">
+                                    <button type="button" ng-click="addField(row);" class="btn btn-primary m-r-sm" ng-show="enabled[row]">
+                                        <span>+</span>
+                                    </button>
+
+                                    <button type="button" ng-click="removeField(row);" class="btn btn-danger m-r-sm" ng-hide="enabled[row]">
+                                        <span>-</span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-if="matchwith">
+                            <label class="col-sm-2 control-label">Match with</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" ng-model="data.matchwith">
+                                    <option value="">-Select-</option>
+                                    <option ng-repeat="item in column[0]" value="{{item}}">{{item | removeSpaces}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">Message</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.message" placeholder="Message" ng-required="true" ng-blur="checkMessage(data.message)" id="focusMe">
+                                <!-- <select class="form-control" ng-model="msgCol" ng-if="hasText" ng-change="changeMsgCol(msgCol)">
+                                    <option value="">-Select-</option>
+                                    <option ng-repeat="item in column[0]" value="{{item}}">{{item | removeSpaces}}</option>
+                                </select> -->
+                            </div>
+                            <div class="col-sm-1">
+                                <info content="'msg_txt'" file="'help/help_alert.html'"></info>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-4">
+                                <tags-input ng-model="data.email" placeholder=" Email" allowed-tags-pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                </tags-input>
+                                <!-- <input type="text" tagsinput class="form-control" ng-model="data.email" onadded="onEmailTagsAdded(data)" onremoved="onEmailTagsRemoved(data)" placeholder=" Email"> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">SMS</label>
+                            <div class="col-sm-4">
+                                <tags-input ng-model="data.phone" 
+                                            placeholder=" Enter Mobile Number" 
+                                            min-length="10" max-length="10" allowed-tags-pattern="^[0-9]+$"  ng-disabled="true">
+                                </tags-input>
+                                <!-- <input type="text" tagsinput class="form-control" ng-model="data.phone" onadded="onPhoneTagsAdded(data)" onremoved="onPhoneTagsRemoved(data)" placeholder=" Contact Number"> -->
+                            </div>
+                        </div>
+                       
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,184 @@
+﻿<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / Statement /</h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">DB-Stream</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>DB-Stream Statement</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="saveDBStreamStatement()">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-model="statement.name" ng-keypress="validateName($event)" ng-required="true" ng-readonly="isReadOnly" placeholder="Name">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" type="button" ng-click="validateDBStream()">Validate</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <textarea placeholder="Description" class="form-control" ng-model="statement.description" ng-required="true"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Type</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" ng-model="statement.dbPullType" ng-change="changeDbPullType(statement.dbPullType)" required>
+                                    <option value="">--Select--</option>
+                                    <option value="query">Query</option>
+                                    <option value="procedure">Procedure</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div ng-if="statement.dbPullType == 'query'">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Collection</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="query.table" ng-options="o as o for o in collectionlist"  ng-disabled="isReadOnly" required>
+                                        <option value="">--Select--</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 control-label">Query Type</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" data-ng-model="query.type">
+                                        <option ng-selected=true>--Select--</option>
+                                        <option value="find">Find</option>
+                                        <option value="aggregate">Aggregate</option>
+                                    </select>
+                                </div>
+                            </div>
+                         
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <textarea type="text" class="form-control" data-ng-model="statement.query" ng-required="true" ng-readonly="isReadOnly" placeholder="query text" style="margin: 0px -45px 0px 0px;    height: 67px;"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Select Option</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="query.optionName" ng-change="changeop()" required>
+                                        <option ng-selected=true>--select--</option>
+                                        
+                                        <option value="match">Match</option>
+                                        <option ng-if="query.type=='aggregate'" value="group">Group</option>
+                                        <option value="project">Project</option>
+                                        <option ng-if="query.type=='aggregate'" value="unwind">Unwind</option>
+                                        <option value="sort">Sort</option>
+                                        <option value="limit">Limit</option>
+                                        <option value="skip">Skip</option>
+                                    </select>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Text</label>
+                                <div class="col-sm-6">
+                                    <textarea type="text" id="test" ng-init="query.optionText='{}'" class="form-control" ng-model="query.optionText"  ng-readonly="isReadOnly" placeholder="" style="margin: 0px -45px 0px 0px;    height: 67px;"></textarea>
+                                </div>
+                                <div class="col-sm-4">
+                                     <button class="btn btn-white" type="button" ng-click="addOption()">Add</button>
+                                      <button class="btn btn-white" type="button" ng-click="validateDBPull()">Validate</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Column</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" ng-model="query.columns" ng-init="query.columns='[]'"  ng-readonly="isReadOnly" placeholder="">
+                                </div>
+                                <div class="col-sm-4">
+                                     <button class="btn btn-white" type="button" ng-click="addCoumns()">Add Coumns</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="statement.dbPullType == 'procedure'">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Procedure Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="statement.procedure" placeholder="Procedure Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Statement Type</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" ng-model="statement.type" ng-disabled="isReadOnly" required>
+                                    <option value="">-Select-</option>
+                                    <option value="replace">Replace</option>
+                                    <option value="refresh">Refresh</option>
+                                    <option value="reset">Reset</option>
+                                    <option value="moving">Moving</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="statement.type == 'replace'">
+                            <label class="col-sm-2 control-label">Event Publish</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" ng-model="statement.eventPublish" ng-disabled="isReadOnly" required>
+                                    <option value="">-Select-</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Combined">Combined</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Interval</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" ng-model="statement.interval" ng-keypress="validateNumber($event)" ng-required="true" ng-readonly="isReadOnly" placeholder="Interval">
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="statement.type == 'reset' ">
+                            <label class="col-sm-2 control-label">Key</label>
+                            <div class="col-sm-2 checkbox checkbox-primary">
+                                <div ng-repeat="item in columns">
+                                    <input type="checkbox" ng-click="toggleKey(item, statement.key)" /> {{ item }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="userProfile.userType == 'system administrator'">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="false" ng-model="statement.visibility"></td>
+                                        <td><span class="m-l-xs">Private</span></td>
+                                        <td>&nbsp;</td>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="true" ng-model="statement.visibility"></td>
+                                        <td><span class="m-l-xs">Public</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancelStatement('dbstream')">Cancel</button>
+                                <button class="btn btn-primary" type="submit" ng-hide="isReadOnly || !validated"  >Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

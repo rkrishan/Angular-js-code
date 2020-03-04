@@ -1,0 +1,38 @@
+<div class="wrapper-content animated fadeIn" ng-controller="OLTUtilizationBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group pull-right">
+                    <label><h3>Date : </h3></label>
+                    <div class="input-group date">
+                        <single-date-picker></single-date-picker>
+                        <label for="datepick" class="input-group-addon"><i class="fa fa-calendar"></i>  </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div> 
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Interface Congestion Monitoring <!-- Plateau Distribution(Minute wise) for<span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  -->{{currentPage}}  <!-- </span> --><b style="color:#1ab394;">{{drdwnSelect}}</b> ,Date <b style="color:#1ab394;">{{edate}} </b></span>
+                    <export-module filename="OLTUtlzion.fileName" dataobj="exportPlateauThroughput" fileheader="OLTUtlzion.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    
+                    <div loading-icon ng-if="loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv"></div>
+                    <div ng-if="!loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv">
+                        <highchart id="chart2" config="throughputPlateauChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingPlateauThroughputDiv && noDataPlateauThroughputDiv">
+                    </div>
+                    <div ng-if="!loadingPlateauThroughputDiv && !noDataPlateauThroughputDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

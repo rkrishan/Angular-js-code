@@ -1,0 +1,64 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="countryWiseTrafficBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+           <div class="col-md-6  pull-right">
+                <div class="float-e-margins  pull-right">
+                    <form role="form" class="form-inline"  ng-submit="click()">
+                        <date-range-picker></date-range-picker>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Country wise Traffic Top 20</h5>
+                    <export-module filename="'Country wise Traffic(Top 20)'" dataobj="exportCountryWiseTrafficObj" ></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingCountryWiseTrafficDiv && !noDataCountryWiseTrafficDiv"></span>
+                    <div ng-if="!loadingCountryWiseTrafficDiv && !noDataCountryWiseTrafficDiv">
+                        <ui-gmap-google-map id='map' center='mapCntryTraffic.center' zoom='mapCntryTraffic.zoom' options='mapCntryTraffic.options' size="mapCntryTraffic.size" control="mapCntryTraffic.control" >
+
+                            <ui-gmap-markers models="marker" coords="'self'" icon="'icon'" events="mapCntryTraffic.events" options="'options'" fit='true'>
+                                <ui-gmap-windows show="show">
+                                    <div ng-non-bindable><b>{{title}}</b></div>
+                                </ui-gmap-windows>
+                            </ui-gmap-markers>
+
+                        </ui-gmap-google-map>
+                    </div>
+                    <span no-data-found ng-if="!loadingCountryWiseTrafficDiv && noDataCountryWiseTrafficDiv"></span>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-12">
+            <div class="ibox-content">
+                <span loading-icon ng-if="loadingCountryWiseTrafficDiv && !noDataCountryWiseTrafficDiv"></span>
+                <div class="table-responsive" ng-if="!loadingCountryWiseTrafficDiv && !noDataCountryWiseTrafficDiv">
+                    <table class=" table table-responsive table-hover table-striped no-margins" >    
+                        <thead id="tableheader">
+                            <tr>
+                                <th style="font-size:14px">Country</th>
+                                <th style="font-size:14px">Traffic</th>
+                                <th style="font-size:14px">% Traffic</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="element in tableData track by $index">
+                                <td >{{ element[0] }}</td>
+                                <td >{{ element[1] }}</td>
+                                <td >{{ element[2]}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <span no-data-found ng-if="!loadingCountryWiseTrafficDiv && noDataCountryWiseTrafficDiv"></span>
+            </div>
+        </div>
+    </div>
+</div>

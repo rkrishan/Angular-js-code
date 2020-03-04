@@ -1,0 +1,95 @@
+.pointer{cursor: pointer;}
+.specta-logo{margin: 11px 0 0 17px;}
+.white-bg .navbar.specta-topnav{background-color:#2f4050;}
+.top-navigation .specta-topnav .nav > li > a{color: #fff;}
+.top-navigation .specta-topnav .nav > li.active > a{color: #23c6c8;}
+.top-navigation .specta-topnav .nav > li.active, .top-navigation .specta-topnav .nav > li a:hover, .top-navigation .specta-topnav .nav > li a:focus{background:no-repeat;color: #23c6c8;}
+.specta-topnav .nav .open > a, .specta-topnav .nav .open > a:focus, .specta-topnav .nav .open > a:hover{background:no-repeat;}
+.navbar-fixed-top.specta-topnav ul.navbar-nav{display: inline;}
+
+/*For dropdown menu*/
+.top-navigation .specta-topnav .dropdown-menu{background-color:#2f4050;border:0;}
+.top-navigation .specta-topnav .navbar-nav li:hover .dropdown-menu > li > a,
+.top-navigation .specta-topnav .navbar-nav li:hover .dropdown-menu .dropdown-header{padding: 10px 15px 10px 20px;}
+.specta-topnav .navbar-nav > li:hover .dropdown-menu{display: block;}
+.specta-topnav .navbar-nav .dropdown-menu > .active > a{background: no-repeat;color: #23c6c8;}
+.specta-topnav .dropdown-menu > li > a{line-height: 8px;color:#fff;}
+
+
+/*For Alert Dropdown*/
+.top-navigation .specta-topnav .dropdown-menu.origional{background-color:#fff;}
+
+/***********daterangepicker*/
+.ranges li{color: #1ab394;}
+.ranges li.active, .ranges li:hover{background:#1ab394; border: 1px solid #1ab394;}
+.daterangepicker td.active, .daterangepicker td.active:hover{background-color:#1ab394;}
+tags-input .tags .tag-item .remove-button{padding:0px 0 0 1px;float:right}
+.slick-prev::before, .slick-next::before {color: #1ab394 !important;}
+
+
+.specta-helpicon.open .dropdown-menu{left: 0}
+
+
+.inspinia-notify{ right: 25px;}
+
+.highlightcolor {
+    border: none !important;
+    padding: 1px 0 1px 1px !important;
+    background: none !important;
+    overflow: hidden;
+  }
+  
+.highlightcolor {
+    background: #ad3f29 url(bg.png) 50% 50% repeat-x !important;
+    border: 1px #88a276 solid !important;
+  }
+
+
+  .ui-datepicker-calendar {
+    display: none;
+    }  
+
+
+  .hide-calendar .ui-datepicker-calendar{
+      display: none;
+    }    
+
+  /* for 3d pai chart configuration   */
+
+  #container {
+    height: 400px; 
+  }
+  
+  .highcharts-figure, .highcharts-data-table table {
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 1em auto;
+  }
+  
+  .highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #EBEBEB;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+  }
+  .highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+  }
+  .highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+  }
+  .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+  }
+  .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+  }
+  .highcharts-data-table tr:hover {
+    background: #f1f7ff;
+  }  

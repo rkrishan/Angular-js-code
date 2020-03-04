@@ -1,0 +1,157 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="cxoAnalyticsBBCtrl">
+    <div class="row" >
+        <div class="col-lg-6" >
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Top 5 Bill Plans</h5><!-- <span style="font-size: 10px">Top 5 bill plans(weekly comparison)</span> -->
+                    <!-- <export-module filename="'Top 5 Bill Plans'" dataobj="topPlanUsagePerUsarData" ></export-module> -->
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTopPlanUsagePerUsersDiv && !noDataTopPlanUsagePerUsersDiv"></div>
+                    <div ng-if="!loadingTopPlanUsagePerUsersDiv && !noDataTopPlanUsagePerUsersDiv">
+
+                        <table class="table table-striped table-hover no-margins" >
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Usage</th>
+                                    <th>Subscribers</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr ng-repeat= "data in topPlanUsagePerUsarData track by $index ">
+                                
+                                    <td >{{data.Plan}}</td>
+
+                                    <td class="text-navy" ng-if="data.ClsUsage=='fa fa-level-up'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                    <td class="text-danger" ng-if="data.ClsUsage=='fa fa-level-down'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                    <td class="text-warning" ng-if="data.ClsUsage=='fa fa-bolt'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                   <td class="text-navy" ng-if="data.ClsUsers=='fa fa-level-up'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                    <td class="text-danger" ng-if="data.ClsUsers=='fa fa-level-down'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                    <td class="text-warning" ng-if="data.ClsUsers=='fa fa-bolt'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        
+                    </div> 
+                    <div no-data-found ng-if="!loadingTopPlanUsagePerUsersDiv && noDataTopPlanUsagePerUsersDiv">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Non Performing 5 Bill Plans</h5>
+                    <!-- <export-module filename="'Worst 5 Bill Plans'" dataobj="bottomPlanUsagePerUsarData" ></export-module> -->
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingBottomPlanUsagePerUsersDiv && !noDataBottomPlanUsagePerUsersDiv"></div>
+                    <div ng-if="!loadingBottomPlanUsagePerUsersDiv && !noDataBottomPlanUsagePerUsersDiv">
+                        <table class="table table-striped table-hover no-margins" >
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Usage</th>
+                                    <th>Subscribers</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr ng-repeat= "data in bottomPlanUsagePerUsarData  ">
+                                    <td >{{data.Plan}}</td>
+                                    <td class="text-navy" ng-if="data.ClsUsage=='fa fa-level-up'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                    <td class="text-danger" ng-if="data.ClsUsage=='fa fa-level-down'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                    <td class="text-warning" ng-if="data.ClsUsage=='fa fa-bolt'">{{data.UsagePrecent}}<i class="{{data.ClsUsage}}"></i></td>
+                                   <td class="text-navy" ng-if="data.ClsUsers=='fa fa-level-up'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                    <td class="text-danger" ng-if="data.ClsUsers=='fa fa-level-down'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                    <td class="text-warning" ng-if="data.ClsUsers=='fa fa-bolt'">{{data.UsersPrecent}}<i class="{{data.ClsUsers}}"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div no-data-found ng-if="!loadingBottomPlanUsagePerUsersDiv && noDataBottomPlanUsagePerUsersDiv">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Top 100 Subscribers Share</h5>
+                    <!-- <export-module filename="'Top 100 Users Share'" dataobj="exportTopUserShare" ></export-module> -->
+
+                    <export-module filename="exportTop100SubShrObj.fileName" dataobj="exportTop100SubShrData" fileheader="exportTop100SubShrObj.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTopUserShareDiv && !noDataTopUserShareDiv"></div>
+                    <div ng-if="!loadingTopUserShareDiv && !noDataTopUserShareDiv">
+                        <highchart id="chart2" config="topUserShareChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingTopUserShareDiv && noDataTopUserShareDiv">
+                    </div>
+                    <div ng-if="!loadingTopUserShareDiv && !noDataTopUserShareDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>CDN Analytics Trend (last 7 days)</h5>
+                    <!-- <export-module filename="'CDN analytic trend'" dataobj="exportCDNTrend" ></export-module> -->
+
+                    <export-module filename="exportCDNTrndObj.fileName" dataobj="exportCDNTrndData" fileheader="exportCDNTrndObj.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingCDNTrendDiv && !noDataCDNTrendDiv"></div>
+                    <div ng-if="!loadingCDNTrendDiv && !noDataCDNTrendDiv">
+                        <highchart id="chart2" config="CDNTrendChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingCDNTrendDiv && noDataCDNTrendDiv">
+                    </div>
+                    <div ng-if="!loadingCDNTrendDiv && !noDataCDNTrendDiv" class="pull-right"><b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Zero Traffic Subs (last 5 days)</h5>
+                    <!-- <export-module filename="'Zero Traffic Subs(last 10 days)'" dataobj="exportZeroTrafficSubs" ></export-module> -->
+
+                    <export-module filename="exportZeroTrficSubObj.fileName" dataobj="exportZeroTrficSubData" fileheader="exportZeroTrficSubObj.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingZeroTrafficSubsDiv && !noDataZeroTrafficSubsDiv"></span>
+                    <div ng-if="!loadingZeroTrafficSubsDiv && !noDataZeroTrafficSubsDiv">
+                        <highchart id="chartApp" config="pieZeroTrafficSubsChartConfig" ></highchart>
+                    </div>
+                    <span no-data-found ng-if="!loadingZeroTrafficSubsDiv && noDataZeroTrafficSubsDiv"></span>
+                </div>
+            </div>
+        </div>
+         <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Over all CEI for Yesterday</h5>
+                    <!-- <export-module filename="'Over all CEI for yesterday'" dataobj="exportCEI" ></export-module> -->
+
+                    <export-module filename="exportOvralCEIObj.fileName" dataobj="exportOvralCEIData" fileheader="exportOvralCEIObj.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingCEIDiv && !noDataCEIDiv"></span>
+                    <div ng-if="!loadingCEIDiv && !noDataCEIDiv">
+                        <highchart id="chartApp" config="pieCEIChartConfig" ></highchart>
+                    </div>
+                    <span no-data-found ng-if="!loadingCEIDiv && noDataCEIDiv"></span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

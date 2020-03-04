@@ -1,0 +1,201 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Statement</h3>
+</div>
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <uib-tabset>
+                    <!-- <uib-tab heading="CEP-Stream" ng-click="loadList('CEP', 'CEP-Esper')" active="cep">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addStatement('cep', 'CEP-Esper')" >Add Statement</button>
+                                </div>
+                                <div class="ibox-content" ng-if="statementLists.length > 0">
+                                    <div class="table-responsive">
+                                        <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions">
+                                            <thead>
+                                                <tr>
+                                                    <th>Creation Date</th>
+                                                    <th>Name</th>
+                                                    <th>Query</th>
+                                                    <th>Type</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in statementLists">
+                                                    <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.query }}</td>
+                                                    <td>{{ item.type }}</td>
+                                                    <td >
+                                                        <button class="btn btn-warning btn-xs" type="button" ng-click="remove($index, item, 'Esper')" ng-if="userProfile.userType == 'system administrator' || item.userId == userProfile.userId "><i class="fa fa-remove"></i> Delete</button>
+
+                                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> -->
+
+                    <uib-tab heading="CEP-Specta" ng-click="loadList('CEP', 'CEP-Specta')" active="specta" ng-if="userProfile.userType.trim() == 'system administrator'">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <!-- <div userlist-settings></div> -->
+                                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addStatement('cep', 'CEP-Specta')" >Add Statement</button>
+                                </div>
+                                <div class="ibox-content" ng-if="statementSpectaLists.length > 0">
+                                    <div class="table-responsive">
+                                        <table datatable class="table table-striped table-bordered table-hover" dt-options="dataTableOpt" >
+                                            <thead>
+                                                <tr>
+                                                    <th>Creation Date</th>
+                                                    <th>Name</th>
+                                                    <th>Query</th>
+                                                    <th>Type</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in statementSpectaLists">
+                                                    <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.counter }}</td>
+                                                    <td>{{ item.type }}</td>
+                                                    <td >
+                                                        <button class="btn btn-warning btn-xs" type="button" ng-click="remove($index, item, 'Specta')" ng-if="userProfile.userType == 'system administrator' || item.userId == userProfile.userId "><i class="fa fa-remove"></i> Delete</button>
+
+                                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="DB-Stream" ng-click="loadList('DBStream')" active="dbstream">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <!-- <div userlist-settings></div> -->
+                                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addStatement('dbstream')">Add Statement</button>
+                                </div>
+                                <div class="ibox-content" ng-if="statementDBStream.length > 0">
+                                    <div class="table-responsive">
+                                        <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions" >
+                                            <thead>
+                                                <tr>
+                                                    <th>Creation Date</th>
+                                                    <th>Name</th>
+                                                    <th>Query</th>
+                                                    <th>Type</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in statementDBStream">
+                                                    <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.query }}</td>
+                                                    <td>{{ item.type }}</td>
+                                                    <td>
+                                                        <button class="btn btn-warning btn-xs" type="button" ng-click="remove($index, item)" ng-if="userProfile.userType == 'system administrator' || item.userId == userProfile.userId "><i class="fa fa-remove"></i> Delete</button>
+
+                                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="DB-Query" ng-click="loadList('DBPull')" active="dbpull">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addStatement('dbpull')" >Add Statement</button>
+                                </div>
+                                <div class="ibox-content" ng-if="DBPullStatementLists.length > 0">
+                                    <div class="table-responsive">
+                                        <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions">
+                                            <thead>
+                                                <tr>
+                                                    <th>Creation Date</th>
+                                                    <th>Name</th>
+                                                    <th>Query</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in DBPullStatementLists">
+                                                    <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.query }}</td>
+                                                    <td>
+                                                        <button class="btn btn-warning btn-xs" type="button" ng-click="remove($index, item)" ng-if="userProfile.userType == 'system administrator' || item.userId == userProfile.userId "><i class="fa fa-remove"></i> Delete</button>
+
+                                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Indicator" ng-click="loadList('Indicator')" active="indicator">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addStatement('indicator')" > Add Statement</button>
+                                </div>
+                                <div class="ibox-content" ng-if="indicatorStatementLists.length > 0">
+                                    <div class="table-responsive">
+                                        <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions" >
+                                            <thead>
+                                                <tr>
+                                                    <th>Creation Date</th>
+                                                    <th>Name</th>
+                                                    <th>Query</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in indicatorStatementLists">
+                                                    <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.query }}</td>
+                                                    <td>
+                                                        <button class="btn btn-warning btn-xs" type="button" ng-click="remove($index, item)" ng-if="userProfile.userType == 'system administrator' || item.userId == userProfile.userId "><i class="fa fa-remove"></i> Delete</button>
+
+                                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

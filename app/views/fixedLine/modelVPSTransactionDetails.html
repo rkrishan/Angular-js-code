@@ -1,0 +1,68 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <a class="pull-right" ng-click="cancel()"><i class="fa fa-times"></i></a>
+        <h4 class="modal-title" ng-if="vpsVsAvgPktsSize">Vps Vs Avg. Packet Size</h4>
+        <h4 class="modal-title" ng-if="vps">Volume per Session</h4>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper wrapper-content animated fadeIn" ng-if="vpsVsAvgPktsSize">
+            <div class="ibox-title">
+                <h5>Time:  {{startSsnTime}}  to  {{endSsnTime}} </h5>
+            </div>
+            <div class="ibox-content">
+                <div class="spiner-example" ng-if="loadingDiv==true">
+                    <div class="sk-spinner sk-spinner-fading-circle">
+                        <div class="sk-circle1 sk-circle"></div>
+                        <div class="sk-circle2 sk-circle"></div>
+                        <div class="sk-circle3 sk-circle"></div>
+                        <div class="sk-circle4 sk-circle"></div>
+                        <div class="sk-circle5 sk-circle"></div>
+                        <div class="sk-circle6 sk-circle"></div>
+                        <div class="sk-circle7 sk-circle"></div>
+                        <div class="sk-circle8 sk-circle"></div>
+                        <div class="sk-circle9 sk-circle"></div>
+                        <div class="sk-circle10 sk-circle"></div>
+                        <div class="sk-circle11 sk-circle"></div>
+                        <div class="sk-circle12 sk-circle"></div>
+                    </div>
+                </div>
+                <div ng-if="vpsDataDiv==true">
+                    <highchart id="chart2" config="ChartConfig" ></highchart>
+                </div>
+                <div class="text-center " ng-if="noDataDiv==true">
+                        <h3 class="font-bold">No Data Found</h3>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeIn" ng-if="vps">
+            <div class="ibox-title">
+                <h5>Time:  {{startSsnTime}}  to  {{endSsnTime}} </h5>
+            </div>
+            <div class="ibox-content">
+                <div class="spiner-example" ng-if="loadingDiv==true">
+                    <div class="sk-spinner sk-spinner-fading-circle">
+                        <div class="sk-circle1 sk-circle"></div>
+                        <div class="sk-circle2 sk-circle"></div>
+                        <div class="sk-circle3 sk-circle"></div>
+                        <div class="sk-circle4 sk-circle"></div>
+                        <div class="sk-circle5 sk-circle"></div>
+                        <div class="sk-circle6 sk-circle"></div>
+                        <div class="sk-circle7 sk-circle"></div>
+                        <div class="sk-circle8 sk-circle"></div>
+                        <div class="sk-circle9 sk-circle"></div>
+                        <div class="sk-circle10 sk-circle"></div>
+                        <div class="sk-circle11 sk-circle"></div>
+                        <div class="sk-circle12 sk-circle"></div>
+                    </div>
+                </div>
+                <div class="flot-chart" ng-if="vpsDataDiv==true">
+                    <div flot class="flot-chart-content" dataset="flotChartData" options="flotBarOptions">
+                    </div>
+                </div>
+                <div class="text-center " ng-if="noDataDiv==true">
+                    <h3 class="font-bold">No Data Found</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.data" class="form-control" ng-change="changeGaugeData()" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.gauge.data == 'push' || module.gauge.data == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.query" class="form-control" ng-change="validategauge(module.gauge.query, module.gauge.data);changedStatement2(stmntList[module.gauge.data], module.gauge.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in stmntList[module.gauge.data]" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validategauge(module.gauge.query, module.gauge.data)">Get Data Points</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.gauge.data == 'DBPull' || module.gauge.data == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.query" class="form-control" ng-change="validate2(module.gauge.query);changedStatement2(stmntList[module.gauge.data], module.gauge.query)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in stmntList[module.gauge.data]" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.gauge.data == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.frequency" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="plot2">
+    <label class="col-md-2">Plot</label>
+    <!-- <div class="col-md-4">
+        <select ng-model="module.gauge.plot" class="form-control" required>
+            <option value="">SELECT</option>
+            <option value="Combined">Combined</option>
+            <option value="Individual">Individual</option>
+        </select>
+    </div> -->
+    
+    <div class="col-md-2">
+        <select ng-model="module.gauge.plotKey" class="form-control">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns2" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" placeholder="Value" class="form-control" ng-model="module.gauge.plotValue">
+    </div>
+    
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data Value</label>
+    <div class="col-md-4">
+        <select name="iboxKpi" ng-model="module.gauge.kpi" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns2" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Decimal Value</label>
+    <div class="col-md-4">
+        <input type="number" placeholder="Data Value" class="form-control" ng-model="module.gauge.dataDecimal" ng-required="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.unit" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.gauge.unit == 'speed'">
+    <label class="col-md-2">Unit 2</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.unit2" class="form-control" required>
+            <option value="Kbps">Kbps</option>
+            <option value="Mbps">Mbps</option>
+            <option value="Gbps">Gbps</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.gauge.unit == 'usage'">
+    <label class="col-md-2">Unit 2</label>
+    <div class="col-md-4">
+        <select ng-model="module.gauge.unit2" class="form-control" required>
+            <option value="KB">KB</option>
+            <option value="MB">MB</option>
+            <option value="GB">GB</option>
+        </select>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-md-2">Maximum Value</label>
+    <div class="col-md-4">
+        <input type="number" placeholder="Maximum Value" class="form-control" ng-model="module.gauge.max" ng-required="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Threshold 1 Value</label>
+    <div class="col-md-4">
+        <input type="number" placeholder="Threshold 1 Value" class="form-control" ng-model="module.gauge.threshold1" ng-required="true">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Threshold 2 Value</label>
+    <div class="col-md-4">
+        <input type="number" placeholder="Threshold 2 Value" class="form-control" ng-model="module.gauge.threshold2" ng-required="true">
+    </div>
+</div>
+

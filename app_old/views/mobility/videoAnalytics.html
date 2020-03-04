@@ -1,0 +1,173 @@
+<div class=" wrapper-content animated fadeIn" ng-controller="videoAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+               <!--  <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker> 
+                    </form>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<!-- <b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp; --><b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab index="1"  heading="Cell with Bad CEI" ng-click="tabSelected('highUsersLowCEI')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h2 class="m-b-xs">Cell with Bad CEI</h2>
+                                            </div>
+                                            <div class="col-lg-4  pull-right">
+                                                <!-- <span export-data></span> -->
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetCountTable,'excel', 'Congestion Analytics')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetCountTable,'csv', 'Congestion Analytics')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <span ng-if="loadingCountMapCircleDiv" ng-bind-html="loading.snip" >{{loading.snip}} </span>
+                                            <span no-data-found ng-if="noDataCountMapCircleDiv"></span>
+                                        </div>
+                                       
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ui-gmap-google-map id='map' center='mapCount.center' zoom='mapCount.zoom' options='mapCount.options' size="mapCount.size" control="mapCount.control" >
+
+                                                    <ui-gmap-markers models="circlesCount" coords="'self'" icon="'icon'" events="mapCount.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+
+                                                </ui-gmap-google-map>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Users Distribution" ng-click="tabSelected('LatencyDistributionCEI')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <span class="pull-right label label-primary">Export</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportLatencyCEI,'excel', 'Latency Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportLatencyCEI,'csv', 'Latency Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        
+                                        <div loading-icon ng-if="loadingsLatencyDistributionCEIPieDiv"></div>
+                                        <div ng-if="DataLatencyDistributionCEIPieDiv">
+                                            <highchart id="LatencyDistributionCEIPie" config="LatencyDistributionPieChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataLatencyDistributionCEIPieDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Device wise" ng-click="tabSelected('latencyPerDay')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <span class="pull-right label label-primary">Export</span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportLatencyCEI1,'excel', 'Latency Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportLatencyCEI1,'csv', 'Latency Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        
+                                        <div loading-icon ng-if="loadingsLatencyDistributionCEIPieDiv"></div>
+                                        <div ng-if="DataLatencyDistributionCEIPieDiv">
+                                            <highchart id="LatencyDistributionCEIPie" config="LatencyDistributionPieChartConfig1" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataLatencyDistributionCEIPieDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

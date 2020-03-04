@@ -1,0 +1,143 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Module</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight" ng-show="listView">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addnew()">Add Module</button>
+                </div>
+                <div class="ibox-content" ng-if="moduleList.length > 0">
+                    
+                    <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions">
+                        <thead>
+                            <tr>
+                                <th>Creation Date</th>
+                                <th>Title</th>                               
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in moduleList">
+                                <td>{{ item.createdDate | date:'yyyy/MM/dd h:mm a'}}</td>
+                                <td>{{ item.title  }}</td>
+                                <td>{{ item.name  }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs" type="button" ng-click="addto(item)"><i class="fa fa-share"></i> Add To</button>
+                                    <button class="btn btn-success btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> Detail</button>
+                                    <button class="btn btn-warning btn-xs" type="button" ng-click="delete($index, item)" ng-if="currentUser.userType == 'system administrator' || item.userId == currentUser.userId"><i class="fa fa-remove"></i> Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--  -->
+
+<!-- Add To -->
+<!-- <div class="row wrapper border-bottom white-bg page-heading" ng-if="addToView">
+    <div class="col-lg-10">
+        <h4>Module Add To Dashboard / Reports / Analysis</h4>
+        <ol class="breadcrumb">
+            <li>
+                <a ui-sref="index.main">Home</a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div> -->
+<div class="wrapper-content animated fadeInRight" ng-if="addToView">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <b>Module : {{selectedModule.title}}</b>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(data)">
+                        <div class="form-group">
+                            <label class="col-md-2">
+                                Add to
+                            </label>
+                            <div class="col-md-4">
+                                <select class="form-control" ng-model="data.type" ng-change="changeAssigningType(data.type)" required>
+                                    <option value="">- SELECT</option>
+                                    <option value="dashboards">Dashboard</option>
+                                    <option value="report">Reports</option>
+                                    <option value="analysis">Analytics</option>
+                                    <option value="staging" ng-if="userProfile.userType != 'user'">Staging</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="dashboardList.length > 0">
+                            <label class="col-md-2">
+                                {{data.type | capitalize}} list
+                            </label>
+                            <div class="col-md-4">
+                                <select class="form-control" ng-model="data.dashboardId" ng-change="changedashboard(data.dashboardId)" required>
+                                    <option value="">- SELECT</option>
+                                    <option ng-repeat="item in dashboardList" value="{{item._id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row form-group" ng-if="tabList.length > 0">
+                            <label class="col-lg-2">Select Tab</label>
+                            <div class="col-lg-4">
+                                <select ng-model="data.tabId" class="form-control" ng-change="tab(data.tabId)" required>
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in tabList" value="{{item._id}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div> -->
+
+                        <div class="row form-group" ng-show="positionShow">
+                            <label class="col-lg-2">Where you want to add (At / After)</label>
+                            <div class="col-lg-4">
+                                <select ng-model="data.positionId" class="form-control">
+                                    <option value="">Top</option>
+                                    <option ng-repeat="item in boxList" value="{{item.component._id}}">{{item.component.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row form-group" ng-show="positionShow">
+                            <label class="col-lg-2">Select Width</label>
+                            <div class="col-lg-4">
+                                <select name="size" ng-model="data.size" class="form-control" required>
+                                    <option value="">Select</option>
+                                    <option value="2">2-col</option>
+                                    <option value="3">3-col</option>
+                                    <option value="4">4-col</option>
+                                    <option value="6">6-col</option>
+                                    <option value="8">8-col</option>
+                                    <option value="9">9-col</option>
+                                    <option value="12">12-col</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button type="submit" class="btn btn-primary" ng-if="positionShow">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

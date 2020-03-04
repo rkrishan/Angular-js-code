@@ -1,0 +1,188 @@
+<div class="wrapper-content animated fadeIn" ng-controller="PotentialupgradeDeatilCtrl">
+    
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div   class="w-25 p-3" class="ibox-title">
+                    <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                    <div class="pull-right">
+                        <a class="pull-right label label-primary" ng-click="goBackPage()">Back</a>
+                    </div>
+
+                    <form class="form-inline" ng-submit="submit()">
+                        <div class="input-group">
+                            <input type="text" ng-model="customerID" placeholder="Enter Subscriber Id" name="search" class="form-control" minlength="0" maxlength="20">
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+                        <div class="form-group"><b>City</b>
+                            <input type="button" value="&darr;"ng-click="onTree('city')"  />
+                            <div id="city" ng-show="tree.city" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+        
+                        <div class="form-group"><b>Area</b>
+                            <input type="button" value="&darr;" ng-click="onTree('area')"/>
+                            <div id="area" ng-show="tree.area" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+        
+                        <div class="form-group"><b>Plan</b>
+                            <input type="button" value="&darr;" ng-click="onTree('plan')"/>
+                            <div id="plan" ng-show="tree.plan" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                        </div>
+                        <!-- <div class="form-group pull-right" >
+                        </div> -->
+                    </form>
+
+                </div>
+                <br>
+
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <p>
+                            <b ng-if="selectedZones.length > 0">Zone:</b> {{selectedZones.join(', ')}}
+                            <b ng-if="selectedCities.length > 0"><br>City:</b> {{selectedCities.join(', ')}}
+                            <b ng-if="selectedNodes.length > 0"><br>Node:</b> {{selectedNodes.join(', ')}}
+                            <b ng-if="selectedAreas.length > 0"><br>Area:</b>{{selectedAreas.join(', ')}}
+                            <b ng-if="selectedPlans.length > 0"><br>Plan:</b> {{selectedPlans.join(', ')}}
+                            <b ng-if="selectedSegement.length > 0"><br>Segment:</b> {{selectedSegement.join(', ')}}</p>
+                    </div>
+                </div>
+                <br>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loading"></div>
+                <div ng-if="dataLoaded" class="pull-right" class="form-group">
+                    <b>Item</b>
+                    <select ng-model="select.rowCount" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+                    <b>Per Page</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div ng-if="dataLoaded">
+                    <!-- <table datatable="ng" dt-options="dataTableOptions" datatable class="table table-striped table-hover no-margins"> -->
+                        <table class="table table-striped table-hover no-margins">
+                        <thead>
+                            <tr>
+                                <th ng-click="sortBy('subscriberid')" >Cust-ID <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'subscriberid' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'subscriberid' && !sortReverse" ></span>
+                                </th>
+
+                                <th ng-click="sortBy('area')" >Area  <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'area' && sortReverse"></span>
+                                    <span ng-show="sortType == 'area' && !sortReverse"></span>
+                                </th>
+
+                                <th ng-click="sortBy('city')" >City <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'city' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'city' && !sortReverse" ></span>
+                                </th>
+
+                                <th ng-click="sortBy('planspeed')" >Plan Speed <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'planspeed' && sortReverse"></span>
+                                    <span ng-show="sortType == 'planspeed' && !sortReverse"></span>
+                                </th>
+
+                                <th title="Quota allocated to the customer his billing cycle"
+                                ng-click="sortBy('datalimit')" >Data Limit(GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'datalimit' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'datalimit' && !sortReverse"></span>
+                                </th>
+                                
+                                <th title="total monthly usage quota per customer /25 days"
+                                     ng-click="sortBy('avgdayusage')" >Avg Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'avgdayusage' && sortReverse"></span>
+                                    <span ng-show="sortType == 'avgdayusage' && !sortReverse"></span>
+                                </th>
+
+                               <th title="Total usage for the current month"
+                                     ng-click="sortBy('currentusage')" >{{currentMonth}} Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'currentusage' && sortReverse"></span>
+                                    <span ng-show="sortType == 'currentusage' && !sortReverse"></span>
+                                </th>
+
+                               <th title="Total usage for the previous month"
+                                     ng-click="sortBy('previoususage')" >{{lastMonth}} Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'previoususage' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'previoususage' && !sortReverse"></span>
+                                </th>
+
+                                <th title="Total usage in month/(Number of days of usage*avg usage)"
+                                     ng-click="sortBy('currentusageratio')" >{{currentMonth}} Usage Ratio <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'currentusageratio' && sortReverse"></span>
+                                    <span ng-show="sortType == 'currentusageratio' && !sortReverse"></span>
+                                </th>
+
+                               <th title="Usage ratio of the last month. Refer to the current usage ratio column for the description"
+                                     ng-click="sortBy('previoususageratio')" >{{lastMonth}} Usage Ratio <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'previoususageratio' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'previoususageratio' && !sortReverse"></span>
+                                </th>
+
+                                <th title="Normal recharge lag of the customer taken over previous recharge cycles"
+                                ng-click="sortBy('normallag')" >Recharge Lag <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                <span ng-show="sortType == 'normallag' && sortReverse" ></span>
+                                <span ng-show="sortType == 'normallag' && !sortReverse"></span>
+                               </th> &nbsp;
+
+                                <th title="Number of days spent in FUP in the current cycle"
+                                ng-click="sortBy('fupdaysinmonth')" > Fup in Month <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                <span ng-show="sortType == 'fupdaysinmonth' && sortReverse"></span>
+                                <span ng-show="sortType == 'fupdaysinmonth' && !sortReverse"></span>
+                                </th>                           
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="item in records |orderBy:sortType:sortReverse|filter:q | itemsPerPage: select.rowCount" 
+                            current-page="currentPage" total-items="total_count"
+                            pagination-id="serverSide">
+                            <!-- <tr class="parent" ng-repeat="item in records track by $index"> -->
+                                <td>{{item.subscriberid}}</td>
+                                <td>{{item.city}}</td>
+                                <td>{{item.area}}</td>
+                                <td>{{item.billplan}}</td>
+                                <td>{{item.datalimit}} GB</td>
+                                <td>{{item.avgdayusage}} GB</td>
+                                <td>{{item.currentusage}} GB</td>
+                                <td>{{item.previoususage}} GB</td>
+                                <td>{{item.currentusageratio}}</td>
+                                <td>{{item.previoususageratio}}</td>
+                                <td>{{item.normallag}}</td>
+                                <td style="color:#3474eb">
+                                    {{item.fupdaysinmonth}}
+                                    <a title="Fup calander" ng-click=displaySubList(item.days) >
+                                    <i class="fa fa-info"></i> </a>
+
+                                </td>
+                                <td>
+                                <a title="Subscriber Details" ng-click="stateGo(item.subscriberid)">
+                                    <i class="fa fa-external-link-square"></i>
+                                </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dir-pagination-controls
+                            class="pull-right"
+                            boundary-links="true"
+                            pagination-id="serverSide"
+                            on-page-change="getData(newPageNumber)">
+                    </dir-pagination-controls>
+                </div>
+                    <div no-data-found ng-if="noData"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

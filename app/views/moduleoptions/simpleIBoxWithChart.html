@@ -1,0 +1,261 @@
+<div class="form-group">
+    <label class="col-md-2">Title</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="IBox Title" class="form-control" ng-model="module.title" required ng-blur="checkTitle(module.title)">
+    </div>
+</div>
+
+<module-label></module-label>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.dataKpi" class="form-control" ng-change="changeiBoxWithChartDataType(module.dataKpi)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.dataKpi == 'push' || module.dataKpi == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.queryKpi" class="form-control" ng-change="validate(module.queryKpi);changedStatement(statementListIbox, module.queryKpi)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementListIbox" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validate(module.queryKpi)">Get Data Points</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.dataKpi == 'DBPull' || module.dataKpi == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.queryKpi" class="form-control" ng-change="changeDBpull(module.queryKpi);changedStatement(statementListIbox, module.queryKpi)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementListIbox" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.dataKpi == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequencyKpi" class="form-control" required>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="plotKpi">
+    <label class="col-md-2">Plot</label>
+    <div class="col-md-2">
+        <select ng-model="module.plotKpiKey" class="form-control">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" placeholder="Value" class="form-control" ng-model="module.plotKpiValue">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data Value</label>
+    <div class="col-md-4">
+        <!-- ng-change="toggleIboxSeries()" -->
+        <select name="iboxKpi" ng-model="module.valueKpi" class="form-control" required>
+            <option value="">SELECT</option>
+            <option ng-repeat="value in columns" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Remark</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Remark" class="form-control" ng-model="module.remark">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Decimal Value</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Data Value" class="form-control" ng-model="module.dataDecimal" ng-required="true">
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.iBoxdata == 'pull'">
+    <label class="col-md-2">Pull Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in frequencyList" value="{{item.id}}">{{item.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.unit" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Auto adjust unit</label>
+    <div class="col-md-4">
+        <input icheck type="radio" ng-value="no" ng-model="module.unitAdjustFlag" name="unitAdjustFlag">No
+        <input icheck type="radio" value="yes" ng-model="module.unitAdjustFlag" name="unitAdjustFlag"> Yes
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Indicator</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.indicator">
+    </div>
+</div>
+
+<!-- Indicator Start -->
+<div ng-if="module.indicator">
+    <div class="form-group">
+        <label class="col-md-2">Indicator ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.indicatorTooltip" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Indicator Query</label>
+        <div class="col-md-4">
+            <select ng-model="module.indicatorQuery" class="form-control" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="item in indicatorStatementList" value="{{item.statementId}}">{{item.name}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Danger</label>
+        <div class="col-md-4" ng-init="module.danger = 'down'">
+            <input icheck type="radio" value="up" ng-model="module.danger" name="danger"> Up
+            <input icheck type="radio" value="down" ng-model="module.danger" name="danger"> Down
+        </div>
+    </div>
+</div>
+<!-- Indicator End -->
+
+
+
+<!-- Second Query Selection start-->
+
+<div class="form-group">
+    <label class="col-md-2">Second query Selection</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.IncludeURL">
+    </div>
+</div>
+
+
+
+<!-- Indicator Start -->
+<div ng-if="module.IncludeURL">
+
+<div class="form-group">
+    <label class="col-md-2">Data 2 </label>
+    <div class="col-md-4">
+        <select ng-model="module.data_1" class="form-control"  ng-change="changeDataType_2(module.data_1)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>    
+
+
+<div class="form-group" ng-if="module.data_1.trim() == 'push' || module.data_1.trim() == 'pull'">
+        <label class="col-md-2">Data Source 2 </label>
+        <div class="col-md-4">
+            <select ng-model="module.query2" class="form-control" ng-change="validate_2(module.query2);changedStatement_2(statementList_1, module.query2)" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="opt in statementList_1" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+            </select>
+        </div>
+    
+        <!-- <div class="col-md-2">
+            <button class="btn btn-primary" type="button" ng-click="validate(module.query)">Get Data Points</button>
+        </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data_1.trim() == 'DBPull' || module.data_1.trim() == 'DBStream'">
+    <label class="col-md-2">Data Source 2</label>
+    <div class="col-md-4">
+        <select ng-model="module.query2" class="form-control" ng-change="changeDBpull_2(module.query2);changedStatement_2(statementList_1, module.query2)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList_1" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+    <div class="form-group">
+        <label class="col-md-2">Select Column </label>
+        <div class="col-md-4">
+            <select name="iboxKpi" ng-model="module.kpi_1" class="form-control" required>
+                <option value="">Select </option>
+                <option ng-repeat="value in columns_2" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Corresponding Column</label>
+        <div class="col-md-4">
+            <select name="iboxKpi" ng-model="module.kpi_2" class="form-control" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="value in columns_2" value="{{value}}">{{value}}</option>
+            </select>
+        </div>
+    </div>
+
+</div>
+
+<!-- Second Query Selection end -->
+
+
+
+<!-- isClickable Start -->
+<div class="form-group">
+    <label class="col-md-2">Is Clickable</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.clickableIbox">
+    </div>
+</div>
+
+<div ng-if="module.clickableIbox">
+    <div class="form-group">
+        <label class="col-md-2">ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.clickableTooltipIbox" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Page</label>
+        <div class="col-md-4">
+            <select ng-model="module.pageIbox" class="form-control" required>
+                <option value="">Select</option>
+                <option ng-repeat="item in redirectionOption" value="{{item.fileId}}|{{item.table}}">{{item.file}} | {{item.page}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+<!-- End isClickable -->

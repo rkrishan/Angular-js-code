@@ -1,0 +1,191 @@
+<div class="wrapper wrapper-content animated fadeIn "  ng-controller="devicePenetrationTrendCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+                <div class="col-sm-2">
+                    <div class="float-e-margins">
+                        <label>Location</label>
+                        <input type="button" value="&darr;" ng-click="location()" />
+                        <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="float-e-margins" >
+                        <label>RAT</label>
+                        <input type="button" value="&darr;" ng-click="rat()"  />
+                        <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="float-e-margins">
+                        <label>Segment</label>
+                        <input type="button" value="&darr;" ng-click="segment()"/>
+                        <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;"></div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="float-e-margins">
+                        <label>Devices</label>
+                        <input type="button" value="&darr;" ng-click="device()"/>
+                        <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;"></div>
+                    </div>
+                </div> 
+            
+                <div class="col-sm-2">
+                    <div class="float-e-margins">
+                        <label>Period</label>
+                        <input type="button" value="&darr;" ng-click="period()"/>
+                        <div id="period" ng-show="treePeriod" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;"></div>
+                    </div>
+                </div> 
+                <div class="col-sm-2">
+                    <div class="float-e-margins pull-right">
+                        <form role="form" class="form-inline"  ng-submit="click()">
+                        <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div> 
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+                <div class="tabs-container">
+                <tabset>
+                    <tab heading="Top Cells" ng-click="onClickCellPenetration()">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Top Cells in penetration growth</h5>
+                                    <div ibox-tools></div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Cell</th>
+                                                <th>Area</th>
+                                                <th>City</th>
+                                                <th>Circle</th>
+                                                <th>% Increase</th>
+                                                <th>Current #</th>
+                                                <th>Prev #</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in dataset">
+                                                <td>{{ element.cell }}</td>
+                                                <td>{{ element.area }}</td>
+                                                <td>{{ element.city }}</td>
+                                                <td>{{ element.circle }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.perc }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.curr }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.prev }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Top Areas" ng-click="onClickAreaPenetration()">
+                        <div class="panel-body">                            
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Top Areas in penetration growth</h5>
+                                    <div ibox-tools></div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Area</th>
+                                                <th>City</th>
+                                                <th>Circle</th>
+                                                <th>% Increase</th>
+                                                <th>Current #</th>
+                                                <th>Prev #</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in dataset">
+                                                <td>{{ element.area }}</td>
+                                                <td>{{ element.city }}</td>
+                                                <td>{{ element.circle }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.perc }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.curr }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.prev }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Top Cities" ng-click="onClickCityPenetration()">
+                        <div class="panel-body">                            
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Top Cities in penetration growth</h5>
+                                    <div ibox-tools></div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>City</th>
+                                                <th>Circle</th>
+                                                <th>% Increase</th>
+                                                <th>Current #</th>
+                                                <th>Prev #</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in dataset">
+                                                <td>{{ element.city }}</td>
+                                                <td>{{ element.circle }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.perc }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.curr }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.prev }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Top Circle" ng-click="onClickCirclePenetration()">
+                        <div class="panel-body">                            
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Top Circles in penetration growth</h5>
+                                    <div ibox-tools></div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Circle</th>
+                                                <th>% Increase</th>
+                                                <th>Current #</th>
+                                                <th>Prev #</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in dataset">
+                                                <td>{{ element.circle }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.perc }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.curr }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.prev }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="wrapper-content animated fadeInRight" ng-controller="forecastingEquipCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span >
+                        <b>Equipment Failure Risk (CPE Level)</b>
+                    </span>
+                    <span class="pull-right">
+                        <div class="btn-group pull-right">
+                        <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M1']" uib-btn-checkbox ng-click="statusMnthBtn(true, false, false)">1M</label>
+                        <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M3']" uib-btn-checkbox ng-click="statusMnthBtn(false, true, false)">3M</label>
+                        <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M6']" uib-btn-checkbox ng-click="statusMnthBtn(false, false, true)">6M</label>
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span >
+                        <uib-progress max="max" >
+                            <uib-bar ng-repeat="bar in stacked track by $index" value="bar.value" type="{{bar.type}}">
+                                <span ng-if="bar.type== 'success'">{{bar.value}} Low</span>
+                                <span ng-if="bar.type== 'info'" >{{bar.value}} Medium</span>
+                                <span ng-if="bar.type== 'danger'">{{bar.value}} High</span>
+                            </uib-bar>
+                        </uib-progress>
+                    </span>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="col-lg-12">
+                        <!-- <span loading-icon ng-if="loadingDiv && !noDataDiv"></span> -->
+                        <div >
+                            <table datatable="ng" class="table datatable-ng table-bordered table-hover table-responsive" >
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Equipment ID</th>
+                                        <th>OLT ID</th>
+                                        <th>Area</th>
+                                        <th>Device</th>
+                                        <th>Model</th>
+                                        <th>Firmware version</th>
+                                        <th>Age of Device(weeks)</th>
+                                        <th>Packet Drop Rate(%)</th>
+                                        <th>Device Uptime (min)</th>
+                                        <th>Failure Probablity(%)</th>
+                                        <th>Failure Risk</th>
+                                        <th>Major factor impacting failure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="element in equipTableObj track by $index">
+                                        <td><span >{{ element['City'] }}</span></td>
+                                        <td><span >{{ element["Equipment ID"] }}</span></td>
+                                        <td><span >{{ element["OLT ID"] }}</span></td>
+                                        <td><span >{{ element["Area"] }}</span></td>
+                                        <td><span >{{ element["Device Brand"] }}</span></td>
+                                        <td><span >{{ element["Device Model"] }}</span></td>
+                                        <td><span >{{ element["Firmware version"] }}</span></td>
+                                        <td><span >{{ element["Age of Device (weeks)"]}}</span></td>
+                                        <td><span >{{ (element["Packet Drop Rate"]*100).toFixed(0) }}</span></td>
+                                        <td><span >{{ element["Device Uptime(min)"]}}</span></td>
+                                        <td><span >{{ (element["Failure Probability"]*100).toFixed(0)}}</span></td>
+                                        <td><span ng-if="element['Failure Risk']=='Low'" class="label label-success">{{ element["Failure Risk"] }}</span>
+                                        <span ng-if="element['Failure Risk']=='Medium'" class="label label-warning">{{ element["Failure Risk"] }}</span>
+                                        <span ng-if="element['Failure Risk']=='High'" class="label label-danger">{{ element["Failure Risk"] }}</span></td>
+                                        <td><span >{{ element["Major factor impacting failure"]}}</span></td>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                         <span no-data-found ng-if="!loadingDiv && noDataDiv"></span> 
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

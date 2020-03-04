@@ -1,0 +1,172 @@
+<div class="wrapper-content animated fadeIn" ng-controller="revenueUpsideMatrixCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b>Total Revenue Loss</b></span>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown>
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportTotalRevLoss,'excel', 'Total Revenue Loss')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportTotalRevLoss,'csv', 'Total Revenue Loss')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingDaywiseRevLossDiv"></div>
+                    <div ng-if="DataDaywiseRevLossDiv">
+                        <highchart id="chart2" config="daywiseRevLossConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataDaywiseRevLossDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Device wise Revenue Loss</h5>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportDevicewiseRevenueLossPie,'excel', 'Device wise Revenue Loss')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportDevicewiseRevenueLossPie,'csv', 'Device wise Revenue Loss')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingDevicewiseRevLossPieDiv"></div>
+                    <div ng-if="DataDevicewiseRevLossPieDiv" >
+                        for Date&nbsp;:&nbsp;{{date.end}}
+                        <highchart id="usage" config="devicewiseRevLossPie" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataDevicewiseRevLossPieDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>City wise Revenue Loss</h5>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportCitywiseRevenueLoss,'excel', 'City wise Revenue Loss')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportCitywiseRevenueLoss,'csv', 'City wise Revenue Loss')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingCitywiseRevLossPieDiv"></div>
+                    <div ng-if="DataCitywiseRevLossPieDiv" >
+                        for Date&nbsp;:&nbsp;{{date.end}}
+                        <highchart id="usage" config="citywiseRevLoss" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataCitywiseRevLossPieDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b>Segment wise Revenue Loss</b></span>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown>
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataNestedExport(exportSegRevLoss,'excel', 'Segment wise Revenue Loss')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataNestedExport(exportSegRevLoss,'csv', 'Segment wise Revenue Loss')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingSegRevLossDiv"></div>
+                    <div ng-if="DataSegRevLossDiv">
+                        <highchart id="chart2" config="segRevLossConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataSegRevLossDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b>Device wise Revenue Loss</b></span>
+                    <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown>
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <i class="fa fa-save fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataNestedExport(exportDeviceRevLoss,'excel', 'Device wise Revenue Loss')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataNestedExport(exportDeviceRevLoss,'csv', 'Device wise Revenue Loss')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingDeviceRevLossDiv"></div>
+                    <div ng-if="DataDeviceRevLossDiv">
+                        <highchart id="chart2" config="deviceRevLossConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="noDataDeviceRevLossDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

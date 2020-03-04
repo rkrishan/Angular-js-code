@@ -1,0 +1,30 @@
+<div class="wrapper-content animated fadeIn" ng-controller="topUsersTrendBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-6  pull-right">
+                <div class="float-e-margins  pull-right">
+                    <form role="form" class="form-inline"  ng-submit="submitClick()">
+                        <date-range-picker></date-range-picker>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Top Subscribers Date <b style="color:#1ab394;">{{sDate}} </b> compared to Date <b style="color:#1ab394;">{{edate}} </b> </span>
+                    <!-- <export-module filename="'Top Users Trend'" dataobj="exportTopUsersTrend" ></export-module> -->
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTopUsersTrendDiv && !noDataTopUsersTrendDiv"></div>
+                    <div ng-if="!loadingTopUsersTrendDiv && !noDataTopUsersTrendDiv">
+                        <highchart id="chart1" config="chartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingTopUsersTrendDiv && noDataTopUsersTrendDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

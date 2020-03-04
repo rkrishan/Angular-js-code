@@ -1,0 +1,76 @@
+<div class="form-group">
+    <label class="col-sm-3">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Label</label>
+    <div class="col-sm-6">{{module.label}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Label Color</label>
+    <div class="col-sm-6">{{colorType[module.labelColor]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Statement</label>
+    <div class="col-sm-6">{{module.statementName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Statement Id</label>
+    <div class="col-sm-6">{{module.query}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">No. of Data Element</label>
+    <div class="col-sm-6">{{module.dataelement}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Column Name</label>
+    <div class="col-sm-6">{{module.colName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Row Name</label>
+    <div class="col-sm-6">{{module.rowName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Row Data</label>
+    <div class="col-sm-6">{{module.rowData}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Unit</label>
+    <div class="col-sm-6">{{module.unit}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Apply fix ordering</label>
+    <div class="col-sm-6">{{module.fixOrder}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Is Clickable</label>
+    <div class="col-sm-6">{{module.clickable}}</div>
+</div>
+
+<div ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-sm-6">ToolTip</label>
+        <div class="col-sm-6">{{module.clickableTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Page</label>
+        <div class="col-sm-6">{{redirectPage}}</div>
+    </div>
+</div>

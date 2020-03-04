@@ -1,0 +1,293 @@
+<div class="wrapper-content animated fadeIn " ng-controller="deviceInsightsCtrl" >
+    <div class="row" ng-if="insideLazyLoad">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.end" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        </div> 
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" ng-if="insideLazyLoad">
+        <div class="col-lg-8">
+            <span><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}
+            </span>
+        </div>
+        <div class="col-lg-4">
+            <span class="dropdown col-lg-12" uib-dropdown>
+                <a class="dropdown-toggle count-info pull-right" title="Advance Filter" href uib-dropdown-toggle >
+                    <h3><i class="fa fa-magic"></i></h3>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts  animated fadeInRight " style="width:367px;">
+                    <li>
+                        <form class="form-inline" name="myForm" role="form" >
+
+                            <div class="form-group">
+                                <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.fromUsage" placeholder="&euro;&euro;" style="width:80px;">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.toUsage" placeholder="&euro; &euro;" style="width:80px;">
+                            </div>&nbsp;&nbsp;
+                            <div class="form-group">
+                                <div class="float-e-margins">
+                                    <select ng-model="dynamicPopover.unitUsage" class="input-sm" style="width:80px;">
+                                        <option value="Bytes">Bytes</option>
+                                        <option value="KB">KB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <form class="form-inline" name="myForm" role="form" >
+
+                            <div class="form-group">
+                                <label class="control-label"><h3>Count &nbsp;:&nbsp; &nbsp; </h3></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.fromCount" placeholder="&euro;&euro;" style="width:80px;">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.toCount" placeholder="&euro; &euro;" style="width:80px;">
+                            </div>&nbsp;&nbsp;
+                            <div class="form-group">
+                                <div class="float-e-margins">
+                                    <select ng-model="dynamicPopover.unitCount" class="input-sm" style="width:80px;">
+                                        <option value="Unit">Unit</option>
+                                        <option value="K">K</option>
+                                        <option value="M">M</option>
+                                   </select>
+                                </div>
+                            </div>
+                        </form>
+
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <button class="btn btn-primary btn-sm pull-right" type="submit" ng-click='saveFilterOption(dynamicPopover)'>Submit</button>
+                    </li>
+                </ul>
+           </span>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab id="1"  heading="User Distribution" ng-click="tabSelected('penetrationDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h2 class="m-b-xs">User Distribution</h2>
+                                            </div>
+                                            <div class="col-lg-4  pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <span class="pull-right label label-primary">Export</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetCount,'excel', 'Penetration Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetCount,'csv', 'Penetration Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <span ng-if="loadingCountMapCircleDiv" ng-bind-html="loading.snip" >{{loading.snip}} </span>
+                                            <span no-data-found ng-if="noDataCountMapCircleDiv"></span>
+                                        </div>
+                                        
+                                        <br/>
+                                        <div>
+                                            <ui-gmap-google-map id='map' center='mapCount.center' zoom='mapCount.zoom' options='mapCount.options' size="mapCount.size" control="mapCount.control" >
+
+                                                <ui-gmap-layer namespace="visualization" type="HeatmapLayer" onCreated="map.heatLayerCallback"></ui-gmap-layer>
+                                                
+                                               <!-- <ui-gmap-marker ng-repeat="circlesCount in circlesCount" idkey="circlesCount.id" coords="circlesCount.coords" options="circlesCount.markerOptions" events="mapCount.events" >
+                                                    <ui-gmap-windows options="show" >
+                                                        <div ng-non-bindable>{{title}}</div>
+                                                    </ui-gmap-windows>
+                                                </ui-gmap-marker> -->
+
+                                                <!-- <ui-gmap-markers models="circlesCount" coords="'self'" icon="'icon'" events="mapCount.events" fit='true'>
+                                                    <ui-gmap-windows show="show">
+                                                        <div ng-non-bindable><b>{{title}}</b></div>
+                                                    </ui-gmap-windows>
+                                                </ui-gmap-markers> -->
+
+                                                <!-- <ui-gmap-circle ng-repeat="c in circlesCount track by $index" id="c.id" center="c.center" stroke="c.stroke" fill="c.fill" radius="c.radius" events="mapCount.events">
+                                                </ui-gmap-circle> -->
+                                            </ui-gmap-google-map>
+                                        </div>
+                                        <br/>
+                                        <h5><p ><i class="fa fa-circle" style="color:#FF0000;"></i>&nbsp; &gt;1000 &nbsp;&nbsp;&nbsp;&nbsp;
+                                       <i class="fa fa-circle" style="color:#FFC107;"></i>&nbsp; 1000-500 &nbsp;&nbsp;&nbsp;&nbsp; 
+                                       <i class="fa fa-circle" style="color:#08B21F;"></i>&nbsp; &lt;500 </p></h5>
+                                       <br/>
+                                        <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                            <thead>
+                                                <tr>
+                                                    <th>CellID</th>
+                                                    <th>Area</th>
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="element in datasetCountTable track by $index">
+                                                    <td>{{ element.cellid }}</td>
+                                                    <td>{{ element.Area }}</td>
+                                                    <td>{{ element.latitude }}</td>
+                                                    <td>{{ element.longitude }}</td>
+                                                    <td>{{ element.Count }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   </uib-tab>
+
+                   <uib-tab id="2" heading="Usage Distribution" ng-click="tabSelected('usageDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h2 class="m-b-xs">Usage Distribution</h2>
+                                            </div>
+                                            <div class="col-lg-4  pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <span class="pull-right label label-primary">Export</span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetUsage,'excel', 'Usage Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetUsage,'csv', 'Usage Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <span ng-if="loadingUsageMapCircleDiv" ng-bind-html="loading.snip">{{loading.snip}}</span>
+                                            <span no-data-found ng-if="noDataUsageMapCircleDiv"></span>
+                                        </div>
+                                        <br/>
+                                        <p ng-if="infoLine">Showing results for: {{protocol}} {{usage}}</p>
+                                        <div>
+                                            <ui-gmap-google-map center='mapUsage.center' zoom='mapUsage.zoom' options='mapUsage.options' size="mapUsage.size" control="mapUsage.control">
+
+                                                <ui-gmap-markers models="circlesUsage" coords="'self'" icon="'icon'" events="mapUsage.events" fit='true' >
+                                                    <ui-gmap-windows show="show">
+                                                        <div ng-non-bindable><b>{{title}}</b></div>
+                                                    </ui-gmap-windows>
+                                                </ui-gmap-markers>
+
+                                            </ui-gmap-google-map>
+                                        </div>
+                                        <br/>
+                                        <h5><p ><i class="fa fa-circle" style="color:#FF0000;"></i>&nbsp; &gt;500MB  &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-circle" style="color:#FFC107;"></i>&nbsp; 500MB-100MB &nbsp;&nbsp;&nbsp;&nbsp; 
+                                            <i class="fa fa-circle" style="color:#08B21F;"></i>&nbsp; &lt;100MB </p></h5>
+                                        <br/>
+                                        <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                            <thead>
+                                                <tr>
+                                                    <th>CellID</th>
+                                                    <th>Area</th>
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
+                                                    <th>Usage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="element in datasetUsageTable track by $index">
+                                                    <td>{{ element.cellid }}</td>
+                                                    <td>{{ element.Area }}</td>
+                                                    <td>{{ element.latitude }}</td>
+                                                    <td>{{ element.longitude }}</td>
+                                                    <td>{{ element.Usage }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

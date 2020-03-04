@@ -1,0 +1,28 @@
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name" style="margin-left:-35%" ui-href="login">Specta</h1>
+        </div>
+        <!--<h3>Welcome to Specta</h3>-->
+        <p>
+            <br>
+        </p>
+        <!--<p>Login in</p>-->
+        <form class="m-t" role="form" ng-submit="forgotPass(user)">
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="New Password" required="" ng-model="user.password">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Repeat Password" required="" ng-model="user.repeatPassword">
+            </div>
+            <span class="text-danger">{{errorMsg}}</span>
+            <span class="text-success">{{successMsg}}</span>
+            <button type="submit" class="btn btn-primary block full-width m-b">Change Password</button>
+             <a ui-sref="login"><small>Login</small></a>
+            <!--<p class="text-muted text-center"><small>Do not have an account?</small></p>-->
+        </form>
+        <p class="m-t"> <small>Pinnacle &copy; 2016-2017</small> </p>
+    </div>
+</div>

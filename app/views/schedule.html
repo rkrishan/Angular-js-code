@@ -1,0 +1,121 @@
+    <div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Schedule</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Schedule</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" novalidate>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label" title="Subject for Email">Name</label>
+                            <div class="col-sm-4" ng-class="{ 'has-error': hasError('name','required')}">
+                                <input type="text" class="form-control" ng-model="data.name" name="name" placeholder="Name" title="This will be used as Subject for E-mail." ng-required="true" focus="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Description</label>
+                            <div class="col-sm-4" ng-class="{ 'has-error': hasError('description','required')}">
+                                <textarea  type="text" class="form-control" name="description" placeholder="Description" ng-model="data.description" ng-required="true"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-hide="reportId">
+                            <label class="col-sm-1 control-label">Report</label>
+                            <div class="col-sm-4" ng-class="{ 'has-error': hasError('report','required')}">
+                                <select class="form-control" name="report" ng-model="data.statementId" ng-change="checkReport(data.statementId)" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in reportsList" value="{{item.statementId}}">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-repeat="(key, value) in data.reportArr track by $index" ng-if="key !='fromDate' && key != 'toDate'">
+                            <label class="col-sm-1 control-label">{{key}}</label>
+                            <div class="col-sm-4" ng-class="{ 'has-error': hasError('reportArr[key]','required')}">
+                                <input type="text" class="form-control" name="reportArr[key]" ng-model="data.reportArr[key]" ng-required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Frequency</label>
+                            <div class="col-sm-4" ng-class="{ 'has-error': hasError('frequency','required')}">
+                                <select class="form-control" name="frequency" ng-model="data.frequency" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Email</label>
+                            <div class="col-sm-4">
+                                <tags-input ng-model="data.email" name="email" placeholder="Email" allowed-tags-pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"></tags-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Duration</label>
+                            <div class="col-sm-2" ng-class="{ 'has-error': hasError('duration','required')}">
+                                <input type="text" class="form-control" name="duration" ng-model="data.duration" placeholder="Duration" ng-required="true">
+                            </div>
+                            <div class="col-sm-2" ng-class="{ 'has-error': hasError('period','required')}">
+                                <select class="form-control" name="period" ng-model="data.period" ng-required="true">
+                                    <option value="">Select</option>
+                                    <option value="d">Day</option>
+                                    <option value="w">Week</option>
+                                    <option value="m">Month</option>
+                                    <option value="y">Year</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Status</label>
+                            <div class="col-sm-4">
+                                <input type="radio" value="true" name="Status" ng-model="data.active" style="margin-left:20px;" ng-required="true"  required="required">
+                                <b>Active</b>
+                            
+                                <input type="radio" value="false" name="Status" ng-model="data.active" style="margin-left:20px;" ng-required="true" required="required">
+                                <b>Inactive</b>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="userProfile.userType == 'system administrator'">
+                            <label class="col-sm-1 control-label"></label>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="false" ng-model="data.visibility"></td>
+                                        <td><span class="m-l-xs">Private</span></td>
+                                        <td>&nbsp;</td>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="true" ng-model="data.visibility"></td>
+                                        <td><span class="m-l-xs">Public</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button class="btn btn-primary" type="submit" ng-click="save(myForm.$valid,data)">Save</button>
+
+                                <!-- <a href="{{uri}}" download> download </a> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

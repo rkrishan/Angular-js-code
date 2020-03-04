@@ -1,0 +1,44 @@
+<div class="wrapper-content animated fadeIn" ng-controller="churnRedirectionBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline">
+                <div class="form-group pull-right">
+                    <button type="button" class="btn btn-w-xs btn-primary btn-xs" ng-click="stateGo()" title='Back to {{pageTitle}}'><i class="fa fa-arrow-left"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b style="color:#1ab394;">{{page}}: {{user}}</b> Date: {{accessedDate}} hourly {{status}}</span>
+                </div>  
+                <div class="ibox-content">                
+                    <div loading-icon ng-if="loadingDiv && !noDataDiv"></div>
+                    <div ng-if="!loadingDiv && !noDataDiv">
+                        <highchart id="UsageVsUsers" config="UsageVsUsersChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingDiv && noDataDiv"></div>
+                    <div ng-if="!loadingDiv && !noDataDiv" class="pull-right"> <b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span><b style="color:#1ab394;">{{page}}: {{user}}</b> Date: {{fromDate}}- {{accessedDate}} Usage</span>
+                </div>  
+                <div class="ibox-content">                
+                    <div loading-icon ng-if="loadingUsageWeeklyDiv && !noDataUsageWeeklyDiv"></div>
+                    <div ng-if="!loadingUsageWeeklyDiv && !noDataUsageWeeklyDiv">
+                        <highchart id="usageWeekly" config="usageWeeklyChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingUsageWeeklyDiv && noDataUsageWeeklyDiv"></div>
+                </div>
+            </div>
+        </div>
+   </div>
+</div>

@@ -1,0 +1,196 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="BBCustomerAnalyticsCtrl">
+    <div class="row" >
+        <div class="col-lg-4">
+            <!--<div>
+                <label>
+                    <input type="radio" checked="" value="Id" ng-model="radio.selMode" ng-change="changed('Id')"> Customer Id
+                </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label>
+                    <input type="radio" value="IP" ng-model="radio.selMode" ng-change="changed('IP')"> Customer IP
+                </label>
+            </div>-->
+            <form role="form" class="form-inline"  ng-submit="submit() ">
+                <div class="input-group">
+                    <input type="text" ng-model="customer.ip" placeholder="Enter Customer ID/IP" name="search" class="form-control input-sm" minlength="5" maxlength="15" required>
+                </div>
+                <button class="btn btn-sm btn-primary " type="submit" >Submit</button>
+            </form>
+        </div>
+        <div class="col-lg-8" ng-if="showUserDetails">
+            <div class="ibox-content">
+                <span >
+                    IP : <span style="color: #1ab394"><strong>{{sourceip}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Bill Plan : <span style="color: #1ab394"><strong ng-if= "speed != ''">{{billPlan}} ({{speed}})</strong><strong ng-if= "speed == ''">{{billPlan}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Segment : <span style="color: #1ab394"><strong>{{segment}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Node : <span style="color: #1ab394"><strong>{{node}}</strong></span><br><br>
+                    Usage : <span style="color: #1ab394"><strong>{{usage}}</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Peak Throughput : <span style="color: #1ab394"><strong>{{peakThroughput}}</strong></span><!--&nbsp;&nbsp;&nbsp;&nbsp;
+                    Avg Throughput : <strong>{{avgThroughput}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+                    CEI : <strong>{{cei}}</strong>-->
+                </span><br>
+                <small class="text-muted"> *as on {{updateTime}}</small>
+            </div>
+            
+        </div>
+       <!-- <div class="col-8 pull-right" ng-if="scChart">
+            <button class="btn btn-sm btn-primary btn-outline" ng-click="scBackBtnClick()">Back</button>
+        </div>-->
+    </div>
+    <br/>
+    <div class="row" ng-if="showUserDetails">
+        <div class="tabs-container" >
+            <uib-tabset>
+                <uib-tab heading="Usage Today" ng-click="tabSelected('usageLast24Hours')">
+                    <div class="panel-body">
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Hourly usage </h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <nvd3 options="options" data="data"></nvd3> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <!-- <div class="table-responsive"> -->
+                                            <table datatable="ng" dt-options="dataTableOptionsDetails" class="table table-striped table-hover no-margins" >
+                                                <thead>
+                                                    <tr>
+                                                        <th >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                        <th ng-repeat="col in colArray">{{col}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+                                                    <tr ng-repeat= "row in rowDataArray track by $index ">
+                                                        <td  style="font-size:12px">{{row[0]}}</td>
+                                                        <td style="font-size:11px" ng-repeat="col in row[1] track by $index"> 
+                                                            <span  ng-if="col.spanClass!=''">
+                                                                <a class="{{col.spanClass}}" ng-click="tableClick(col.val, $index,row[0])"> {{col.val}}</a>
+                                                            </span>
+                                                            <span class="{{col.spanClass}}" ng-if="col.spanClass==''">
+                                                                {{col.val}}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                        <!--   </div>  -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>App wise Usage </h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <nvd3 options="optionsHorizontalBar" data="dataHorizontalBar" ></nvd3> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab heading="Transaction Details" ng-click="tabSelected('transactionDetails')">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                 <div class="col-md-12">
+                                    <div class="float-e-margins pull-right">
+                                        <form role="form" class="form-inline"  ng-submit="dateRangeSubmit()">
+                                            <div class="input-daterange" id="datepicker">
+                                                <div class="form-group">
+                                                    <input  type="text"  ng-model="date.start" required placeholder="From Date"/>
+                                                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <div class="form-group">
+                                                    <input  type="text"  ng-model="date.end" required  placeholder="To Date">
+                                                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="table-responsive">
+                                            <table datatable="ng" dt-options="transactionDetailsOptions" class=" table table-responsive table-hover table-striped no-margins" >    
+                                                <thead id="tableheader">
+                                                    <tr>
+                                                        <th style="font-size:12px">Date</th>
+                                                        <th style="font-size:12px">Duration</th>
+                                                        <th style="font-size:12px">AppProtocol</th>
+                                                        <th style="font-size:12px">DestinationIP</th>
+                                                        <th style="font-size:12px">App</th>
+                                                        <th style="font-size:12px">SourcePort</th>
+                                                        <th style="font-size:12px">DestinationPort</th>
+                                                        <th style="font-size:12px">URL/IP</th>
+                                                        <th style="font-size:12px">Usage</th>
+                                                        <th style="font-size:12px"></th>
+                                                        <th style="font-size:12px">UpUsage</th>
+                                                        <th style="font-size:12px">DownUsage</th>
+                                                        <th style="font-size:12px">Throughput</th>
+                                                        <th style="font-size:12px">DataLatency</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="element in transactionDetail">
+                                                        <td ng-bind-html="element.Date">{{ element.Date }}</td>
+                                                        <td ng-bind-html="element.Duration">{{ element.Duration }}</td>
+                                                        <td >{{ element.AppProtocol }}</td>
+                                                        <td >{{ element.DestinationIP }}</td>
+                                                        <td >{{ element.App }}</td>
+                                                        <td >{{ element.SourcePort }}</td>
+                                                        <td >{{ element.DestinationPort }}</td>
+                                                        <td >{{ element.URL }}</td>
+                                                        <td >{{ element.Usage }}</td>
+                                                        <td>
+                                                            <a title="User Analytics" ng-click="transactionTableSelectedRow(element.key, 'vps')">
+                                                                <i class="fa fa-external-link-square"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td >{{ element.UpUsage }}</td>
+                                                        <td >{{ element.DownUsage }}</td>
+                                                        <td >{{ element.Throughput }}</td>
+                                                        <td >{{ element.DataLatency }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+        </div>
+    </div>
+   <!-- <div ng-if="scChart">
+        <div class="row" >
+            <div class="col-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Hourly {{scValue}}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <nvd3 options="scOptions" data="scData" ></nvd3> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</div>

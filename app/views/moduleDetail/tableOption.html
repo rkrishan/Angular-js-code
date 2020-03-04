@@ -1,0 +1,144 @@
+<div class="form-group">
+    <label class="col-sm-3">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Label</label>
+    <div class="col-sm-6">{{module.label}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Label Color</label>
+    <div class="col-sm-6">{{colorType[module.labelColor]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Statement</label>
+    <div class="col-sm-6">{{module.statementName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Stament Id</label>
+    <div class="col-sm-6">{{module.query}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">No. of Data Element</label>
+    <div class="col-sm-6">{{module.dataelement}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Table Column Label</label>
+    <div class="col-sm-6">{{module.labels}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Table Columns</label>
+    <div class="col-sm-6">{{module.columns}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Unit</label>
+    <div class="col-sm-3" ng-repeat="(key, value) in module.unit">{{key}} = {{value}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Decimal Value</label>
+    <div class="col-sm-2" ng-repeat="(key, value) in module.dataDecimal">{{key}} = {{value}}</div>
+</div>
+
+<!-- Indicator Options -->
+<div ng-if="module.indicator">
+    <div class="form-group">
+        <label class="col-sm-3">Indicator</label>
+        <div class="col-sm-9">{{module.indicator.join(',')}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.indicatorTooltip">
+        <label class="col-sm-3">Indicator Tooltip</label>
+        <div class="col-sm-3" ng-repeat="(key, value) in module.indicatorTooltip">{{key}} = {{value}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.danger">
+        <label class="col-sm-3">Danger</label>
+        <div class="col-sm-3" ng-repeat="(key, value) in module.danger">{{key}} = {{value}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.indicatorQuery">
+        <label class="col-sm-3">Indicator Query</label>
+        <div class="col-sm-6">{{module.indicatorQuery}}</div>
+    </div>
+</div>
+
+<div ng-if="module.threshold">
+    <div class="form-group">
+        <label class="col-sm-3">Threshold Value</label>
+        <div class="col-sm-6">{{module.threshold}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Threshold Unit</label>
+        <div class="col-sm-6">{{module.thresholdUnit}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Sub Unit</label>
+        <div class="col-sm-6">{{module.subUnit}}</div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Apply fix ordering</label>
+    <div class="col-sm-6">{{module.fixOrder}}</div>
+</div>
+
+<!-- Table Options -->
+<div ng-if="module.type == 'table_with_search'">
+    <div class="form-group">
+        <label class="col-sm-3">Search</label>
+        <div class="col-sm-6">{{module.searching}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Sort</label>
+        <div class="col-sm-6">{{module.sort}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Pagination</label>
+        <div class="col-sm-6">{{module.paging}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Info Record</label>
+        <div class="col-sm-6">{{module.info}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Per Page</label>
+        <div class="col-sm-6">{{module.length}}</div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3">Is Clickable</label>
+    <div class="col-sm-6">{{module.clickable}}</div>
+</div>
+
+<div ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-sm-3">ToolTip</label>
+        <div class="col-sm-6">{{module.clickableTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">Page</label>
+        <div class="col-sm-6">{{redirectPage}}</div>
+    </div>
+</div>

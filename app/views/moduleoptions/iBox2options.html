@@ -1,0 +1,204 @@
+<div class="form-group">
+    <label class="col-md-2">Display</label>
+    <div class="col-md-4">
+        <select ng-model="module.display" class="form-control" required ng-init="module.display = 'Horizontal'">
+            <option value="Horizontal" selected>Horizontal</option>
+            <option value="Vertical">Vertical</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data</label>
+    <div class="col-md-4">
+        <select ng-model="module.data2" class="form-control" ng-change="changeiBox2DataType(module.data2)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in dataType" value="{{item.id}}">{{item.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data2 == 'push' || module.data2 == 'pull'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query2" class="form-control" ng-change="validate2(module.query2);changedStatement2(statementList2, module.query2)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList2" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+
+    <!-- <div class="col-md-2">
+        <button class="btn btn-primary" type="button" ng-click="validate2(module.query2)">Get Data Points</button>
+    </div> -->
+</div>
+
+<div class="form-group" ng-if="module.data2 == 'DBPull' || module.data2 == 'DBStream'">
+    <label class="col-md-2">Data Source</label>
+    <div class="col-md-4">
+        <select ng-model="module.query2" class="form-control" ng-change="validate2(module.query2);changedStatement2(statementList2, module.query2)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="opt in statementList2" value="{{opt.statementId}}">{{opt.name}} | {{opt.type| capitalize}} | {{opt.description}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="module.data2 == 'DBPull'">
+    <label class="col-md-2">Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency2" class="form-control" required>
+            <option ng-repeat="opt in frequencyList" value="{{opt.id}}">{{opt.value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" ng-if="plot2">
+    <label class="col-md-2">Plot</label>
+    <div class="col-md-2">
+        <select ng-model="module.plotKey2" class="form-control">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns2" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" placeholder="Value" class="form-control" ng-model="module.plotValue2">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Data Value</label>
+    <div class="col-md-4">
+        <select name="iboxKpi" ng-model="module.kpi2" class="form-control" required ng-change="toggleIboxSeries2()">
+            <option value="">- SELECT</option>
+            <option ng-repeat="value in columns2" value="{{value}}">{{value}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Color</label>
+    <div class="col-md-4">
+        <input colorpicker ng-model="module.color2" type="text" value="#676a6c">
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-md-2">Remark</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Remark" class="form-control" ng-model="module.remark2">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Decimal Value</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Data Value 2" class="form-control" ng-model="module.dataDecimal2" ng-required="true">
+    </div>
+</div>
+
+<!-- <div class="form-group" ng-if="module.data2 == 'pull'">
+    <label class="col-md-2">Pull Frequency</label>
+    <div class="col-md-4">
+        <select ng-model="module.frequency2" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in frequencyList" value="{{item.id}}">{{item.value}}</option>
+        </select>
+    </div>
+</div> -->
+
+<div class="form-group">
+    <label class="col-md-2">Unit</label>
+    <div class="col-md-4">
+        <select ng-model="module.unit2" class="form-control" required>
+            <option value="">- SELECT</option>
+            <option value="count">Count</option>
+            <option value="usage">Usage</option>
+            <option value="speed">Speed</option>
+            <option value="percent">%</option>
+
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Auto adjust unit</label>
+    <div class="col-md-4">
+        <input icheck type="radio" ng-value="no" ng-model="module.unitAdjustFlag2" name="unitAdjustFlag2">No
+        <input icheck type="radio" value="yes" ng-model="module.unitAdjustFlag2" name="unitAdjustFlag2"> Yes
+    </div>
+</div>
+
+<!-- Indicator Start -->
+<div class="form-group">
+    <label class="col-md-2">Indicator</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.indicator2">
+    </div>
+</div>
+
+<div class="hr-live-dashed" ng-if="module.indicator2">
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-md-2">Indicator ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.indicatorTooltip2" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Indicator Query</label>
+        <div class="col-md-4">
+            <select ng-model="module.indicatorQuery2" class="form-control" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="item in indicatorStatementList" value="{{item.statementId}}">{{item.name}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Danger</label>
+        <div class="col-md-4">
+            <input type="radio" value="up" ng-model="module.danger2" name="danger2"> Up
+            <input type="radio" ng-value="down" ng-model="module.danger2" name="danger2"> Down
+        </div>
+    </div>
+</div>
+<!-- Indicator End -->
+
+<!-- isClickable Start -->
+<div class="form-group">
+    <label class="col-md-2">Is Clickable</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.clickable2">
+    </div>
+</div>
+
+<div class="hr-live-dashed" ng-if="module.clickable2">
+    <div class="form-group">
+        <label class="col-md-2">ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.clickableTooltip2" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Page</label>
+        <div class="col-md-4">
+            <select ng-model="module.page2" class="form-control" ng-change="changePage2(module.page2)" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="item in redirectionOption" value="{{item.fileId}}|{{item.table}}">{{item.file}} | {{item.page}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="tabList2">
+        <label class="col-md-2">Tab</label>
+        <div class="col-md-4">
+            <select ng-model="module.tab2" class="form-control" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="(key, value) in tabList2" value="{{key}}" ng-if="value">{{key}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+<!-- End isClickable -->

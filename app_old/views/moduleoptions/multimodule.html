@@ -1,0 +1,141 @@
+<div class="inmodal">
+    <div class="form-horizontal modal-body">
+        <div class="form-group">
+            <label class="col-md-2">Module Type</label>
+            <div class="col-md-4">
+                <select ng-model="module.type" class="form-control" ng-change="changeModuleType(module.type);" required>
+                    <option value="">- SELECT</option>
+                    <option ng-repeat="item in moduleType" value="{{item.id}}">{{item.value | capitalize}}</option>
+                </select>
+            </div>
+        </div>
+        
+        <div ng-if="module.type == 'info_box'">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Info Box</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/info_box.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="module.type == 'simple_ibox' || module.type == 'simple_ibox_with_dual_data_point' ">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Ibox</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/simpleIBox.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="module.type == 'simple_ibox_with_dual_data_point'">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Data Point 2</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/iBox2options.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="module.type == 'simple_ibox_with_trend'">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Ibox</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/iBoxWithTrend.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- For IBox -->
+        <div ng-if=" module.type == 'ibox_with_embeded_chart' ">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Ibox</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/simpleIBoxWithChart.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- For Chart -->
+        <div ng-if="module.type == 'ibox_with_embeded_chart'">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Configure Chart</h5>
+                        </div>
+                        <div class="ibox-content" ng-include="'views/moduleoptions/chartOptions.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="module.type == 'simple_charts'">
+            <div class="col-lg-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Configure Chart</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-md-2">
+                                Name
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Chart Name" class="form-control" ng-model="module.name" ng-required="true">
+                            </div>
+                        </div>
+                        <div ng-include="'views/moduleoptions/chartOptions.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" ng-if="module.type == 'simple_table' || module.type == 'table_with_search' ">
+            <div class="col-lg-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Configure Table</h5>
+                    </div>
+                    <div class="ibox-content" ng-include="'views/moduleoptions/tableOption.html'"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="module.type == 'map'">
+            <div class="col-lg-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Configure Map</h5>
+                    </div>
+                    <div class="ibox-content" ng-include="'views/moduleoptions/mapOption.html'"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="ok(module)">Ok</button>
+    </div>
+</div>

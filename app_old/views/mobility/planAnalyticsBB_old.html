@@ -1,0 +1,50 @@
+<div class="wrapper wrapper-content animated fadeIn" ng-controller="BBbillPlanUtilizationCtrl">
+    <div class="row" >
+        <div class="col-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Plan wise Usage &amp; Subscriber (*as on {{tillNow}})</h5>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <nvd3 options="options" data="data"></nvd3> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class=" table table-responsive table-hover table-striped no-margins" >    
+                            <thead id="tableheader">
+                                <tr>
+                                    <th style="font-size:12px">Bill Plan</th>
+                                    <th style="font-size:12px">Prov. Users</th>
+                                    <th style="font-size:12px">Active Users</th>
+                                    <th style="font-size:12px">% Active User</th>
+                                    <th style="font-size:12px">Traffic</th>
+                                    <th style="font-size:12px">% Traffic</th>
+                                    <th style="font-size:12px">Traffic/User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="element in tableData track by $index">
+                                    <td >{{ element[0] }}</td>
+                                    <td >{{ element[1] }}</td>
+                                    <td >{{ element[2]}}</td>
+                                    <td >{{ element[3] }}</td>
+                                    <td >{{ element[4]}}</td>
+                                    <td >{{ element[5]}}</td>
+                                    <td >{{ element[6]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

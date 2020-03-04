@@ -1,0 +1,68 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Configuration</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{pagetitle}}</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save()">
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">Title</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" data-ng-model="title" ng-required="true" placeholder="Title">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" placeholder="Key Name" data-ng-model="key.name" placeholder="Name">
+                            </div>
+                             <div class="col-sm-4">
+                                <textarea placeholder="Value" class="form-control" ng-model="key.value" rows="1"></textarea>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <button class="btn btn-primary" type="button" ng-click="addkeywithvalue()" ng-disabled="key.name == ''">Add Key with value</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-repeat="(key,value) in item" ng-if="key!='_id' && key!='userId' && key!='createDate' && key!='name'">
+                            <label class="col-sm-2 control-label"></label>
+                            <label class="col-sm-2 control-label">{{key}}</label>
+                           
+                             <div class="col-sm-4">
+                                <textarea placeholder="Key Value" class="form-control" ng-blur="updatekeyvalue(key, value)"  ng-model="value" rows="1"></textarea>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <button class="btn btn-warning btn-xs" type="button" ng-click="deletekey(key)">Delete Key</button>
+                            </div>
+                        </div>
+                         
+                        <div class="form-group" >
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8">
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                 
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

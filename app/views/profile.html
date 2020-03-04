@@ -1,0 +1,106 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Profile</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="tabs-container">
+                        <uib-tabset>
+                            <uib-tab heading="Profile" active="userProfile">
+                                <div class="panel-body">
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <form class="form-horizontal" name="userform" role="form" ng-submit="save(userform.$valid)" novalidate autocomplete="off">
+                                                <!-- <div class="form-group">
+                                                    <label class="col-sm-2 control-label">User Id <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasErrorEdit('username','required')}">
+                                                        <input type="email" ng-blur="checkuser()" ng-model="user.username" placeholder="Email" class="form-control" ng-required="true" name="username" ng-readonly="isReadOnly"  focus="true" ng-pattern ="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/">
+                                                        <span ng-show="userform.username.$error.pattern" class="text-danger">email not valid</span>
+                                                    </div>
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">User Id</label>
+                                                    <div class="col-sm-6">{{user.username}}</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">First Name <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasErrorEdit('firstName','required')}">
+                                                    <input type="text" placeholder="First Name" name="firstName" class="form-control" ng-model="user.firstName" ng-required="true">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Last Name <span class="text-danger">*</span></label>
+                                                     <div class="col-sm-6"  ng-class="{ 'has-error': hasErrorEdit('lastName','required')}">
+                                                    <input type="text" placeholder="Last Name" name="lastName" class="form-control" ng-model="user.lastName" ng-required="true">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">User Type </label>
+                                                    <div class="col-sm-6">{{user.userType}}</div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Circle</label>
+                                                    <div class="col-sm-6" ng-if="isArray(user.circle)">{{ user.circle.join(', ')}}</div>
+                                                    <div class="col-sm-6" ng-if="!isArray(user.circle)">{{ user.circle}}</div>
+                                                </div>
+
+                                                <div class="form-group" style="margin-bottom:1em;">
+                                                    <div class="col-sm-12  col-sm-offset-4">
+                                                        <button class="btn btn-primary" type="submit" >Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </uib-tab>
+                            <uib-tab heading="Change Password" active="changePassword" ng-if="user.changePassword == undefined || user.changePassword == true">
+                                <div class="panel-body">
+                                    <div class="ibox float-e-margins">
+                                       <div class="ibox-content">
+                                        <div class="row">
+                                            <form class="form-horizontal" name="changePasswordForm" role="form" novalidate>
+                                                <div class="form-group" >
+                                                    <label  class="col-sm-2 control-label">Current Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('CurrentPassword','required')}">
+                                                    <input type="password" name="CurrentPassword" class="form-control" ng-model="password.CurrentPassword"  placeholder="current password"  ng-required="true">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">New Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('password','required')}">
+                                                    <input type="password" ng-model="password.password" name="password" placeholder="new Password" name="password" class="form-control" ng-required="true">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label  class="col-sm-2 control-label">Repeat Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('repeatpassword','required')}">
+                                                    <input type="password" ng-model="password.repeatpassword" name="repeatpassword" placeholder="repeat Password" class="form-control" ng-required="true">
+                                                    <span class="text-danger" ng-show="(password.password != password.repeatpassword) && (password.password && password.repeatpassword)">Password do not Match </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom:1em;">
+                                                    <div class="col-sm-12  col-sm-offset-4">
+                                                        <button class="btn btn-primary" type="submit" ng-click="changePass(changePasswordForm.$valid,password)">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

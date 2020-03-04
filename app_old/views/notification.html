@@ -1,0 +1,54 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Alerts</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Alerts</h5>
+                </div>
+                <div class="ibox-content" ng-if="list.length > 0">
+                    <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOptions">
+                        <thead> 
+                            <tr>
+                                <!-- <th>Name</th> -->
+                                <th>Message</th>
+                                <th>Priority</th>
+                                <th>Count</th>
+                                <th>Create Time</th>
+                                <th>Update Time</th>
+                                <th>Status</th>
+                                <th>ACK Time</th>
+                                <th>ACK By</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key, item) in list" ng-style="checkStatus(item.priority, item.status)">
+                                <!-- <th> {{item.name}} </th> -->
+                                <th> {{item.message}} </th>
+                                <th> {{item.priority.toUpperCase()}} </th>
+                                <th> {{item.count}} </th>
+                                <td> {{item.createtime | date : 'yyyy/MM/dd HH:mm:ss'}} </td>
+                                <td> {{item.updatetime | date : 'yyyy/MM/dd HH:mm:ss'}} </td>
+                                <td> <span>{{item.status}}</span></td>
+                                <td> 
+                                    <span ng-if="item.ackTime">{{item.ackTime | date : 'yyyy/MM/dd HH:mm:ss'}}</span>
+                                    <span ng-if="!item.ackTime"> - </span>
+                                </td>
+                                <td> <span ng-bind="item.ackBy || '-'"></span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs" type="button" ng-click="alertACK($index, item)" ng-if="item.status.toUpperCase() != 'ACKNOWLEDGED'">Acknowledge</button>
+                                    <button class="btn btn-danger btn-xs" type="button" ng-click="delete(item, $index)" ng-if="item.status.toUpperCase() != 'NEW'"><i class="fa fa-remove"></i> Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

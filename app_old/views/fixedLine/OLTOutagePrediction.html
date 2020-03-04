@@ -1,0 +1,67 @@
+<div class="wrapper-content animated fadeInRight" ng-controller="forecastingOutageCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span >
+                        <b class="pull-center">OLT Outage Prediction</b>
+                        <span class="pull-right"><b>OLT: &nbsp;</b>
+                            <select ng-model="outage.selectOLT" ng-change="changOutageOLT()" style="height:24px;font-size:10px;padding:0px 42px;">
+                                <option value="BDG-CRF-OLT1-HW5600">BDG-CRF-OLT1-HW5600</option>
+                                <option value="BGR-GND-OLT1-ZTEC300" >BGR-GND-OLT1-ZTEC300</option>
+                                <option value="BKS-GDHB2-OLT1-ZTEC300">BKS-GDHB2-OLT1-ZTEC300</option>
+                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div ng-if="!loadingDiv && !noDataDiv">
+                                <highchart id="forecastingOutageML" config="forecastingOutageMLConfig" ></highchart>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br><br>
+                            <div ng-if="!loadingDiv && !noDataDiv">
+                                <table datatable="ng" dt-options="{ 'searching': false,'bLengthChange': false,'bInfo': false,}" class="table  table-bordered table-hover " >
+                                    <thead>
+                                        <tr>
+                                            <th>OLT</th>
+                                            <th>Probability</th>
+                                            <th>Major Cause</th>
+                                            <th>Risk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  ng-repeat="element in forecastingOutageTableObj track by $index">
+                                            <td><span >{{ element['OLT ID'] }}</span></td>
+                                            <td><span >{{ element['Fault Probability'] }}</span></td>
+                                            <td><span >{{ element['Major Cause'] }}</span></td>
+                                            <td><span ng-if="element['Fault Risk']=='Low'" class="label label-success">{{ element['Fault Risk'] }}</span>
+                                                <span ng-if="element['Fault Risk']=='High'" class="label label-danger">{{ element['Fault Risk'] }}</span>
+                                                <span ng-if="element['Fault Risk']=='Medium'" class="label label-info">{{ element['Fault Risk'] }}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="col-lg-12">
+                        <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                        <div ng-if="!loadingDiv && !noDataDiv">
+                            <highchart id="forecasting" config="forecastingOutageConfig" ></highchart>
+                        </div>
+                        <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

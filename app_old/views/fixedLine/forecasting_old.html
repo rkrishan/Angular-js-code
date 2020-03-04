@@ -1,0 +1,75 @@
+<div class="wrapper-content animated fadeInRight" ng-controller="forecastingTpCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span >
+                        <b class="text-center">OLT Usage Prediction</b>
+                        <span class="pull-right"><b>OLT: &nbsp;</b>
+                            <select ng-model="filterData.selectOLT" style="height:24px;font-size:10px;padding:0px 42px;" ng-options="value.OLT as value.OLT for (key,value) in oltList">
+                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div  ng-if="!loadingDiv && !noDataDiv">
+                                <highchart id="forecastingPlanMultiline" config="forecastingPlanMultiline" ></highchart>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <br><br>
+                            <div  ng-if="!loadingDiv && !noDataDiv">
+                                <table class="table  table-bordered table-hover " >
+                                    <thead>
+                                        <tr>
+                                            <th>Bill Plan Speed</th>
+                                            <th>Forecast Period(Months)
+                                                <div class="btn-group pull-right">
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M1--']" uib-btn-checkbox ng-click="statusMnthBtn(true, false, false)">1M</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M3--']" uib-btn-checkbox ng-click="statusMnthBtn(false, true, false)">3M</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['M6--']" uib-btn-checkbox ng-click="statusMnthBtn(false, false, true)">6M</label>
+                                                </div><br><br>
+                                                Expected Subscribers Growth :
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="element in forecastingTableObj track by $index">
+                                           <td><select ng-model="filterData.selectPS" style="height:24px;font-size:10px;padding:0px 42px;" ng-options="value as value.PlanSpeed for (key,value) in psList">   
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <span >
+                                                    <select ng-model="filterData.growthRate" style="height:24px;font-size:10px;padding:0px 12px;"ng-options="value.gr_name as value.gr_name for (key,value) in growthRate">
+                                                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <span class="pull-right"><button class="btn btn-xs btn-primary" ng-click="forecastClick()" type="submit">Forecast</button></span>
+                                <span class="pull-right"><button class="btn btn-xs btn-primary" ng-click="resetClick()" type="submit">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="col-lg-12">
+                        <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                        <div ng-if="!loadingDiv && !noDataDiv">
+                            <highchart id="forecasting" config="forecastingConfig" ></highchart>
+                        </div>
+                        <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

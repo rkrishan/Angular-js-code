@@ -1,0 +1,1014 @@
+<style type="text/css">
+    .breadcrumbs{margin:16px 0 13px 8px;}
+    select.input-sm {height: 38px;}
+
+</style>
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">{{$state.current.data.pageTitle}} / </h2>
+    <h3 class="pull-left breadcrumbs" ng-if="params.pageHeading">{{params.Key}} : {{params.value}}</h3>
+    <h3 class="pull-left breadcrumbs" ng-if="!params.pageHeading">{{headerName}}</h3>
+
+    <h3 class="pull-right breadcrumbs" ng-if="!params.returnPath">
+        <button class="btn btn-primary btn-circle btn-xs" type="button" ng-click="addFavorite(false)" ng-if="isFavorite" title="Remove favorite"><i class="fa fa-star-o"></i> </button>
+        <button class="btn btn-primary  btn-circle btn-outline btn-xs" type="button" ng-click="addFavorite(true)" ng-if="!isFavorite" title="Add to favorite"><i class="fa fa-star"></i> </button>
+    </h3>
+
+    <h3 class="pull-right breadcrumbs" ng-if="params.returnPath">
+        <button class="btn btn-w-xs btn-primary btn-xs" type="button" title='Back to {{params.pageHeading}}' ng-click="backPage()"><i class="fa fa-arrow-left"></i></button>
+    </h3>
+</div>
+
+
+
+<div class="wrapper-content animated fadeIn">
+    <div class="row" ng-if="report.filter"> <!-- -->
+        <div class="col-lg-12">
+            <form class="form-inline">
+                <div class="form-group" ng-show="report.filter.location || report.filter.Location"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="locationTree" style="z-index:999;position:absolute;max-height: 300px;overflow-y: auto;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-show="report.filter.RAT || report.filter.Rat"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="ratTree" style="z-index:999;position:absolute;max-height: 300px;overflow-y: auto;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-show="report.filter.segment || report.filter.Segment"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="segmentTree" style="z-index:999;position:absolute;max-height: 300px;overflow-y: auto;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-show="report.filter.device || report.filter.Device"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="deviceTree" style="z-index:999;position:absolute;max-height: 300px;overflow-y: auto;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+
+
+                <div class="form-group" ng-show="report.filter.plan || report.filter.Plan">
+                    <b>Plan</b>
+                    <select ng-model="filter.planSelected" class="form-control input-sm" style="width:100px;" ng-if="!report.filterType.Plan || report.filterType.Plan == 'single'">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in plan" value="{{item.Plan}}">{{item.Plan}}</option>
+                    </select>
+
+                    <select ng-model="filter.planSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.Plan == 'multiple' && plan.length>0" style="width:200px;" ng-options="item.Plan as item.Plan for item in plan" ng-change="filterChange(filter.planSelected, 'planSelected')">
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+
+
+                <div class="form-group" ng-show="report.filter.OLT || report.filter.olt">
+                    <b>OLT</b>
+                    <select ng-model="filter.oltSelected" class="form-control input-sm" ng-if="!report.filterType.OLT || report.filterType.OLT == 'single'" style="width:200px;" ng-change="filterChange(filter.planSelected, 'planSelected')" >
+                        <option value="">Select</option>
+                        <option ng-repeat="item in olt" value="{{item.OLT}}">{{item.OLT}}</option>
+                    </select>
+                    
+                    <select ng-model="filter.oltSelected" 
+                    class="form-control input-sm" 
+                    chosen multiple ng-if="report.filterType.OLT == 'multiple' && olt.length>0"
+                    ng-options="item.OLT as item.OLT for item in olt" 
+                    ng-change="filterChange(filter.oltSelected, 'oltSelected')" 
+                    style="width:200px;">
+                    </select>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+
+                <div class="form-group" ng-show="report.filter.App || report.filter.app">
+                    <b>App</b>
+                    <select ng-model="filter.appSelected" class="form-control input-sm" ng-if="!report.filterType.App || report.filterType.App == 'single'" style="width:100px;">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in app" value="{{item.App || item.app}}">{{item.App || item.app}}</option>
+                    </select>
+
+                    <select ng-model="filter.appSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.App == 'multiple' && app.length>0" ng-options="item.App as item.App for item in app" style="width:150px;" ng-change="filterChange(filter.appSelected, 'appSelected')"></select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>  
+
+                <div class="form-group" ng-show="report.filter.Area || report.filter.area">
+                    <b>Area</b>
+                    <select ng-model="filter.areaSelected" class="form-control input-sm" ng-if="!report.filterType.Area || report.filterType.Area == 'single'" style="width:100px;">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in area" value="{{item.Area}}">{{item.Area}}</option>
+                    </select>
+
+                    <select ng-model="filter.areaSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.Area == 'multiple' && app.length>0" ng-options="item.Area as item.Area for item in area" style="width:150px;" ng-change="filterChange(filter.areaSelected, 'areaSelected')"></select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-show="report.filter.Node || report.filter.node">
+                    <b>Node</b>
+                    <select ng-model="filter.nodeSelected" class="form-control input-sm" ng-if="!report.filterType.Node || report.filterType.Node == 'single'" style="width:100px;">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in node" value="{{item.node}}">{{item.node}}</option>
+                    </select>
+
+                    <select ng-model="filter.nodeSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.Node == 'multiple' && node.length>0" ng-options="item.node as item.node for item in node" style="width:150px;" ng-change="filterChange(filter.nodeSelected, 'nodeSelected')"></select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group" ng-show="report.filter.Protocol || report.filter.protocol">
+                    <b>Protocol</b>
+                    <select ng-model="filter.protocolSelected" class="form-control input-sm" ng-if="!report.filterType.Protocol || report.filterType.Protocol == 'single'" style="width:100px;">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in protocol" value="{{item.protocol}}">{{item.protocol}}</option>
+                    </select>
+
+                    <select ng-model="filter.protocolSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.Protocol == 'multiple' && protocol.length>0" ng-options="item.protocol as item.protocol for item in protocol" style="width:150px;" ng-change="filterChange(filter.protocolSelected, 'protocolSelected')"></select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group" ng-show="report.filter.cdn || report.filter.cdn">
+                    <b>CDN</b>
+                    <select ng-model="filter.cdnSelected" class="form-control input-sm" ng-if="!report.filterType.cdn || report.filterType.cdn == 'single'" style="width:100px;">
+                        <option value="">Select</option>
+                        <option ng-repeat="item in cdn" value="{{item.cdn}}">{{item.cdn}}</option>
+                    </select>
+
+                    <select ng-model="filter.protocolSelected" class="form-control input-sm" chosen multiple ng-if="report.filterType.Protocol == 'multiple' && protocol.length>0" ng-options="item.protocol as item.protocol for item in protocol" style="width:150px;" ng-change="filterChange(filter.protocolSelected, 'protocolSelected')"></select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <!--  -->
+                <div class="input-group" ng-show="report.filter.Usage">
+                    <a class="dropdown-toggle" title="Usage Filter" ng-click="toggleFilter()">
+                        <i class="fa fa-filter fa-2x"></i>
+                    </a>
+                    <div id="tglFilter" class="dropdown-menu dropdown-messages animated fadeInRight" style="width: 360px;">
+                        <div class="dropdown-messages-box">
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i>&equals;</h3>&nbsp;&nbsp; </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-sm" ng-model="fromUsage" style="width:70px;" numbers-only>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-sm" ng-model="toUsage" placeholder="##" style="width:70px;" numbers-only>
+                                        </div>&nbsp;&nbsp;
+                                        <div class="form-group">
+                                            <select ng-model="unit" class="input-sm" style="width:80px;" ng-init="unit = 'Bytes'">
+                                                <option value="Bytes">Bytes</option>
+                                                <option value="KB">KB</option>
+                                                <option value="MB">MB</option>
+                                                <option value="GB">GB</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group pull-right" ng-show="(report.filter.date == undefined && report.filter.singleDatepicker == undefined) && (report.filter.location || report.filter.Location || report.filter.rat || report.filter.Rat || report.filter.segment || report.filter.Segment || report.filter.device || report.filter.Device || report.filter.plan || report.filter.Plan || report.filter.OLT || report.filter.olt || report.filter.App || report.filter.app || report.filter.Area || report.filter.area || report.filter.Node || report.filter.node || report.filter.text)">
+                    <button class="btn btn-xs btn-primary" ng-click="search()">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="pull-right" ng-show="report.filter.date || report.filter.singleDatepicker">
+                    <!-- <div class="form-group" ng-if="report.GranularityDefault" ng-init="date.granularity = report.GranularityDefault">
+                        <select class="form-control input-sm" ng-model="date.granularity" style="padding: 0 12px;">
+                            <option value="Minute" ng-if="report.granularity['Minute']">Minute</option>
+                            <option value="Hour" ng-if="report.granularity['Hour']">Hour</option>
+                            <option value="Day" ng-if="report.granularity['Day']">Day</option>
+                            <option value="Week" ng-if="report.granularity['Week']">Week</option>
+                            <option value="Month" ng-if="report.granularity['Month']">Month</option>
+                        </select>
+                    </div> -->
+
+                    <!-- For Month View -->
+                    <div class="input-group input-daterange" data-provide="datepicker" data-date-format="yyyy-mm" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker" ng-if="report.filter.date && report.view=='Month'" data-date-min-view-mode="1">
+                        <div class="form-group">
+                            <input id="startDate" type="text" class="form-control input-sm" ng-model="date.start" required placeholder="From"/>
+                        </div>
+                        <div class="form-group">
+                            <input id="endDate" type="text" class="form-control input-sm" ng-model="date.end" required  placeholder="To">
+                        </div>
+                        <button class="btn btn-sm btn-primary" type="button" ng-click="search(date)">Submit</button>
+                    </div>
+
+                    <!-- For Day View -->
+                    <!--  && date.granularity !== 'Month' -->
+                    <div class="input-group input-daterange" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-01" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker" ng-if="report.filter.date && report.view != 'Month'" >
+                        <div class="form-group">
+                            <input id="startDate" type="text" class="form-control input-sm" ng-model="date.start" required placeholder="From" ng-change="dateChange(date)" min-Date="minDate" max-Date="maxDate"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="endDate" type="text" class="form-control input-sm" ng-model="date.end" required  placeholder="To" ng-change="dateChange(date)" min-Date="minDate" max-Date="maxDate">
+                        </div>
+
+                        <div class="form-group" ng-if="report.GranularityDefault" ng-init="date.granularity">
+                            <select class="form-control input-sm" ng-model="date.granularity" style="padding: 0 12px;">
+                                <option ng-repeat="value in granularityArr" value="{{value.trim()}}">{{value.trim()}}</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-sm btn-primary" type="button" ng-click="search(date)">Submit</button>
+                    </div>
+
+                    <div ng-if="report.filter.singleDatepicker">
+                        <div class="input-group date" >
+                            <input type="datetime" class="form-control input-sm" date-time ng-model="date.start" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" format="YYYY-MM-DD" date-change="changeDate" ng-if="report.view!='Month'">
+
+                            <input type="datetime" class="form-control input-sm" date-time ng-model="date.start" view="month" auto-close="true" placeholder="Select Date" min-view="month" min-Date="minDate" max-Date="maxDate" format="YYYY-MM" date-change="changeDate" ng-if="report.view=='Month'"> <!-- date-change="changeDate" -->
+                        </div>
+                        <button class="btn btn-sm btn-primary" type="submit" ng-click="search(date)">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br>
+    </div>
+
+    <div class="row" ng-if="(report.filter.location || report.filter.Location) || (report.filter.rat || report.filter.Rat) || (report.filter.segment || report.filter.Segment) || (report.filter.device || report.filter.Device)">
+        <div class="col-lg-12">
+            <p><span ng-if="report.filter.location"><b >Location:</b> {{locationinfo}}</span>&nbsp;&nbsp;&nbsp;<span ng-if="report.filter.rat > -1"><b >RAT:</b> {{ratinfo}}</span>&nbsp;&nbsp;&nbsp;<span ng-if="report.filter.segment > -1"><b >Segment:</b>{{segmentinfo}}</span>&nbsp;&nbsp;&nbsp;<span ng-if="report.filter.device"><b >Device:</b> {{deviceinfo}}</span></p>
+        </div>
+    </div>
+
+    <div ng-if="report.filter"><br></div>
+    <!-- <div class="row">
+        <div class="col-md-2 text-right pull-right" ng-if="params.returnPath">
+            <button class="btn btn-w-xs btn-primary btn-xs" type="button" title='Back to {{params.pageHeading}}' ng-click="backPage()"><i class="fa fa-arrow-left"></i></button>
+        </div>
+    </div> -->
+
+    <div class="row" ng-repeat="test in currentPage.components" >
+        <div ng-repeat="component in test" >
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'custom'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.name}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-include="displaydata[comonent.component._id].file"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'simple_ibox'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}&nbsp;
+                            <small ng-if="component.component.clickable">
+                                <a title="{{component.component.clickableTooltip}}" ng-click="redirectToOtherPage({label : component.component.kpi}, component.component)"><i class="fa fa-external-link-square"></i></a>
+                            </small>
+                        </h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].kpi == null "></div>
+                        
+                        <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].kpi == null"></div>
+                        
+                        <span ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].kpi != null">
+                            <h2 class="no-margins" style="color:{{component.component.color}}">
+                                {{displaydata[component.component._id].kpi}}
+                                <small>
+                                    {{displaydata[component.component._id].unit}}
+                                </small>
+                            </h2>
+                            <small style="margin-left: 5px;color:{{component.component.color}}">{{component.component.remark}}</small>
+
+                            <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass">
+                                {{displaydata[component.component._id].indicatorValue}}
+                                <i title="{{component.component.indicatorTooltip}}" ng-class="displaydata[component.component._id].indicatorClass"></i>
+                            </div>
+                        </span>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'ibox_with_gauge'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}&nbsp;
+                            <small ng-if="component.component.clickable">
+                                <a title="{{component.component.clickableTooltip}}" ng-click="redirectToOtherPage({label : component.component.kpi}, component.component)"><i class="fa fa-external-link-square"></i></a>
+                            </small>
+                        </h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].kpi == ''"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset[0].kpi == ''"></div>
+
+                                <h2 class="no-margins" style="color:{{component.component.color}}">
+                                    {{displaydata[component.component._id].kpi}}
+                                    <small>{{displaydata[component.component._id].unit}}
+                                        <small><a title="{{component.component.clickableTooltip}}" ng-click="redirectToOtherPage({label : component.component.kpi}, component.component)" ng-if="component.component.clickable"><i class="fa fa-external-link-square"></i></a></small>
+                                    </small>
+                                </h2>
+                                <small style="margin-left: 5px;">{{component.component.remark}}</small>
+
+                                <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass">
+                                    {{displaydata[component.component._id].indicatorValue}}
+                                    <i title="{{component.component.indicatorTooltip}}" ng-class="displaydata[component.component._id].indicatorClass"></i>
+                                </div>
+                                <!-- <div update-time-tools></div> -->
+                            </div>
+                            
+                            <div class="col-xs-6">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].gauge.loader == true && displaydata[component.component._id].gauge.data.length == 0"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].gauge.loader == false && displaydata[component.component._id].gauge.data.length == 0"></div>
+
+                                <div ng-if="displaydata[component.component._id].gauge.data < component.component.gauge.threshold1">
+                                    <knob knob-data="displaydata[component.component._id].gauge.data" data-fgColor="#2CC185" knob-options="displaydata[component.component._id].gauge.options" data-angleOffset=-125 data-angleArc=250 data-width="80" data-height="80" readonly></knob>
+                                </div>
+
+                                <div ng-if="displaydata[component.component._id].gauge.data >= component.component.gauge.threshold1 && displaydata[component.component._id].gauge.data < component.component.gauge.threshold2">
+                                    <knob knob-data="displaydata[component.component._id].gauge.data" data-fgColor="#ff5d00" knob-options="displaydata[component.component._id].gauge.options" data-angleOffset=-125 data-angleArc=250 data-width="80" data-height="80" readonly></knob>
+                                </div>
+
+                                <div ng-if="displaydata[component.component._id].gauge.data >= component.component.gauge.threshold2">
+                                    <knob knob-data="displaydata[component.component._id].gauge.data" data-fgColor="#ff0000" knob-options="displaydata[component.component._id].gauge.options" data-angleOffset=-125 data-angleArc=250 data-width="80" data-height="80" readonly></knob>
+                                </div>
+
+                                <h5 style="padding-left:30px;" class='pull-left'>{{displaydata[component.component._id].gauge.unit}}</h5>
+                                <div class="m-t-md" ng-show="displaydata[component.component._id].gauge.updateTime" style="font-size: 70%;color: gray;">
+                                    <small class="pull-right"><i class="fa fa-clock-o"> </i> 
+                                        {{displaydata[component.component._id].gauge.updateTime | date:'HH:mm'}}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'iBox_Multi_no_Header'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-2" style="width:{{displaydata[component.component._id].width}}%" ng-repeat="(iboxIndex, item) in component.component.list" ng-class="{'b-r' : iboxIndex != displaydata[component.component._id].totalObj}">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].data[iboxIndex].loader == true"></div>
+                                
+                                <div no-data-found ng-if="displaydata[component.component._id].data[iboxIndex].loader == false && displaydata[component.component._id].data[iboxIndex].data == '' && displaydata[component.component._id].data[iboxIndex].data !== 0"></div>
+
+                                <h2 class="no-margins" style="color:{{item.color}}; font-size:24px;">
+                                    {{displaydata[component.component._id].data[iboxIndex].data}}
+                                    <small style="color:{{item.color}};">
+                                        {{displaydata[component.component._id].data[iboxIndex].unit}}
+                                        <small ng-if="item.clickable">
+                                            <a title="{{item.clickableTooltip}}" ng-click="redirectToOtherPage({label : item.kpi}, item)"><i class="fa fa-external-link-square"></i></a>
+                                        </small>
+                                    </small>
+                                </h2>
+                                <div>
+                                    <small>{{item.remark}}</small>
+                                    <!-- <small ng-if="item.label" ng-class="item.labelColor" class="label label-info"> {{item.label}}</small> -->
+
+                                    <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].data[iboxIndex].spanclass" style="padding-right: 30px; padding-top: 3px;font-size:11px;">
+                                        {{displaydata[component.component._id].data[iboxIndex].indicatorValue}}
+                                        <i title="{{item.indicatorTooltip}}" ng-class="displaydata[component.component._id].data[iboxIndex].indicatorClass"></i>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br>
+                            </div>
+                            <div update-time-tools></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'info_box'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <span class="pull-right">
+                            <a ng-click="removeComponent(component)" title="Remove" ng-show="userProfile.userType != 'user'"><i class="fa fa-remove"></i></a>
+                        </span>
+                        <div ng-if="component.component.textType == 'static'">
+                            {{component.component.description}}
+                        </div>
+                        <div ng-if="component.component.textType == 'dynamic'">
+                            {{displaydata[component.component._id].description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'gauge'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content" style="text-align:center;">
+                        <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].data.length == 0"></div>
+                        
+                        <div ng-if="component.component.threshold">
+                            <div ng-if="displaydata[component.component._id].data < component.component.threshold">
+                                <knob knob-data="displaydata[component.component._id].data" data-fgColor="#2CC185" knob-options="displaydata[component.component._id].options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80"></knob>
+                            </div>
+
+                            <div ng-if="displaydata[component.component._id].data >= component.component.threshold">
+                                <knob knob-data="displaydata[component.component._id].data" data-fgColor="#ff0000" knob-options="displaydata[component.component._id].options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80"></knob>
+                            </div>
+                        </div>
+
+                        <div ng-if="component.component.threshold1 && component.component.threshold2">
+                            <div ng-if="displaydata[component.component._id].data < component.component.threshold1">
+                                <knob knob-data="displaydata[component.component._id].data" data-fgColor="#2CC185" knob-options="displaydata[component.component._id].options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80"></knob>
+                            </div>
+
+                            <div ng-if="displaydata[component.component._id].data >= component.component.threshold1 && displaydata[component.component._id].data < component.component.threshold2">
+                                <knob knob-data="displaydata[component.component._id].data" data-fgColor="#ff5d00" knob-options="displaydata[component.component._id].options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80"></knob>
+                            </div>
+
+                            <div ng-if="displaydata[component.component._id].data >= component.component.threshold2">
+                                <knob knob-data="displaydata[component.component._id].data" data-fgColor="#ff0000" knob-options="displaydata[component.component._id].options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80"></knob>
+                            </div>
+                        </div>
+
+                        <h4>{{displaydata[component.component._id].unit}}</h4>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'progress_bar'">
+                <style type="text/css">
+                    .progress{background-color:#ededed;margin-bottom: 8px;height: 16px;}
+                </style>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && !item.value"></div>
+
+                        <div class="col-lg-6" ng-repeat="item in displaydata[component.component._id].multiData">
+                            <div class="col-lg-5">
+                                    {{item.title}}
+                                    <!-- <br>
+                                    <small ng-if="item.value < item.max">capacity-{{item.max}}</small>
+                                    <small ng-if="item.value > item.max" class="text-danger"> capacity-{{item.max}}</small> -->
+                            </div>
+                            <div class="col-lg-3">
+                                {{item.value +'/'+ item.max +'  '+item.unit}}
+                                <!--  -->
+                            </div>
+                            <div class="col-lg-4">
+                                <div ng-if="item.value < item.threshold1">
+                                    <uib-progressbar value="item.value" type="primary" max="item.max">
+                                        <!-- <small ng-if="item.value < 100">{{item.pct}}%</small>
+                                        <small ng-if="item.value >= 100" class="text-danger">100%</small> -->
+                                    </uib-progressbar>
+                                </div>
+
+                                <div ng-if="item.value >= item.threshold1 && item.value < item.threshold2">
+                                    <uib-progressbar value="item.value" type="warning" max="item.max">
+                                        <!-- <small ng-if="item.value < 100">{{item.pct}}%</small>
+                                        <small ng-if="item.value >= 100" class="text-danger">100%</small> -->
+                                    </uib-progressbar>
+                                </div>
+
+                                <div ng-if="item.value >= item.threshold2">
+                                    <uib-progressbar value="item.value" type="danger" max="item.max">
+                                        <!-- <small ng-if="item.value < 100">{{item.pct}}%</small>
+                                        <small ng-if="item.value >= 100" class="text-danger">100%</small> -->
+                                    </uib-progressbar>
+                                </div>
+                            </div>
+                        </div>
+                        <div update-time-tools></div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'multi_gauge'">
+                <div class="col-lg-3" ng-repeat="item in displaydata[component.component._id].multiData">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title" style="min-height: 55px;">
+                            <h5>{{item.title}}</h5>
+                            <div ibox-tools></div>&nbsp;&nbsp;
+                            <I style="text-align-last:left;" title={{item.completename}}>{{item.area}}</I>
+                        </div>
+                        <div class="ibox-content">
+                            <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && !item.value"></div>
+
+                            <div ng-if="item.value < item.threshold1">
+                                <knob knob-data="item.value" data-fgColor="#2CC185" knob-options="item.options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80" max="item.max"></knob>
+                            </div>
+
+                            <div ng-if="item.value >= item.threshold1 && item.value < item.threshold2">
+                                <knob knob-data="item.value" data-fgColor="#ff5d00" knob-options="item.options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80" max="item.max"></knob>
+                            </div>
+
+                            <div ng-if="item.value >= item.threshold2">
+                                <knob knob-data="item.value" data-fgColor="#ff0000" knob-options="item.options" data-angleOffset=-125 data-angleArc=250 readonly data-width="80" data-height="80" max="item.max"></knob>
+                            </div>
+
+                            <h4>{{item.unit}}</h4>
+                            <!-- <h3>{{component.component.title}}</h3> -->
+                            
+                            <div update-time-tools></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'simple_ibox_with_dual_data_point'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}&nbsp;
+                            <small ng-if="component.component.clickable">
+                                <a title="{{component.component.clickableTooltip}}" ng-click="redirectToOtherPage({label : component.component.kpi}, component.component)"><i class="fa fa-external-link-square"></i></a>
+                            </small>
+                        </h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row" ng-if="component.component.display == 'Horizontal'">
+                            <div class="col-xs-6 b-r">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].kpi == ''"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset[0].kpi == ''"></div>
+
+                                <h2 class="no-margins" style="color:{{component.component.color}}">
+                                    {{displaydata[component.component._id].kpi}}
+                                    <small style="color:{{component.component.color}}">{{displaydata[component.component._id].unit}}</small>
+                                </h2>
+                                <a title="{{component.component.clickableTooltip}}" ng-click="dataTableSelectedRow(null, component.component)" ng-if="component.component.clickable">
+                                    <i class="fa fa-external-link-square"></i>
+                                </a>
+
+                                <small style="margin-left: 5px;">{{component.component.remark}}</small>
+                                <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass">
+                                    {{displaydata[component.component._id].indicatorValue}}
+                                    <i title="{{component.component.indicatorTooltip}}" ng-class="displaydata[component.component._id].indicatorClass"></i>
+                                </div>
+                                <div update-time-tools></div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader2 == true && displaydata[component.component._id].kpi2 == ''"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].loader2 == false && displaydata[component.component._id].dataset[0].kpi2 == ''"></div>
+
+                                <h2 class="no-margins" style="color:{{component.component.color2}}">
+                                    {{displaydata[component.component._id].kpi2}}
+                                    <small style="color:{{component.component.color2}}">{{displaydata[component.component._id].unit2}}</small>
+                                </h2>
+                                <small style="margin-left: 5px;">{{component.component.remark2}}</small>
+                                <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass2">
+                                    {{displaydata[component.component._id].indicatorValue2}}
+                                    <i title="{{component.component.indicatorTooltip2}}" ng-class="displaydata[component.component._id].indicatorClass2"></i>
+                                </div>
+                                <a title="{{component.component.clickableTooltip2}}" ng-click="dataTableSelectedRow(null, component.component)" ng-if="component.component.clickable">
+                                    <i class="fa fa-external-link-square"></i>
+                                </a>
+                                <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime2" style="font-size: 70%;color: gray;">
+                                    <small class="pull-right">
+                                        <i class="fa fa-clock-o"> </i> 
+                                        {{displaydata[component.component._id].updateTime2 | date:'HH:mm'}}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="component.component.display == 'Vertical'">
+                            <div class="col-md-12">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].kpi == ''"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset[0].kpi == ''"></div>
+
+                                <h2 class="no-margins" style="color:{{component.component.color}}">
+                                    {{displaydata[component.component._id].kpi}}
+                                    <small style="color:{{component.component.color}}" >{{displaydata[component.component._id].unit}}</small>
+                                </h2>
+                                <small style="margin-left: 5px;">{{component.component.remark}}</small>
+                                <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass">
+                                    {{displaydata[component.component._id].indicatorValue}}
+                                    <i title="{{component.component.indicatorTooltip}}" ng-class="displaydata[component.component._id].indicatorClass"></i>
+                                </div>
+                                <div update-time-tools></div>
+                            </div>
+                            <div class="col-md-12">
+                                <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader2 == true && displaydata[component.component._id].kpi2 == ''"></div>
+
+                                <div no-data-found ng-if="displaydata[component.component._id].loader2 == fasle && displaydata[component.component._id].dataset[0].kpi2 == ''"></div>
+
+                                <h2 class="no-margins" style="color:{{component.component.color2}}">
+                                    {{displaydata[component.component._id].kpi2}}
+                                    <small style="color:{{component.component.color2}}">{{displaydata[component.component._id].unit2}}</small>
+                                </h2>
+                                <small style="margin-left: 5px;">{{component.component.remark2}}</small>
+                                <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass2">
+                                    {{displaydata[component.component._id].indicatorValue2}}
+                                    <i title="{{component.component.indicatorTooltip2}}" ng-class="displaydata[component.component._id].indicatorClass2"></i>
+                                </div>
+                                <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime2" style="font-size: 70%;color: gray;">
+                                    <small class="pull-right">
+                                        <i class="fa fa-clock-o"> </i> 
+                                        {{displaydata[component.component._id].updateTime2 | date:'HH:mm'}}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'simple_ibox_with_trend'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{displaydata[component.component._id].kpi}}</h1>
+                        <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].indicatorClass">
+                            <span ng-if="component.component.indicatortype == 'bolt' || component.component.indicatortype == 'updown' ">
+                                {{displaydata[component.component._id].kpiIndicator}}
+                                <i ng-class="displaydata[component.component._id].spanclass"></i>
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'linegraph' ">
+                                <line-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.linechartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></line-chart>
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'piegraph' ">
+                                <pie-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.piechartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></pie-chart>
+                                
+                                <!-- <pie-chart data="newtunnelchart.kpihistory" options="ibox.piechartOptions"></pie-chart> -->
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'bargraph' ">
+                                <bar-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.barchartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></bar-chart>
+                            </span>
+                        </div>
+                        <small>{{component.component.unit | capitalize}}</small>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'ibox_with_embeded_chart'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}} &nbsp;
+                            <small ng-if="component.component.clickableIbox">
+                                <a title="{{component.component.clickableTooltipIbox}}" ng-click="redirectToOtherPage({label : component.component.kpi}, component.component)"><i class="fa fa-external-link-square"></i></a>
+                            </small>
+                        </h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <span class="stat-percent font-bold" ng-class="displaydata[component.component._id].spanclass" style="padding-top:10px;">
+                                {{displaydata[component.component._id].indicatorValue}}
+                                <i ng-class="displaydata[component.component._id].indicatorClass"></i>
+                            </span>
+                            <h2 class="no-margins" style="color:{{component.component.color}}">     {{displaydata[component.component._id].kpi}}
+                                <small style="color:{{component.component.color}}">{{displaydata[component.component._id].unit}}</small>
+                            </h2>
+                            <small style="margin-left: 5px;">{{component.component.remark}}</small>
+                        </div>
+                        <br>
+                        <div ng-if="component.component.libType == 'flot'">
+                            <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].dataset[0].data.length == 0"></div>
+
+                            <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset[0].data.length == 0"></div>
+
+                            <div flot class="flot-chart-content" dataset="displaydata[component.component._id].dataset" options="displaydata[component.component._id].options" height="90" ng-if="displaydata[component.component._id].dataset[0].data.length > 0"></div>
+                        </div>
+
+                        <div ng-if="component.component.libType == 'highchart'">
+                            <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].labeldata.length == 0"></div>
+
+                            <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].labeldata.length == 0"></div>
+                            
+                            <div ng-if="displaydata[component.component._id].labeldata.length > 0">
+                                <highchart config="displaydata[component.component._id].options"></highchart>
+                            </div>
+                        </div>
+                        
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'simple_charts' " style="min-height:200px;" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 style="display:inherit;">
+                            {{component.component.title}}
+                        </h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <h5 style="font-size: 16px;" ng-if="component.component.header">{{component.component.header}}</h5>
+                        <div snipper-circle class="spiner-example" ng-if="component.component.libType == 'flot' && displaydata[component.component._id].loader == true && displaydata[component.component._id].dataset[0].data.length == 0 " ></div>
+
+                        <div no-data-found ng-if="component.component.libType == 'flot' && displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset[0].data.length == 0 " ></div>
+
+                        <div ng-if="component.component.libType == 'flot' && component.component.chartType != 'Pie' && (displaydata[component.component._id].dataset[0].data.length > 0 )">
+                            <div class="flot-chart">
+                                <div id="{{component.component._id}}" flot class="flot-chart-content" dataset="displaydata[component.component._id].dataset" options="displaydata[component.component._id].options" height="170"></div>
+                            </div>
+                        </div>
+
+                        <div ng-if="component.component.libType == 'flot' && component.component.chartType == 'Pie' && (displaydata[component.component._id].dataset.length > 0)">
+                            <div class="flot-chart">
+                                <div id="{{component.component._id}}" flot class="flot-chart-content" dataset="displaydata[component.component._id].dataset" options="displaydata[component.component._id].options" height="170"></div>
+                            </div>
+                        </div>
+
+                        <div ng-if="component.component.libType == 'highchart'">
+                            <div ng-if="component.component.clickable" style="color:#1ab394;" class="pull-right"><b>&lowast;</b> Click Chart to View More</div>
+
+                            <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].labeldata.length == 0"></div>
+
+                            <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].labeldata.length == 0"></div>
+                            
+                            <div ng-if="displaydata[component.component._id].labeldata.length > 0">
+                                <highchart config="displaydata[component.component._id].options"></highchart>
+
+                                <span ng-if="displaydata[component.component._id].total" style="display:inherit" class="text-center"><b>Total {{displaydata[component.component._id].total}}</b></span>
+                            </div>
+                        </div> 
+
+                        <div ng-if="component.component.libType == 'D3'">
+                            <div snipper-circle class="spiner-example" ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].data.length == 0"></div>
+
+                            <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].dataset.length == 0"></div>
+
+                            <div ng-if="displaydata[component.component._id].data.length > 0">
+                                <nvd3 options="displaydata[component.component._id].options" data="displaydata[component.component._id].data" api="displaydata[component.component._id].api"></nvd3>
+                            </div>
+                        </div>
+                        
+                        <div class="m-t-md" ng-if="displaydata[component.component._id].updateTime && (component.component.data != 'DBPull')">
+                            <small class="pull-right" style="font-size: 70%;color: gray;">
+                                <i class="fa fa-clock-o"> </i>
+                                {{displaydata[component.component._id].updateTime | date:'HH:mm'}}
+                            </small>
+                        </div>
+
+                        <div ng-if="component.component.footer">
+                            <div class="hr-line-dashed"></div>
+                            <h5>{{component.component.footer}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'simple_table'" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <!-- <div ibox-simpletbl-tools></div> -->
+                        <div ibox-datatbl-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="spiner-example" snipper-circle ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div no-data-found ng-if="displaydata[component.component._id].loader  == false && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div class="table-responsive" ng-if="displaydata[component.component._id].data.length > 0">
+                            <table id="{{component.component._id}}" class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th> {{component.component.labelAlias ? component.component.labelAliasText : component.component.labels }}</th>
+
+                                        <th ng-repeat="col in displaydata[component.component._id].columns">{{ component.component.columnAlias[col.title] ? component.component.columnAliasText[col.title] : col.title}}</th>
+                                        <th class ="test1" ng-if="row[displaydata[component.component._id].label].pieData.length > 0"></th>
+                                        <th class="test2" ng-if="component.component.indicator.length > 0"></th>
+                                        <th class="test3" ng-if="component.component.clickable"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in displaydata[component.component._id].data">
+                                        <td>{{row[displaydata[component.component._id].label].value}}</td>
+                                        <td ng-repeat="col in displaydata[component.component._id].columns">
+                                            <span>{{row[col.field].value}}</span>
+                                        </td>
+
+                                        <td ng-if="row[displaydata[component.component._id].label].pieData.length > 0" style="width: 3%">
+                                            <pie-chart data="row[displaydata[component.component._id].label].pieData" options="displaydata[component.component._id].pieOption" title="{{row[displaydata[component.component._id].label].pieData[0]}}%"></pie-chart>
+                                        </td>
+
+                                        <td ng-repeat="col in displaydata[component.component._id].columns" ng-if="component.component.indicator.length > 0" >
+                                            <span class="{{row[col.field].spanclass}}">
+                                                <i title="{{component.component.indicatorTooltip[col.field]}}" class="{{row[col.field].indicator}}">
+                                                <small style="font-size: 11px;font-family: open sans;">  &nbsp;{{row[col.field].diffPCT}} </small></i>
+                                            </span>
+                                        </td>
+                                        <td ng-if="component.component.clickable" style="width: 5%">
+                                            <a title="{{component.component.clickableTooltip}}" ng-click="dataTableSelectedRow(component.component, row)">
+                                                <i class="fa fa-external-link-square"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'table_with_search' " >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-datatbl-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="spiner-example" snipper-circle ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div class="table-responsive" ng-if="displaydata[component.component._id].data.length > 0">
+                            <table id="{{component.component._id}}" dt-options="displaydata[component.component._id].options" datatable class="table table-striped table-hover no-margins">
+                                <thead>
+                                    <tr>
+                                        <th> {{component.component.labelAlias ? component.component.labelAliasText : component.component.labels }}</th>
+                                        <th ng-repeat="col in displaydata[component.component._id].columns">{{ component.component.columnAlias[col.title] ? component.component.columnAliasText[col.title] : col.title}}</th>
+                                        <th ng-if="component.component.clickable"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in displaydata[component.component._id].data ">
+                                        <td>{{row[displaydata[component.component._id].label].value}}</td>
+                                        <td ng-repeat="col in displaydata[component.component._id].columns" ng-if="!component.component.indicator">
+                                            {{row[col.field].value}}
+                                        </td>
+                                        <td ng-repeat="col in displaydata[component.component._id].columns" ng-if="component.component.indicator.length > 0">
+                                            {{row[col.field].value}}
+                                            &nbsp;
+                                            <span class="{{row[col.field].spanclass}}" ng-if="component.component.indicator.length > 0">
+                                                <i title="{{component.component.indicatorTooltip[col.field]}}" class="{{row[col.field].indicator}}"></i>
+                                            </span>
+                                        </td>
+                                        <td ng-if="component.component.clickable">
+                                            <a title="{{component.component.clickableTooltip}}" ng-click="dataTableSelectedRow(component.component, row)">
+                                                <i class="fa fa-external-link-square"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'col_extended_table'" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-colextdtbl-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="spiner-example" snipper-circle ng-if="displaydata[component.component._id].data.length == 0 && displaydata[component.component._id].loader == true"></div>
+                        
+                        <div no-data-found ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].data.length == 0">
+                        </div>
+
+                        <div class="table-responsive" ng-if="displaydata[component.component._id].data.length > 0">
+                            <table datatable="ng" dt-options="col_extended_table_Opt" id="{{component.component._id}}" class="table table-striped table-hover table-bordered no-margins">
+                                <thead>
+                                    <tr>
+                                        <th>{{displaydata[component.component._id].component.rowName}}</th>
+                                        <th ng-if="displaydata[component.component._id].component.isTotal">{{component.component.totalText}}</th>
+                                        <th ng-repeat="col in displaydata[component.component._id].data[0].data" style="text-align:center;">{{col[displaydata[component.component._id].component.colName]}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in displaydata[component.component._id].data ">
+                                        <td>{{row[displaydata[component.component._id].component.rowName]}}</td>
+                                        <td ng-if="displaydata[component.component._id].component.isTotal">{{row.total}}</td>
+                                        <td style="text-align:center;" ng-repeat="rowData in row.data">{{rowData[displaydata[component.component._id].component.rowData]}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <uib-pagination ng-if="displaydata[component.component._id].data.length > 0" total-items="totalItems" ng-model="bigCurrentPage" max-size="maxSize" items-per-page="itemsPerPage" ng-change= "changePage()" class="pagination-sm pull-right" boundary-links="true"></uib-pagination> -->
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'extended_table'" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-colextdtbl-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="spiner-example" snipper-circle ng-if="displaydata[component.component._id].loader == true"></div>
+                        
+                        <div no-data-found ng-if="displaydata[component.component._id].loader == false && !displaydata[component.component._id].topModelsObj">
+                        </div>
+
+                        <div class="table-responsive" ng-if="displaydata[component.component._id].topModelsObj.length > 0">
+                            <!-- datatable="ng" dt-options="col_extended_table_Opt" -->
+                            <!-- <table id="{{component.component._id}}" class="table table-striped table-hover table-bordered no-margins">
+                            </table> -->
+                            <table class="table table-striped table-hover table-bordered no-margins">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center; background-color: rgba(0, 0, 0, 0.20); border: 1px solid grey;" ng-repeat="colHeaders in displaydata[component.component._id].topModelsObj" colspan='{{displaydata[component.component._id].colSpan}}'>{{colHeaders.Date | date : 'yyyy-MM-dd'}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:center; background-color: rgba(0, 0, 0, 0.15);  border: 1px solid grey;" ng-repeat="data in displaydata[component.component._id].colHeader track by $index" >{{data}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat='data in displaydata[component.component._id].keysTopModel'>
+                                        <td style="text-align:center; border: 1px solid rgba(0, 0, 0, 0.15);" ng-repeat="rowData in data track by $index">{{rowData}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+           <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'map'" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.title}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+
+                    <div class="ibox-content">
+                        <div class="spiner-example" snipper-circle ng-if="displaydata[component.component._id].loader == true && displaydata[component.component._id].data.length == 0"></div>
+
+                        <div class="spiner-example" ng-if="displaydata[component.component._id].loader == false && displaydata[component.component._id].data.length == 0 " >
+                            <div no-data-found></div>
+                        </div>
+                        <div ng-if="component.component.mapType == 'simple' && displaydata[component.component._id].data.length > 0"> 
+                            <div ng-if="displaydata[component.component._id].mapOptions.marker.length > 0">
+                                <ui-gmap-google-map center="displaydata[component.component._id].mapOptions.center" size="displaydata[component.component._id].mapOptions.size" zoom='displaydata[component.component._id].mapOptions.zoom' options='displaydata[component.component._id].mapOptions.options' aria-label="Google map">
+
+                                    <ui-gmap-markers models="displaydata[component.component._id].mapOptions.marker" coords="'self'" icon="'icon'" events="displaydata[component.component._id].mapOptions.events" options="'options'" fit='true'>
+                                        <ui-gmap-windows show="show">
+                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                        </ui-gmap-windows>
+                                    </ui-gmap-markers>
+                                </ui-gmap-google-map>
+
+
+                            </div>
+                        </div>
+
+                        <div ng-if="component.component.mapType == 'heat' && displaydata[component.component._id].data.length > 0">
+                            <ui-gmap-google-map center='displaydata[component.component._id].mapOptions.center' zoom='displaydata[component.component._id].mapOptions.zoom' >
+                                <ui-gmap-layer namespace="visualization" type="HeatmapLayer" show="displaydata[component.component._id].mapOptions.showHeat" onCreated="displaydata[component.component._id].mapOptions.heatLayerCallback"></ui-gmap-layer>
+                            </ui-gmap-google-map>
+                        </div>
+
+                        <!-- <div ng-if="component.component.mapType == 'heat' && displaydata[component.component._id].data.length > 0">
+                            <ui-gmap-layer namespace="visualization" type="HeatmapLayer" onCreated="mapUsage.heatLayerCallback"></ui-gmap-layer>
+                        </div> -->
+                        
+                        <!-- <div ng-if="component.component.mapType == 'heat' && displaydata[component.component._id].data.length > 0">
+                            <ng-map zoom="4" center="{{displaydata[component.component._id].data[0][0]}}, {{displaydata[component.component._id].data[0][1]}}" map-type-id="SATELLITE" >
+                                <heatmap-layer id="foo" data="heatMapData"></heatmap>
+                            </ng-map>
+                        </div> -->
+                        <div update-time-tools></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ng-if="component.componentType == 'mupltiple_tab' " >
+                <div class="tabs-container">
+                    <tabset>
+                        <tab heading="{{item}}" ng-repeat="item in component.component.tabname">
+                            <div class="panel-body">
+                                {{item}}
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

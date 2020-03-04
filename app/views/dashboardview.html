@@ -1,0 +1,333 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Dashboard</h3>
+</div>
+
+<div class="wrapper-content animated fadeIn">
+    <div class="row" ng-repeat="test in currentPage.components" >
+        <div ng-repeat="component in test" >
+            <div class="col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_ibox'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div uib-dropdown class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                        <h5>{{component.component.name}}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h2 class="no-margins">{{displaydata[component.component._id].kpi}} <small>{{displaydata[component.component._id].unit}}</small></h2>
+                        
+                        <div class="stat-percent font-bold text-success">
+                            {{displaydata[component.component._id].kpiindicator}}
+                            <i ng-class="displaydata[component.component._id].spanclass"></i>
+                        </div>
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_ibox_with_dual_data_point'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                        <h5>{{component.component.name}}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="col-md-6">
+                            <h2 class="no-margins row">{{displaydata[component.component._id].kpi}} <small>{{displaydata[component.component._id].unit}}</small></h2>
+                        </div>
+
+                        <div class="row col-md-6">
+                            <h2 class="no-margins">{{displaydata[component.component._id].kpi2}} <small>{{displaydata[component.component._id].unit2}}</small></h2>
+                        </div>
+
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_ibox_with_dual_data_point'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div uib-dropdown class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                        <h5>{{component.component.name}}</h5>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row ibox-content">
+                            <h2 class="no-margins">{{displaydata[component.component._id].kpi}} <small>{{displaydata[component.component._id].unit}}</small></h2>
+
+                            <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                                <small class="pull-right">
+                                    <i class="fa fa-clock-o"> </i> 
+                                    Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row ibox-content">
+                            <h2 class="no-margins">{{displaydata[component.component._id].kpi2}} <small>{{displaydata[component.component._id].unit}}</small></h2>
+
+                            <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime2">
+                                <small class="pull-right">
+                                    <i class="fa fa-clock-o"> </i> 
+                                    Update on {{displaydata[component.component._id].updateTime2 | date:'HH:mm:ss'}}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_ibox_with_trend'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.name}}</h5>
+                        <div uib-dropdown  class="ibox-tools dropdown pull-right">
+                            <span class="label label-primary" ng-if="component.component.frequency"> {{component.component.frequency}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{displaydata[component.component._id].kpi}}</h1>
+                        <div class="stat-percent font-bold" ng-class="displaydata[component.component._id].indicatorClass">
+                            <span ng-if="component.component.indicatortype == 'bolt' || component.component.indicatortype == 'updown' ">
+                                {{displaydata[component.component._id].kpiIndicator}}
+                                <i ng-class="displaydata[component.component._id].spanclass"></i>
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'linegraph' ">
+                                <line-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.linechartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></line-chart>
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'piegraph' ">
+                                <pie-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.piechartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></pie-chart>
+                                
+                                <!-- <pie-chart data="newtunnelchart.kpihistory" options="ibox.piechartOptions"></pie-chart> -->
+                            </span>
+                            <span ng-if="component.component.indicatortype == 'bargraph' ">
+                                <bar-chart data="displaydata[component.component._id].kpiindicatordatahistory" options="ibox.barchartOptions" ng-if="displaydata[component.component._id].kpiindicatordatahistory.length > 0"></bar-chart>
+                            </span>
+                        </div>
+                        <small>{{component.component.unit | capitalize}}</small>
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-{{component.component.width}}" ng-if="component.componentType == 'ibox_with_embeded_chart'">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div uib-dropdown  class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                        <h5>{{component.component.name}}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <h2 class="no-margins">{{displaydata[component.component._id].kpi}} <small>{{displaydata[component.component._id].unit}}</small></h2> <br>
+                            <div flot class="flot-chart-content" dataset="displaydata[component.component._id].dataset" options="displaydata[component.component._id].options" height="90" ng-if="component.component.libType == 'flot' &&  displaydata[component.component._id].dataset[0].data.length > 0"></div>
+                        </div>
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_charts' " style="min-height:200px;" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{component.component.name}}</h5>
+                        <div class="ibox-tools">
+                            <!-- <span class="fa fa-remove pull-right" ng-click="removeComponent($index)"></span> -->
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div ng-if="component.component.libType == 'flot' && displaydata[component.component._id].dataset[0].data.length > 0">
+                            <div class="flot-chart">
+                                <div flot class="flot-chart-content" dataset="displaydata[component.component._id].dataset" options="displaydata[component.component._id].options" height="170"></div>
+                            </div>
+                        </div>
+
+                        <div ng-if="component.component.libType == 'highchart' ">
+                            <highchart config="displaydata[component.component._id].options"></highchart>
+                        </div>
+
+                        <div ng-if="component.component.libType == 'D3' ">
+                            <nvd3 options="displaydata[component.component._id].options" data="displaydata[component.component._id].data" api="displaydata[component.component._id].api"></nvd3>
+                        </div>
+
+                        <!-- <div ng-if="component.component.libType == 'D3' && component.component.chartType == 'LinePlusBar' ">
+                            <nvd3 options="displaydata[component.component._id].options" data="displaydata[component.component._id].data" ng-if="displaydata[component.component._id].data[0].values.length > 0"></nvd3>
+                        </div> -->
+
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'Line'">
+                            <canvas id="{{component.component._id}}" class="chart chart-line-alt" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-legend="true" chart-series="component.component.series" chart-options="displaydata[component.component._id].options"></canvas>
+                        </div>
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'Bar' && displaydata[component.component._id].data.length > 0">
+                            <canvas id="{{component.component._id}}" class="chart chart-bar-alt" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-legend="true" chart-series="component.component.series" chart-options="displaydata[component.component._id].options"></canvas>
+                        </div>
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'Pie'">
+                            <canvas id="{{component.component._id}}" class="chart chart-pie" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-options="component.component.options" chart-legend="true"></canvas>
+                        </div>
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'Doughnut'">
+                            <canvas id="{{component.component._id}}" class="chart chart-doughnut" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-options="component.component.options" chart-legend="true"></canvas>
+                        </div>
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'PolarArea'">
+                            <canvas id="{{component.component._id}}" class="chart chart-polar-area" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-options="component.component.options" chart-legend="true"></canvas>
+                        </div>
+                        <div ng-if="component.component.libType == 'ChartJS' && component.component.chartType == 'Radar'">
+                            <canvas id="{{component.component._id}}" class="chart chart-radar" chart-data="displaydata[component.component._id].data" chart-labels="displaydata[component.component._id].labeldata" chart-legend="true" chart-series="component.component.series" chart-options="component.component.options"></canvas>
+                        </div>
+
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="connectPanels col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'simple_table' || component.componentType == 'reports'" >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <!-- <div class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div> -->
+                        <h5>{{component.component.name}}</h5>
+                        <div ibox-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table id="{{component.component._id}}" class="table table-striped table-hover no-margins">
+                                <thead>
+                                    <tr>
+                                        <th>{{displaydata[component.component._id].label}}</th>
+                                        <th ng-repeat="col in displaydata[component.component._id].columns">{{col.title}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr ng-repeat="row in $data "> -->
+                                    <tr ng-repeat="row in displaydata[component.component._id].data ">
+                                        <td>{{row[displaydata[component.component._id].label].value}}</td>
+                                        <td ng-repeat="col in displaydata[component.component._id].columns">
+                                            {{row[col.field].value}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'table_with_search' " >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <!-- <div class="ibox-tools dropdown pull-right">
+                            <span ng-class="component.component.labelColor" ng-if="component.component.label"> {{component.component.label}}</span>
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div> -->
+                        <h5>{{component.component.name}}</h5>
+                        <div ibox-export-tools></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table id="{{component.component._id}}" datatable class="table table-striped table-hover no-margins" ng-if="displaydata[component.component._id].data.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>{{component.label}}</th>
+                                        <th ng-repeat="col in displaydata[component.component._id].columns">{{col}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="row in displaydata[component.component._id].data ">
+                                        <td ng-repeat="col in displaydata[component.component._id].columns">
+                                            {{row[col.field].value}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                       </div>
+
+                        <div class="m-t-md" ng-show="displaydata[component.component._id].updateTime">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i> 
+                                Update on {{displaydata[component.component._id].updateTime | date:'HH:mm:ss'}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connectPanels col-lg-{{component.component.width}}" ui-sortable="sortableOptions" ng-if="component.componentType == 'map' " >
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div uib-dropdown class="ibox-tools dropdown pull-right">
+                            <a ng-click="removeComponent(component)" title="Remove"><i class="fa fa-remove"></i></a>
+                        </div>
+                        <h5>{{component.component.name}}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <ng-map center="28.6608, 77.1008" zoom="5" mayTypeId="TERRAIN">
+                            <shape name="{{displaydata[component.component._id].shape}}" ng-repeat="city in displaydata[component.component._id].data" no-watcher="true"
+                              stroke-color="#FF0000"
+                              stroke-opacity="0.8"
+                              stroke-weight="2"
+                              fill-color="#FF0000"
+                              fill-opacity="0.35"
+                              center="{{city.position}}"
+                              radius="{{city.population}}">
+                            </shape>
+                        </ng-map>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

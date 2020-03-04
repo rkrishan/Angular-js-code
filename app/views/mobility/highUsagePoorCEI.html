@@ -1,0 +1,205 @@
+<div class="wrapper-content animated fadeIn " ng-controller="highUsagePoorCEICtrl" >
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <date-range-picker></date-range-picker>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-8">
+            <span><b>Location:</b> {{locationinfo}}
+            </span>
+        </div>
+        <div class="col-lg-4">
+            <span class="dropdown col-lg-12 " uib-dropdown>
+               <a class="dropdown-toggle count-info pull-right label label-primary" title="Advance Filter" href uib-dropdown-toggle >
+                    <i class="fa fa-filter" ></i>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts  animated fadeInRight " style="width:367px;">
+                    <li>
+                        <form class="form-inline" name="myForm" role="form" >
+
+                            <div class="form-group">
+                                <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.fromUsage" placeholder="&euro;&euro;" style="width:80px;">
+                            </div>
+                            &nbsp;&nbsp;
+                            <div class="form-group">
+                                <div class="float-e-margins">
+                                    <select ng-model="dynamicPopover.unitUsage" class="input-sm" style="width:80px;">
+                                        <option value="Bytes">Bytes</option>
+                                        <option value="KB">KB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <button class="btn btn-primary btn-sm pull-right" type="submit" ng-click='saveFilterOption(dynamicPopover)'>Submit</button>
+                    </li>
+                </ul>
+           </span>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab index="1"  heading="Heat Zones of High Traffic Poor CEI" ng-click="tabSelected('heatZonesPoorCEI')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>High Usage Poor CEI for Date <b style="color:#1ab394;"> {{edate}} </b> for <b style="color:#1ab394;">Usage &gt; {{usageLabel}}</b></span>
+                                        
+                                        <export-module filename="exportHeatZonesPoorCEIObj.fileName" dataobj="exportDatasetPoorCEI" fileheader="exportHeatZonesPoorCEIObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingPoorCEIMapMarkersDiv"></div>
+                                        <div no-data-found ng-if="noDataPoorCEIMapMarkersDiv"></div>
+                                        
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ui-gmap-google-map id='map' center='mapHeatZonesPoorCEI.center' zoom='mapHeatZonesPoorCEI.zoom' options='mapHeatZonesPoorCEI.options' size="mapHeatZonesPoorCEI.size" control="mapHeatZonesPoorCEI.control" >
+                                                    <ui-gmap-markers models="markersPoorCEI" coords="'self'" icon="'icon'" events="mapHeatZonesPoorCEI.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+
+                                                </ui-gmap-google-map>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <span ng-if="markersPoorCEI.length>0">
+                                            <div class="checkbox checkbox-circle checkbox-success checkbox-inline" >
+                                                <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxUsageLowStatus" ng-click="checkboxLowUsageStateChange(checkboxUsageLowStatus)" >
+                                                <label for="inlineCheckbox3"> 0- {{lowUsage}} </label>
+                                            </div>
+                                            <div class="checkbox checkbox-circle checkbox-warning checkbox-inline">
+                                                <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxUsageMediumStatus" ng-click="checkboxMediumUsageStateChange(checkboxUsageMediumStatus)" >
+                                                <label for="inlineCheckbox2"> {{lowUsage}}-{{mediumUsage}} </label>
+                                            </div>
+                                            <div class="checkbox checkbox-circle checkbox-danger checkbox-inline">
+                                                <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxUsageHighStatus" ng-click="checkboxHighUsageStateChange(checkboxUsageHighStatus)" >
+                                                <label for="inlineCheckbox1">{{mediumUsage}}-{{highestUsage}} </label>
+                                            </div>
+                                        </span>
+                                        <br/>
+                                        <!-- <span>Total Count: <b>&nbsp;{{datasetPoorCEITable.length}}</b></span> -->
+                                        <br/>
+                                        <div class="ibox-content">
+                                            <div >
+                                                <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>CellID</th>
+                                                            <th>Area</th>
+                                                            <th>Latitude</th>
+                                                            <th>Longitude</th>
+                                                            <th>Usage</th>
+                                                            <!-- <th>Worst affected Device</th>
+                                                            <th>Worst affected Segment</th> -->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="element in datasetPoorCEITable track by $index">
+                                                            <td>{{ element.cellid }}</td>
+                                                            <td>{{ element.Area }}</td>
+                                                            <td>{{ element.latitude }}</td>
+                                                            <td>{{ element.longitude }}</td>
+                                                            <td>{{ element.Usage }}</td>
+                                                            <!-- <td>{{ element.Device }}</td>
+                                                            <td>{{ element.Segment }}</td> -->
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="2"  heading="Overall Poor CEI" ng-click="tabSelected('overallDayCount')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Overall Poor CEI between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b> for <b style="color:#1ab394;">Usage &gt; {{usageLabel}}</b></span>
+                                        
+                                        <export-module filename="exportOverallPoorCEIObj.fileName" dataobj="exportOverallPoorCEI" fileheader="exportOverallPoorCEIObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingOverallPoorCEIDiv"></div>
+                                                    <div ng-if="dataOverallPoorCEIDiv">
+                                                        <highchart id="OverallPoorCEI" config="OverallPoorCEIBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataOverallPoorCEIDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab index="3"  heading="City wise Poor CEI" ng-click="tabSelected('citywiseCount')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>City wise Poor CEI between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b> for <b style="color:#1ab394;">Usage &gt; {{usageLabel}}</b></span>
+                                        
+                                        <export-module filename="exportCitywisePoorCEIObj.fileName" dataobj="exportCitywisePoorCEI" fileheader="exportCitywisePoorCEIObj.fileHeader"></export-module>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="ibox float-e-margins">
+                                                    <div loading-icon ng-if="loadingCitywiseCEIDiv"></div>
+                                                    <div ng-if="dataCitywiseCEIDiv">
+                                                        <highchart id="CitywiseCEI" config="CitywiseCEIBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataCitywiseCEIDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

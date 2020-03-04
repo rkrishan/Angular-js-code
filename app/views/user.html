@@ -1,0 +1,229 @@
+﻿<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">User</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight" ng-show="isReadOnly">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="tabs-container">
+                        <uib-tabset>
+                            <uib-tab heading="Profile" active="userProfile">
+                                <div class="panel-body">
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <form class="form-horizontal" name="userform" role="form" ng-submit="save(userform.$valid)" novalidate autocomplete="off">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">User Id <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasErrorEdit('username','required')}">
+                                                        <input type="email" ng-blur="checkuser()" ng-model="user.username" placeholder="Email" class="form-control" ng-required="true" name="username" ng-readonly="isReadOnly"  focus="true" ng-pattern ="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/">
+                                                        <span ng-show="userform.username.$error.pattern" class="text-danger">email not valid</span>
+                                                    </div>    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">First Name <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasErrorEdit('firstName','required')}">
+                                                    <input type="text" placeholder="First Name" name="firstName" class="form-control" ng-model="user.firstName" ng-required="true">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Last Name <span class="text-danger">*</span></label>
+                                                     <div class="col-sm-6"  ng-class="{ 'has-error': hasErrorEdit('lastName','required')}">
+                                                    <input type="text" placeholder="Last Name" name="lastName" class="form-control" ng-model="user.lastName" ng-required="true">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">User Type </label>
+                                                    <div class="col-sm-6" >
+                                                        <input icheck type="radio" value="circle admin" id="userTypeUser" name="parent" ng-model="user.userType" style="margin-left:20px;" ng-required="true">
+                                                        <label for="userTypeUser">Administrator</label>
+
+                                                        <input icheck type="radio" value="circle user" id="user" name="parent" ng-model="user.userType" style="margin-left:35px;" ng-required="true">
+                                                        <label for="user">User</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" ng-if="(user.userType == 'circle admin' || user.userType == 'circle user')">
+                                                    <label class="col-sm-2 control-label">{{userSelector}} Circle</label>
+                                                    <div class="col-md-4" ng-class="{ 'has-error': hasError('circle','required')}">
+                                                        <select class="form-control" name="circle" ng-model="user.circle" required>
+                                                            <option value=""> Select</option>
+                                                            <option ng-repeat="item in circleList" value="{{item.circle}}">{{item.circle}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" ng-if="(user.userType == 'corporate admin' || user.userType == 'corporate user')">
+                                                    <label class="col-sm-2 control-label">{{userSelector}} Circle</label>
+                                                    <div class="col-md-4" ng-class="{ 'has-error': hasError('circle','required')}">
+                                                        <select chosen multiple class="form-control" name="circle" ng-model="user.circle" required>
+                                                            <option value=""> Select</option>
+                                                            <option ng-repeat="item in circleList" value="{{item.circle}}">{{item.circle}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" style="margin-bottom:1em;">
+                                                    <div class="col-sm-12  col-sm-offset-4">
+                                                        <button ng-if="currentUser.userType !== 'user'" class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                                        <button class="btn btn-primary" type="submit" >Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </uib-tab>
+                            <uib-tab heading="Change Password" active="changePassword">
+                                <div class="panel-body">
+                                    <div class="ibox float-e-margins">
+                                       <div class="ibox-content">
+                                        <div class="row">
+                                            <form class="form-horizontal" name="changePasswordForm" role="form" novalidate>
+                                                <!-- <div class="form-group" >
+                                                    <label  class="col-sm-2 control-label">Current Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('CurrentPassword','required')}">
+                                                    <input type="password" name="CurrentPassword" class="form-control" ng-model="password.CurrentPassword"  placeholder="current password"   ng-required="true">
+                                                    </div>
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label  class="col-sm-2 control-label">New Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('password','required')}">
+                                                    <input type="password" ng-model="password.password" name="password" placeholder="new Password" name="password" class="form-control" ng-required="true">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label  class="col-sm-2 control-label">Repeat Password <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error': hasError('repeatpassword','required')}">
+                                                    <input type="password" ng-model="password.repeatpassword" name="repeatpassword" placeholder="repeat Password" class="form-control" ng-required="true">
+                                                    <span class="text-danger" ng-show="(password.password != password.repeatpassword) && (password.password && password.repeatpassword)">Password do not Match </span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom:1em;">
+                                                    <div class="col-sm-12  col-sm-offset-4">
+                                                        <button ng-if="currentUser.userType == 'system administrator' || currentUser.userType == 'corporate admin'|| currentUser.userType == 'circle admin'" class="btn btn-white" class="btn btn-white" type="button" ng-click="cancel()" >Cancel</button>
+                                                        <button class="btn btn-primary" type="submit" ng-click="changePass(changePasswordForm.$valid,password)">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper-content animated fadeInRight" ng-if="!isReadOnly">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>User Profile</h5>
+                </div> 
+                <div class="ibox-content">
+                    <div class="row">
+                        <form class="form-horizontal" name="userform" role="form" ng-submit="save(userform.$valid)" novalidate>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">User Id <span class="text-danger">*</span></label>
+                                <div class="col-sm-6" ng-class="{ 'has-error': hasError('username','required')}">
+                                    <input type="text" ng-blur="checkuser()" ng-model="user.username" placeholder="Email" class="form-control" ng-required="true" name="username" ng-readonly="isReadOnly"  focus="true" ng-pattern ="/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/">
+                                    <span ng-show="userform.username.$error.pattern" class="text-danger">email not valid</span>
+                                </div>    
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">First Name <span class="text-danger">*</span></label>
+                                <div class="col-sm-6" ng-class="{ 'has-error': hasError('firstName','required')}">
+                                <input type="text" placeholder="First Name" name="firstName" class="form-control" ng-model="user.firstName" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Last Name <span class="text-danger">*</span></label>
+                                 <div class="col-sm-6"  ng-class="{ 'has-error': hasError('lastName','required')}">
+                                <input type="text" placeholder="Last Name" name="lastName" class="form-control" ng-model="user.lastName" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">Password <span class="text-danger">*</span></label>
+                                <div class="col-sm-6" ng-class="{ 'has-error': hasError('password','required')}">
+                                <input type="password" ng-model="user.password" name="password" placeholder="new Password" class="form-control" ng-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">Repeat Password <span class="text-danger">*</span></label>
+                                <div class="col-sm-6" ng-class="{ 'has-error': hasError('repeatpassword','required')}">
+                                <input type="password" ng-model="user.repeatpassword" name="repeatpassword" placeholder="repeat Password" class="form-control" ng-required="true">
+                                <span class="text-danger" ng-show="(user.password != user.repeatpassword) && (user.password && user.repeatpassword)">Password do not Match </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Change Password</label>
+                                <div class="col-md-4">
+                                    <input icheck type="checkbox" ng-model="user.changePassword">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">User Type </label>
+                                <div class="col-sm-6" >
+                                    <input icheck type="radio" value="circle admin" id="userTypeUser" name="parent" ng-model="user.userType" style="margin-left:20px;" ng-required="true">
+                                    <label for="userTypeUser">Administrator</label>
+
+                                    <input icheck type="radio" value="circle user" id="user" name="parent" ng-model="user.userType" style="margin-left:35px;" ng-required="true">
+                                    <label for="user">User</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="(user.userType == 'circle admin' || user.userType == 'circle user')">
+                                <label class="col-sm-2 control-label">{{userSelector}} Circle</label>
+                                <div class="col-md-4" ng-class="{ 'has-error': hasError('circle','required')}">
+                                    <select class="form-control" name="circle" ng-model="user.circle" required ng-init="user.circle = ''">
+                                        <option value=""> Select</option>
+                                        <option ng-repeat="item in circleList" value="{{item.circle}}">{{item.circle}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="(user.userType == 'corporate admin' || user.userType == 'corporate user')">
+                                <label class="col-sm-2 control-label">{{userSelector}} Circle</label>
+                                <div class="col-md-4" ng-class="{ 'has-error': hasError('circle','required')}">
+                                    <select chosen multiple class="form-control" name="circle" ng-model="user.circle" ng-init="user.circle = ''" required>
+                                        <option value=""> Select</option>
+                                        <option ng-repeat="item in circleList" value="{{item.circle}}">{{item.circle}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div ng-if="(user.userType == 'admin' || user.userType == 'user' ) && userProfile.userType == 'circle admin'">
+                               <div class="form-group">
+                                   <label class="col-sm-2 control-label">{{userSelector}} Circle</label>
+                                   <div class="col-sm-6" >
+                                       <label class="form-control">{{userProfile.circle}}</label>
+                                   </div>
+                               </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:1em;">
+                                <div class="col-sm-12  col-sm-offset-4">
+                                    <button class="btn btn-white" ng-if="currentUser.userType == 'system administrator' || currentUser.userType == 'corporate admin'|| currentUser.userType == 'circle admin'" type="button" ng-click="cancel()" >Cancel</button>
+                                    <button class="btn btn-primary" type="submit" >Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,482 @@
+-----------------------------------------------------------------------------------
+Datatable
+----------------------
+<div loading-icon ng-if="loadingQoSCountDiv"></div>
+<div ng-if="DataQoSCountDiv">
+    <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options=" QoSCountTblOpt" >
+        <thead>
+            <tr>
+                <th>QoS Type</th>
+                <th>Count</th>
+                <th>MaxDLRate</th>
+                <th>MaxULRate</th>
+                <th ></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="element in QoSCountTableData track by $index">
+                <td>{{$index+1}}</td>
+                <!-- <td>{{ element.QoSType }}</td> -->
+                <td>{{ element.Count }}</td>
+                <td>{{ element.MaxDLRate }}</td>
+                <td>{{ element.MaxULRate }}</td>
+                <td>
+                    <span class="ibox-tools dropdown" uib-dropdown class="">
+                        <a title="Export" class="dropdown-toggle" href uib-dropdown-toggle>
+                            <span class="label label-primary"><i class="fa fa-save"></i></span>
+                            <!-- <button class="btn btn-xs btn-primary" ladda="$index" data-style="slide-down"  >
+                              <i class="fa fa-save"></i>
+                            </button> -->
+                        </a>
+                        <ul class=" dropdown-menu">
+                            <li>
+                                <a ng-click="exportQoSType( element.QoSType, 'excel')">Export to Excel</a>
+                            </li>
+                            <li>
+                                <a ng-click="exportQoSType( element.QoSType, 'csv')">Export to CSV</a>
+                            </li>
+                        </ul>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div no-data-found ng-if="noDataQoSCountDiv"></div>
+-----------------------------------------------------------------------------------
+Col-Extnd-Table
+---------------------------
+<div loading-icon ng-if="loadingQoSDeviceWiseDiv"></div> 
+<div ng-if="DataQoSDeviceWiseDiv">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Device</th>
+                    <th ng-repeat="elementData in columns track by $index">{{elementData}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="rowData in rowDataArray track by $index">
+                    <td ng-repeat="element in rowData track by $index">{{element}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div no-data-found ng-if="noDataQoSDeviceWiseDiv"></div>
+-----------------------------------------------------------------------------------
+Highchart
+-----------------------
+<div loading-icon ng-if="loadingUsageDiv"></div>
+<div ng-if="dataUsageDiv">
+    <highchart id="chart2" config="usageBarChartConfig" ></highchart>
+</div>
+<div no-data-found ng-if="noDataQoSDeviceWiseDiv"></div>
+------------------------------------------------------------------------------------
+Map
+-------------------
+<div>
+    <span loading-icon ng-if="loading2GCellDiv"></span>
+    <span no-data-found ng-if="noData2GCellDiv"></span>
+</div>
+<br/>
+<div >
+    <ui-gmap-google-map id='map' center='cellWithZeroTraffic.center' zoom='cellWithZeroTraffic.zoom' options='cellWithZeroTraffic.options' size="cellWithZeroTraffic.size" control="cellWithZeroTraffic.control">
+    Marker
+        <ui-gmap-markers models="cell2GCount" coords="'self'" icon="'icon'" events="cellWithZeroTraffic.events" options="'options'" fit='true' >
+            <ui-gmap-windows show="show">
+                <div ng-non-bindable><b>{{title}}</b></div>
+            </ui-gmap-windows>
+        </ui-gmap-markers>
+    Circle
+        <ui-gmap-circle ng-repeat="c in circlesCount track by $index" id="c.id" center="c.center" stroke="c.stroke" fill="c.fill" radius="c.radius" events="mapCount.events">
+        </ui-gmap-circle>
+    </ui-gmap-google-map>
+</div>
+-----------------------------------------------------------------------------------
+Export
+---------------------------
+<export-module filename="exportDNSReqObj.fileName" dataobj="exportDNSReqData" fileheader="exportDNSReqObj.fileHeader"></export-module>
+----------------------------------------------------------------
+Top Dropdown List
+----------------------
+<div class="pull-right">
+    <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+        <option value="100">Top 100</option>
+        <option value="250">Top 250</option>
+        <option value="500">Top 500</option>
+        <option value="750">Top 750</option>
+        <option value="1000">Top 1000</option>
+        <option value="1500">Top 1500</option>
+        <option value="2000">Top 2000</option>
+        <option value="20000">&gt; 2000</option>
+    </select>
+</div>  
+-----------------------------------------------------------------------
+Tab
+---------------------
+<div class="row" >
+    <div class="col-lg-12">
+        <div class="tabs-container" >
+            <uib-tabset >
+                <uib-tab index="1"  heading="User Penetration" ng-click="tabSelected('penetrationDistribution')" >
+                    <div class="panel-body">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                </div>
+                                <div class="ibox-content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab index="1"  heading="User Penetration" ng-click="tabSelected('penetrationDistribution')" >
+                    <div class="panel-body">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                </div>
+                                <div class="ibox-content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab index="1"  heading="User Penetration" ng-click="tabSelected('penetrationDistribution')" >
+                    <div class="panel-body">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                </div>
+                                <div class="ibox-content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-tab>
+            </uib-tabset>
+        </div>
+    </div>
+</div>
+------------------------------------------------------------------------
+Map Click legends
+----------------------
+<div class="row">
+    <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus)" ng-checked="{{checkboxCountLowStatus}}">
+        <label for="inlineCheckbox3"> 0- {{low}} </label>
+    </div>
+    <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+        <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus)"  ng-checked="{{checkboxCountMediumStatus}}">
+        <label for="inlineCheckbox2"> {{low}}-{{medium}} </label>
+    </div>
+    <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+        <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus)" ng-checked="{{checkboxCountHighStatus}}">
+        <label for="inlineCheckbox1"> {{medium}}-{{highest}} </label>
+    </div>
+</div>          
+------------------------------------------------------------------------
+Filters
+------------------------
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form-inline" ng-submit="click()">
+            <filter-location></filter-location>
+
+            <filter-rat></filter-rat>
+
+            <date-segment></date-segment>
+
+            <date-device></date-device>
+
+            Single Datepicker
+            <single-date-picker></single-date-picker>
+
+            DateRange
+            <date-range-picker></date-range-picker>
+        </form>
+    </div>
+</div>
+<br/>
+------------------------------------------------------------------------
+Filter info. and Advance Filter
+-----------------------------------
+<div class="row">
+    <div class="col-lg-8">
+        <span><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}
+        </span>
+    </div>
+    <div class="col-lg-4">
+        <span class="dropdown col-lg-12" uib-dropdown>
+            <a class="dropdown-toggle count-info pull-right" title="Advance Filter" href uib-dropdown-toggle >
+                <h3><i class="fa fa-magic"></i></h3>
+            </a>
+            <ul class="dropdown-menu dropdown-alerts  animated fadeInRight " style="width:367px;">
+                <li>
+                    <form class="form-inline" name="myForm" role="form" >
+
+                        <div class="form-group">
+                            <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-sm" ng-model="dynamicPopover.fromUsage" placeholder="##" style="width:70px;">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-sm" ng-model="dynamicPopover.toUsage" placeholder="##" style="width:80px;">
+                        </div>&nbsp;&nbsp;
+                        <div class="form-group">
+                            <div class="float-e-margins">
+                                <select ng-model="dynamicPopover.unitUsage" class="input-sm" style="width:80px;">
+                                    <option value="Bytes">Bytes</option>
+                                    <option value="KB">KB</option>
+                                    <option value="MB">MB</option>
+                                    <option value="GB">GB</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <form class="form-inline" name="myForm" role="form" >
+
+                        <div class="form-group">
+                            <label class="control-label"><h3>Count &nbsp;:&nbsp; &nbsp; </h3></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-sm" ng-model="dynamicPopover.fromCount" placeholder="##" style="width:70px;">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-sm" ng-model="dynamicPopover.toCount" placeholder="##" style="width:80px;">
+                        </div>&nbsp;&nbsp;
+                        <div class="form-group">
+                            <div class="float-e-margins">
+                                <select ng-model="dynamicPopover.unitCount" class="input-sm" style="width:80px;">
+                                    <option value="Unit">Unit</option>
+                                    <option value="K">K</option>
+                                    <option value="M">M</option>
+                               </select>
+                            </div>
+                        </div>
+                    </form>
+
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <button class="btn btn-primary btn-sm pull-right" type="submit" ng-click='saveFilterOption(dynamicPopover)'>Submit</button>
+                </li>
+            </ul>
+       </span>
+    </div>
+</div>
+-------------------------------------------------------------------------
+Pagination
+-----------------------------------
+<uib-pagination ng-if="displaydata[component.component._id].data.length > 0" total-items="totalItems" ng-model="currPage" force-ellipses="true" boundary-link-numbers="true" max-size="maxSize" items-per-page="itemsPerPage" ng-change= "changePage(currPage, displaydata[component.component._id].data, displaydata[component.component._id].component)" class="pagination-sm pull-right" boundary-links="true">
+</uib-pagination>
+
+-----------------------------------------------------------------------
+Map Table
+------------------------------------
+<table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options="cellUserDistribution">
+    <thead>
+        <tr>
+            <th>CellID</th>
+            <th>Area</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="element in datasetUsageTable track by $index">
+            <td>{{ element.cellid }}</td>
+            <td>{{ element.Area }}</td>
+            <td>{{ element.latitude }}</td>
+            <td>{{ element.longitude }}</td>
+            <td>{{ element.Usage }}</td>
+        </tr>
+    </tbody>
+</table>
+
+------------------------------------------------------------------------
+Map Checkbox Button
+--------------------------------------
+<br/>
+<div class="checkbox checkbox-circle checkbox-success checkbox-inline" >
+    <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxUsageLowStatus" ng-click="checkboxLowUsageStateChange(checkboxUsageLowStatus)" >
+    <label for="inlineCheckbox3"> 0- {{lowUsage}} </label>
+</div>
+<div class="checkbox checkbox-circle checkbox-warning checkbox-inline">
+    <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxUsageMediumStatus" ng-click="checkboxMediumUsageStateChange(checkboxUsageMediumStatus)" >
+    <label for="inlineCheckbox2"> {{lowUsage}}-{{mediumUsage}} </label>
+</div>
+<div class="checkbox checkbox-circle checkbox-danger checkbox-inline">
+    <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxUsageHighStatus" ng-click="checkboxHighUsageStateChange(checkboxUsageHighStatus)" >
+    <label for="inlineCheckbox1">{{mediumUsage}}-{{highestUsage}} </label>
+</div>
+<br/>
+
+-------------------------------------------------------------------
+Map code
+----------------------------------------------------------
+<ui-gmap-google-map center='mapUsage.center' zoom='mapUsage.zoom' options='mapUsage.options' size="mapUsage.size" control="mapUsage.control">
+
+    <ui-gmap-markers models="circlesUsage" coords="'self'" icon="'icon'" events="mapUsage.events" fit='true' options="'options'">
+        <ui-gmap-windows show="show">
+            <div ng-non-bindable><b>{{title}}</b></div>
+        </ui-gmap-windows>
+    </ui-gmap-markers>
+
+</ui-gmap-google-map>
+
+======================================================
+map Js code
+--------------------------------------------------------
+<!-- $scope.cellUserDistribution= {
+    "aaSorting": [4]
+};
+$scope.mapUsage= angular.copy(utility.get_init_mapObj());
+$scope.markerUsage= [];
+$timeout(function() {
+            $scope.mapHeatZonesPoorCEI.control.refresh({latitude: globalConfig.lat, longitude: globalConfig.lng});
+        }, 500);
+ ----------------------------------------------------
+// without click button
+$timeout(function() {
+    $scope.mapCount.control.refresh({latitude: globalConfig.lat,longitude: globalConfig.lng});
+}, 500);
+httpService.get(urlMap).then(function (response) {  
+            var objArray = response.data;
+             
+            if(objArray.length>0){
+                var datasetCountTable= [];
+                for(var i=0; i< objArray.length; i++ ){
+                    datasetCountTable[i]= objArray[i];
+                }
+                $scope.datasetCountTable= datasetCountTable;
+                var value= objArray.length;
+                /*if(objArray.length>100){
+                    value= 100;
+                }*/
+                
+                var mapcount= [];
+                for (var i = 0; i < value; i++) {
+                    
+                    var colour;
+                    colour= 'images/tower_red.png';
+                    mapcount[i]= {
+                        id: i,
+                        latitude: objArray[i].latitude,
+                        longitude: objArray[i].longitude,
+                        title: objArray[i].Area+ ' (' + objArray[i].cellid +') , Usage: '+ dataFormatter.formatUsageData((objArray[i].Usage),3),
+                        cellid: objArray[i].cellid,
+                        icon: colour,
+                        options:{visible:true}
+                    }
+                }
+                $scope.markerUsage= mapcount;
+                
+                $scope.loadingCountMapCircleDiv= false;
+                $scope.noDataCountMapCircleDiv= false;
+            }else{
+                $scope.loadingCountMapCircleDiv= false;
+                $scope.noDataCountMapCircleDiv= true;
+                $scope.circlesCount= [];
+            }
+});
+
+// with click button
+$timeout(function() {
+    $scope.mapCount.control.refresh({latitude: globalConfig.lat,longitude: globalConfig.lng});
+}, 500);
+$scope.circlesCount= [];
+httpService.get(urlMap).then(function (response) {  
+    var objArray = response.data;
+    // var objArray = globalData.map_bsnl_Data;
+     
+    if(objArray.length>0){
+        $scope.highest= objArray[0].Count;
+        $scope.medium= ($scope.highest/2).toFixed(0);
+        $scope.low= ($scope.highest/3).toFixed(0);
+
+        var datasetCountTable= [];
+        for(var i=0; i< objArray.length; i++ ){
+            datasetCountTable[i]= objArray[i];
+        }
+        $scope.datasetCountTable= datasetCountTable;
+        var value= objArray.length;
+        /*if(objArray.length>100){
+            value= 100;
+        }*/
+        
+        var mapcount= [];
+        for (var i = 0; i < value; i++) {
+            
+            var colour;
+            if(objArray[i].Count >= $scope.highest/2)
+            {
+                //colour= "#FF0000";
+                colour= 'images/tower_red.png';
+                highCountIndex.push(i);
+            }else if(objArray[i].Count < ($scope.highest/2) && objArray[i].Count >= ($scope.highest/3))
+            {
+                //colour= "#FFC107"    
+                colour= "images/tower_yellow.png";
+                mediumCountIndex.push(i); 
+            }else if(objArray[i].Count < ($scope.highest/3))
+            {
+                //colour= "#08B21F"
+                colour= "images/tower_green.png";
+                lowCountIndex.push(i);
+            }
+            // colour= 'images/tower_red.png';
+            mapcount[i]= {
+                id: i,
+                latitude: objArray[i].latitude,
+                longitude: objArray[i].longitude,
+                title: objArray[i].Area+ ' (' + objArray[i].cellid +') , Count: '+ objArray[i].Count,
+                cellid: objArray[i].cellid,
+                date: $scope.date.end,
+                area: objArray[i].Area,
+                icon: colour,
+                options:{visible:true}
+            }
+        }
+        $scope.circlesCount= mapcount;
+        
+        $scope.loadingCountMapCircleDiv= false;
+        $scope.noDataCountMapCircleDiv= false;
+    }else{
+        $scope.loadingCountMapCircleDiv= false;
+        $scope.noDataCountMapCircleDiv= true;
+        $scope.circlesCount= [];
+    }
+});
+
+$scope.checkboxHighCountStateChange= function(state){
+    var mapObject= angular.copy($scope.circlesCount);
+    $scope.circlesCount= utility.getMapLegendClickData()(state, highCountIndex, mapObject);
+}
+$scope.checkboxMediumCountStateChange= function(state){
+    var mapObject= angular.copy($scope.circlesCount);
+    $scope.circlesCount= utility.getMapLegendClickData()(state, mediumCountIndex, mapObject);
+}
+$scope.checkboxLowCountStateChange= function(state){
+    var mapObject= angular.copy($scope.circlesCount);
+    $scope.circlesCount= utility.getMapLegendClickData()(state, lowCountIndex, mapObject);
+} -->

@@ -1,0 +1,39 @@
+<div class="wrapper-content animated fadeIn" ng-controller="protocolThroughputBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="submit() ">
+                <div class="input-group pull-right">
+                    <single-date-picker></single-date-picker>
+                    <div class="input-group-btn">
+                        <button class="btn btn-sm btn-primary " type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+   <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Throughput Distribution (Minute wise) for Protocol: <b style="color:#1ab394;">{{select.protocol}}</b>, Date: <b style="color:#1ab394;">{{sDate}}</b></span>
+                    <export-module filename="'protocol Throughput'" dataobj="exportProtocolThroughput" ></export-module>
+                    <div class="pull-right"><b>Protocol :</b>
+                        <select ng-model="select.protocol" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectValue()">
+                            <option value="{{protocol}}" ng-repeat="protocol in protocolList track by $index">{{protocol}}</option>
+                        </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>  
+                <div class="ibox-content">                             
+                    <div loading-icon ng-if="loadingDiv && !noDataDiv"></div>
+                    <div ng-if="!loadingDiv && !noDataDiv">
+                        <highchart id="protocolThroughput" config="protocolThroughputChartConfig" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingDiv && noDataDiv"></div>
+                    <div ng-if="!loadingDiv && !noDataDiv" class="pull-right"> <b>&lowast;</b><small >Select Chart Area to Zoom</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

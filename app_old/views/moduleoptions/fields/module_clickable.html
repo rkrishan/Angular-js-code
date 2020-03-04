@@ -1,0 +1,35 @@
+<div class="form-group">
+    <label class="col-md-2">Is Clickable</label>
+    <div class="col-md-4">
+        <input icheck type="checkbox" ng-model="module.clickable">
+    </div>
+</div>
+
+<div class="hr-live-dashed" ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-md-2">ToolTip</label>
+        <div class="col-md-4">
+            <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.clickableTooltip" ng-required="true">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2">Page</label>
+        <div class="col-md-4">
+            <select ng-model="module.page" class="form-control" ng-change="changePage(module.page)" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="item in redirectionOption" value="{{item.fileId}}|{{item.table}}">{{item.file}} | {{item.page}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="tabList">
+        <label class="col-md-2">Tab</label>
+        <div class="col-md-4">
+            <select ng-model="module.tab" class="form-control" required>
+                <option value="">- SELECT</option>
+                <option ng-repeat="(key, value) in tabList" value="{{key}}" ng-if="value">{{key}}</option>
+            </select>
+        </div>
+    </div>
+</div>

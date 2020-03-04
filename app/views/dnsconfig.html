@@ -1,0 +1,66 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">DNS Config</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>DNS Config</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(data)">
+                        <div class="form-group" ng-init="data.type = 'IPV4'">
+                            <label class="col-sm-2 control-label">Type</label>
+                            <div class="col-sm-4">
+                                <input icheck type="radio" name="type" ng-model="data.type" value="IPV4">
+                                <span class="m-l-xs">IPV4</span>
+
+                                <input icheck type="radio" name="type" ng-model="data.type" value="IPV6">
+                                <span class="m-l-xs">IPV6</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{data.type}}</label>
+                            <div ng-if="data.type == 'IPV4'" ng-init="data.value = {}">
+                                <div class="col-sm-1" ng-repeat="(key, item) in [1, 2, 3, 4]" style="width: 60px;padding: 0px;margin-left: 8px;">
+                                    <input type="text" class="form-control" ng-model="data.value[key]" placeholder="000" numbers-only maxlength="3">
+                                </div>
+                            </div>
+
+                            <div ng-if="data.type == 'IPV6'" ng-init="data.value = {}">
+                                <div class="col-sm-1" ng-repeat="(key, item) in [1, 2, 3, 4, 5, 6, 7, 8]" style="width: 60px;padding: 0px;margin-left: 8px;">
+                                    <input type="text" class="form-control" ng-model="data.value[key]" maxlength="4" placeholder="0000">
+                                </div>
+                            </div> 
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label class="col-sm-2 control-label">IPv6</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.ipv6" placeholder="IPv6" ng-blur="isUniqueipv6(data.ipv6)">
+                                <span class="text-danger">{{errMsgipv6}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <span class="text-danger">{{error}}</span>
+                            </div>
+                        </div> -->
+                        
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancle()">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

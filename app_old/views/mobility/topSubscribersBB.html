@@ -1,0 +1,133 @@
+<div class="wrapper-content animated fadeIn" ng-controller="topSubscribersBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group">
+                    <b>Top</b>
+                    <select ng-model="select.cust_Count" style="height:20px;font-size:10px;padding:0px 12px;">
+                        <option value="10" >10</option>
+                        <option value="50" >50</option>
+                        <option value="100">100</option>
+                        <option value="200" >200</option>
+                    </select>
+                    <b>Subscribers</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Plan Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers  between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                    <export-module filename="exportPlanDist.fileName" dataobj="exportPlanDistData" fileheader="exportPlanDist.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingPlanDistributionDiv && !noDataPlanDistributionDiv"></span>
+                    <div ng-if="!loadingPlanDistributionDiv && !noDataPlanDistributionDiv">
+                        <div style="color:#1ab394;" class="pull-right"><b>&lowast;</b> click segment to download subscribers list</div>
+                        <highchart id="chartApp" config="PlanDistributionChartConfig" ></highchart>
+                        
+                    </div>
+                    <span no-data-found ng-if="!loadingPlanDistributionDiv && noDataPlanDistributionDiv"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Plan Speed Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                    <export-module filename="exportPlanSpdDist.fileName" dataobj="exportPlanSpdData" fileheader="exportPlanSpdDist.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingPlanSpeedDiv && !noDataPlanSpeedDiv"></span>
+                    <div ng-if="!loadingPlanSpeedDiv && !noDataPlanSpeedDiv">
+                        <div style="color:#1ab394;" class="pull-right"><b>&lowast;</b> click segment to download subscribers list</div>
+                        <highchart id="chartApp" config="planSpeedChartConfig" ></highchart>
+                        
+                    </div>
+                    <span no-data-found ng-if="!loadingPlanSpeedDiv && noDataPlanSpeedDiv"></span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Usage Bucket Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b> </span>
+                    <export-module filename="exportUsgBktDist.fileName" dataobj="exportUsgBktData" fileheader="exportUsgBktDist.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingUsageBucketDiv && !noDataUsageBucketDiv"></span>
+                    <div ng-if="!loadingUsageBucketDiv && !noDataUsageBucketDiv">
+                        <div style="color:#1ab394;" class="pull-right"><b>&lowast;</b> click segment to download subscribers list</div>
+                        <highchart id="chartApp" config="usageBucketChartConfig" ></highchart>
+                        
+                    </div>
+                    <span no-data-found ng-if="!loadingUsageBucketDiv && noDataUsageBucketDiv"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Throughput Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b> </span>
+                    <export-module filename="exportTpBktDist.fileName" dataobj="exportTpBktData" fileheader="exportTpBktDist.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingThroughputDistributionDiv && !noDataThroughputDistributionDiv"></span>
+                    <div ng-if="!loadingThroughputDistributionDiv && !noDataThroughputDistributionDiv">
+                        <div style="color:#1ab394;" class="pull-right"><b>&lowast;</b> click segment to download subscribers list</div>
+                        <highchart id="chartApp" config="ThroughputDistributionChartConfig" ></highchart>
+                        
+                    </div>
+                    <span no-data-found ng-if="!loadingThroughputDistributionDiv && noDataThroughputDistributionDiv"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>CEI Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b> </span>
+                    <export-module filename="'CEI Distribution'" dataobj="exportCEIDistribution" ></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingCEIDistributionDiv && !noDataCEIDistributionDiv"></span>
+                    <div ng-if="!loadingCEIDistributionDiv && !noDataCEIDistributionDiv">
+                        <highchart id="chartApp" config="CEIDistributionChartConfig" ></highchart>
+                    </div>
+                    <span no-data-found ng-if="!loadingCEIDistributionDiv && noDataCEIDistributionDiv"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>App Distribution for Top <b style="color:#1ab394;">{{cust_Count}}</b> Subscribers between Date <b style="color:#1ab394;">{{sDate}} - {{edate}} </b></span>
+                    <export-module filename="exportAppDist.fileName" dataobj="exportAppDistData" fileheader="exportAppDist.fileHeader"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <span loading-icon ng-if="loadingAppDistributionDiv && !noDataAppDistributionDiv"></span>
+                    <div ng-if="!loadingAppDistributionDiv && !noDataAppDistributionDiv">
+                        <highchart id="chartApp" config="appDistributionChartConfig" ></highchart>
+                        <div style="color:#1ab394;" class="pull-right"><b>&lowast;</b> click segment to download subscribers list</div>
+                    </div>
+                    <span no-data-found ng-if="!loadingAppDistributionDiv && noDataAppDistributionDiv"></span>
+                </div>
+            </div>
+        </div>
+       
+    </div> -->
+</div>

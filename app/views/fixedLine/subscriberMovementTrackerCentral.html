@@ -1,0 +1,306 @@
+<div class=" wrapper-content animated fadeIn" ng-controller="appSubscriberMovementTrackerCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Site</b>
+                    <input type="button" value="&darr;" ng-click="onTree('zone')" />
+                    <div id="zone" ng-show="tree.zone" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>City</b>
+                    <input type="button" value="&darr;"ng-click="onTree('city')"  />
+                    <div id="city" ng-show="tree.city" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>OLT</b>
+                    <!-- <input type="text" value =" " name="filter" id="filter" ng-click="onTree('node')" /> -->
+                    <input type="button" value="&darr;"ng-click="onTree('node')"/>
+                    <div id="node" ng-show="tree.node" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Area</b>
+                    <input type="button" value="&darr;" ng-click="onTree('area')"/>
+                    <!-- Area Filter: <input type="text" name="filter" id="filter"/> -->
+                    <div id="area" ng-show="tree.area" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Plan</b>
+                    <input type="button" value="&darr;" ng-click="onTree('plan')"/>
+                    <div id="plan" ng-show="tree.plan" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="onTree('segment')" />
+                    <div id="segment" ng-show="tree.segment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+ 
+                <div class="form-group"><b>Group By</b>
+                    <select ng-model="group" style="height:24px;font-size:10px;padding:0px 12px;" ng-disabled="isReadOnly" required>
+                            <option value="all" >All</option>
+                            <option value="site" >Site</option>
+                            <option value="city">City</option>
+                            <option value="segment" >Segment</option>
+                            <option ng-if="selectedAreas.length > 0" value="area">Area</option>
+                            <option ng-if="selectedPlans.length > 0" value="billplan">Plan Name</option>
+                            <option ng-if="selectedNodes.length > 0" value="olt">Node</option>
+                            <option value="validity">Plan Validity</option>
+                            <option value="plantype" >Plan Type</option>
+                        </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                Usage &nbsp;:&nbsp; &nbsp;
+              <!-- -------------------This is for adding usage filter on the page --------------------------------------->
+                <div class="input-group">
+                    <a class="dropdown-toggle" title="Usage Filter" ng-click="toggleUsageFilter()">
+                        <i class="fa fa-filter fa-2x"></i>
+                    </a>
+                    <div id="tglFilter" class="dropdown-menu dropdown-messages animated fadeInRight" style="width: 360px;">
+                        <div class="dropdown-messages-box">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i>&equals;</h3>&nbsp;&nbsp; </label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control input-sm" ng-model="fromUsage" placeholder="0" style="width:70px;" numbers-only>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control input-sm" ng-model="toUsage" placeholder="##" style="width:70px;" numbers-only>
+                                </div>&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <select ng-model="unit" class="input-sm" style="width:80px;" ng-init="unit = 'Bytes'">
+                                        <option value="Bytes">Bytes</option>
+                                        <option value="KB">KB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                        <option value="TB">TB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <!-- -------------------ENd of usage filter on the page --------------------------------------->
+
+             <!--This is for count filter  -->
+             
+              Count &nbsp;:&nbsp; &nbsp;
+              <div class="input-group">
+                    <a class="dropdown-toggle" title="Count Filter" ng-click="toggleCountFilter()">
+                        <i class="fa fa-filter fa-2x"></i>
+                    </a>
+                    <div id="cntFilter" class="dropdown-menu dropdown-messages animated fadeInRight" style="width: 275px;">
+                        <div class="dropdown-messages-box">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label class="control-label"><h3>Count &nbsp;:&nbsp; &nbsp; </h3></label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i>&equals;</h3>&nbsp;&nbsp; </label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control input-sm" ng-model="fromCount" placeholder="0" style="width:70px;" numbers-only>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control input-sm" ng-model="toCount" placeholder="##" style="width:70px;" numbers-only>
+                                </div>&nbsp;&nbsp;
+                                <!-- <div class="form-group">
+                                    <select ng-model="unit" class="input-sm" style="width:80px;" ng-init="unit = 'Bytes'">
+                                        <option value="Bytes">Bytes</option>
+                                        <option value="KB">KB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- -------------------ENd of usage filter on the page --------------------------------------->
+                
+             
+             <!--end of count filter-->
+                
+                <div class="form-group pull-right" >
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p>
+                <b ng-if="selectedZones.length > 0">Zone:</b> {{selectedZones.join(', ')}}
+                <b ng-if="selectedCities.length > 0"><br>City:</b> {{selectedCities.join(', ')}}
+                <b ng-if="selectedNodes.length > 0"><br>Node:</b> {{selectedNodes.join(', ')}}
+                <b ng-if="selectedAreas.length > 0"><br>Area:</b>{{selectedAreas.join(', ')}}
+                <b ng-if="selectedPlans.length > 0"><br>Plan:</b> {{selectedPlans.join(', ')}}
+                <b ng-if="selectedSegement.length > 0"><br>Segment:</b> {{selectedSegement.join(', ')}}</p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab heading="Subscriber Count Trend">
+                        <div class="panel-body" active="true" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">  
+                                            <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                       <div class="ibox-content">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div loading-icon ng-if="loading"></div>
+                                                <div ng-if="dataLoaded">
+                                                    <highchart id="chart2-unlimited" config="countChartConfig" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noData"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Subscriber Usage Trend">
+                        <div class="panel-body" >
+                            <div class="row">
+                            <div class="ibox float-e-margins">
+                                <div class="col-lg-12">
+                                        <div class="ibox-title">  
+                                            <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                    <div class="ibox-content">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div loading-icon ng-if="loading"></div>
+                                            <div ng-if="dataLoaded">
+                                                <highchart id="chart2-unlimited" config="usageChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noData"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <!-- <uib-tab heading="ThroughPut wise  Trend">
+                        <div class="panel-body" >
+                            <div class="row">
+                            <div class="ibox float-e-margins">
+                                <div class="col-lg-12">
+                                        <div class="ibox-title">  
+                                            <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                    <div class="ibox-content">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div loading-icon ng-if="loading"></div>
+                                            <div ng-if="dataLoaded">
+                                                <highchart id="chart2-unlimited" config="usageChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noData"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> -->
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+ <!-------------------------------------------- This is for second half of the page code  ---------------------------------->
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab heading="Up usage Trend">
+                        <div class="panel-body" active="true" >
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">  
+                                            <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                       <div class="ibox-content">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div loading-icon ng-if="loading"></div>
+                                                <div ng-if="dataLoaded">
+                                                    <highchart id="chart2-unlimited" config="upusageoptionsChartConfig" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noData"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Down Usage Trend">
+                        <div class="panel-body" >
+                            <div class="row">
+                            <div class="ibox float-e-margins">
+                                <div class="col-lg-12">
+                                        <div class="ibox-title">  
+                                            <export-module filename="TpmDist.fileName" dataobj="exportDeviceCountMultiLineChart", fileHeader=" TpmDist.fileHeader" ></export-module>
+                                        </div>
+                                    <div class="ibox-content">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div loading-icon ng-if="loading"></div>
+                                            <div ng-if="dataLoaded">
+                                                <highchart id="chart2-unlimited" config="dusageoptionsChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noData"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+
+</div>

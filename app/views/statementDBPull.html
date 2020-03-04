@@ -1,0 +1,162 @@
+﻿<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / Statement /</h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">DB-Query</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>DB Pull Statement</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="saveStatementDBPull()">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-model="statement.name" ng-keypress="validateName($event)" ng-required="true" ng-readonly="isReadOnly" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <textarea placeholder="Description" class="form-control" ng-model="statement.description" ng-required="true"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Type</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" ng-model="statement.dbPullType" ng-change="changeDbPullType(statement.dbPullType)" required>
+                                    <option value="">Select</option>
+                                    <option value="query">Query</option>
+                                    <option value="procedure">Procedure</option>
+                                    <option value="redis">Redis</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3" ng-if="statement.dbPullType == 'query'">
+                                <span class="m-l-xs">Multi Query</span>
+                                <input icheck type="checkbox" ng-model="statement.multiquery">
+                            </div>
+                        </div>
+
+                        <div ng-if="statement.dbPullType == 'query'">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Collection</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="query.table" ng-options="o as o for o in collectionlist"  ng-disabled="isReadOnly" required>
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 control-label">Query Type</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="query.type">
+                                        <option value="">Select</option>
+                                        <option value="find">Find</option>
+                                        <option value="aggregate">Aggregate</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Select Option</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" ng-model="query.optionName" ng-change="changeop()">
+                                        <option value="">Select</option>
+                                        <option value="match">Match</option>
+                                        <option ng-if="query.type == 'aggregate'" value="group">Group</option>
+                                        <option value="project">Project</option>
+                                        <option ng-if="query.type == 'aggregate'" value="unwind">Unwind</option>
+                                        <option value="sort">Sort</option>
+                                        <option value="limit">Limit</option>
+                                        <option value="skip">Skip</option>
+                                        <option ng-if="query.type == 'aggregate'" value="lookup">Lookup</option>
+                                    </select>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Text</label>
+                                <div class="col-sm-6" ng-if="['unwind', 'limit', 'skip'].indexOf(query.optionName) == -1 ">
+                                    <textarea class="form-control" ng-model="query.optionText"  ng-readonly="isReadOnly" placeholder="key:value"></textarea>
+                                </div>
+                                <div class="col-sm-6" ng-if="['unwind', 'limit', 'skip'].indexOf(query.optionName) > -1 ">
+                                    <input type="text" class="form-control" ng-model="query.optionText"  ng-readonly="isReadOnly"> <!-- numbers-only -->
+                                </div>
+
+                                <div class="col-sm-4">
+                                     <button class="btn btn-white" type="button" ng-click="addOption()">Add</button>
+                                      <button class="btn btn-white" type="button" ng-click="validateDBPull()">Validate</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <textarea type="text" class="form-control" ng-model="statement.query" ng-required="true" ng-readonly="isReadOnly" placeholder="query text" rows="5"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">Column</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" ng-model="query.columns" ng-init="query.columns='[]'"  ng-readonly="isReadOnly" placeholder="">
+                                </div>
+                                <!-- <div class="infont col-sm-1">
+                                    <i class="fa fa-info-circle" uib-tooltip="['key']" tooltip-placement="right"></i>
+                                </div> -->
+                                <div class="col-sm-4">
+                                     <button class="btn btn-white" type="button" ng-click="addCoumns()">Add Coumns</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="statement.dbPullType == 'procedure'">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Procedure Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" ng-model="statement.procedure" placeholder="Procedure Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="statement.dbPullType == 'redis'">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Redis Statement</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" ng-model="statement.redis" placeholder="Statement"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="userProfile.userType == 'system administrator'">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="false" ng-model="statement.visibility"></td>
+                                        <td><span class="m-l-xs">Private</span></td>
+                                        <td>&nbsp;</td>
+                                        <td><input icheck type="radio" class="form-control" name="visibility" ng-value="true" ng-model="statement.visibility"></td>
+                                        <td><span class="m-l-xs">Public</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ng-click="cancelStatement('dbpull')">Cancel</button>
+                               
+                                <button class="btn btn-primary" type="submit"  ng-show="(validated && isColumnadded) || isProcedure">Save</button>
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

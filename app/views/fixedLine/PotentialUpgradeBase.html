@@ -1,0 +1,38 @@
+<style>
+</style>
+
+<div class="wrapper-content animated fadeIn" ng-controller="PotentialUpgradeBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="pull-right">
+                    <!-- <div class="input-append date" id="datepicker" data-date="02-2012" 
+                    data-date-format="mm-yyyy">
+                        <input  type="text" readonly="readonly" name="date" >	
+                        <label for="datepicker" class="input-append date"><i class="fa fa-calendar"></i> </label>
+                        <button class="btn btn-sm btn-primary " type="submit" >Submit</button>
+                    </div>                    -->
+                    <div class="input-group input-append date"
+                        data-date-format="mm-yyyy">
+                     <input type="text" class='datepicker' name="datepicker1" /> &nbsp;
+                     <!-- <label for="datepicker" class="input-append date"><i class="fa fa-calendar"></i> </label> -->
+                    <button class="btn btn-sm btn-primary " type="submit" >Submit</button>	  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="col-lg-8">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                <div ng-if="!loadingDiv && !noDataDiv">
+                    <highchart id="chartApp" config="pieChartConfig" ></highchart>
+                </div>
+                <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+            </div>
+        </div>
+    </div>
+
+</div>

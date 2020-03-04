@@ -1,0 +1,183 @@
+<div class="wrapper-content animated fadeIn "  ng-controller="deviceAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+               <!-- <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>-->
+
+               <div class="input-group pull-right">
+                    <!--<div class="input-daterange" id="datepicker">
+                        <input type="text"  ng-model="date.start" required placeholder="From Date"/>
+                        <input type="text"  ng-model="date.end" required  placeholder="To Date">
+                        <button class="btn btn-xs btn-primary" type="submit">Submit</button>
+                    </div>-->
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Top 10 Handsets by count </h5>
+                    <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+                    <!-- <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <span class="pull-right label label-primary">Export</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetCountData,'excel', 'Top 10 Handsets by count')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetCountData,'csv', 'Top 10 Handsets by count')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div> -->
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTop10HandsetsDiv"></div>
+                    <div id="interactiveCountData" flot class="flot-chart-content" dataset="flotHandsetCountData" options="flotPieOptions" height="140" responsive="true" ng-if="dataTop10HandsetsDiv">
+                    </div>
+                    <br/>
+                    <div ng-if="dataTop10HandsetsDiv">
+                        <table class="table">
+                            <tbody>
+                                <tr style="border:5px;" ng-repeat="element in legendDataCount">
+                                    <td style="width:5px;"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid {{ element.color }};overflow:hidden"></div></div></td>
+                                    <td>{{ element.label }}</td>
+                                    <td>{{ element.data }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div no-data-found ng-if="noDataTop10HandsetsDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Top 10 Handsets by traffic </h5>
+                    <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+                    <!-- <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <span class="pull-right label label-primary">Export</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetUsageData,'excel', 'Top 10 Handsets by traffic')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetUsageData,'csv', 'Top 10 Handsets by traffic')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div> -->
+                 </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTop10HandsetsDiv"></div>
+                    <div id="interactiveTrafficData" flot class="flot-chart-content" dataset="flotHandsetUsageData" options="flotPieOptions" height="140" responsive="true" ng-if="dataTop10HandsetsDiv">
+                    </div>
+                    <br/>
+                    <div ng-if="dataTop10HandsetsDiv">
+                        <table class="table">
+                            <tbody>
+                                <tr style="border:5px;" ng-repeat="element in legendDataTraffic">
+                                    <td style="width:5px;"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid {{ element.color }};overflow:hidden"></div></div></td>
+                                    <td>{{ element.label }}</td>
+                                    <td>{{ element.data }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div no-data-found ng-if="noDataTop10HandsetsDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Top 10 Handsets by Avg traffic </h5>
+                    <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+                    <!-- <div class="pull-right">
+                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                <span class="pull-right label label-primary">Export</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetAvgTrafficData,'excel', 'Top 10 Handsets by Avg traffic')">Export to Excel</a>
+                                </li>
+                                <li>
+                                    <a ng-click="dataExport(exportHandsetAvgTrafficData,'csv', 'Top 10 Handsets by Avg traffic')">Export to CSV</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div> -->
+                 </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingTopHangsetsAvgTrafficDiv"></div>
+                    <div id="interactiveAvgTrafficData" flot class="flot-chart-content" dataset="flotHandsetAvgTrafficData" options="flotPieOptions" height="140" responsive="true" ng-if="dataTopHangsetsAvgTrafficDiv">
+                    </div>
+                    <br/>
+                    <div ng-if="dataTopHangsetsAvgTrafficDiv">
+                        <table class="table">
+                            <tbody>
+                                <tr style="border:5px;" ng-repeat="element in legendDataAvgTraffic">
+                                    <td style="width:5px;"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid {{ element.color }};overflow:hidden"></div></div></td>
+                                    <td>{{ element.label }}</td>
+                                    <td>{{ element.data }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div no-data-found ng-if="noDataTopHangsetsAvgTrafficDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

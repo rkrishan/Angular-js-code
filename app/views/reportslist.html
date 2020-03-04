@@ -1,0 +1,136 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Report</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight" ng-if="mainView">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <button type="button" class="btn btn-w-m btn-primary" ng-click="addnew()" ng-if="(userProfile.userType == 'system administrator' || userProfile.userType == 'corporate admin' || userProfile.userType.trim() == 'circle admin' || userProfile.userType.trim() == 'admin')">Add Report</button>
+                </div>
+                <div class="ibox-content">
+                    <div class="responsive" ng-if="allReportsList.length > 0">
+                        <table datatable class="table table-striped table-bordered table-hover" dt-options="{ bSort: false}">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>UseCase</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in allReportsList">
+                                    <td>{{ item.type  }}</td>
+                                    <td>{{ item.name  }} </td>
+                                    <td>{{ item.description  }}</td>
+                                    <td>{{ useCaseArr[item.useCase]}}</td>
+
+                                    <td >
+                                        <button class="btn btn-success btn-xs" type="button" ng-click="assign(item)" ng-show="userProfile.userType.trim() != 'user'"><i class="fa fa-share-square"></i> Assign</button>
+
+                                        <button class="btn btn-primary btn-xs" type="button" ng-click="detail(item)"><i class="fa fa-edit"></i> View</button>
+
+                                        <button class="btn btn-info btn-xs" type="button" ng-click="addFavorite(item, false)" ng-if="favoriteList.indexOf(item._id) > -1"><i class="fa fa-star"></i> Un-Favorite</button>
+
+                                        <button class="btn btn-info btn-xs" type="button" ng-click="addFavorite(item, true)" ng-if="favoriteList.indexOf(item._id) == -1"><i class="fa fa-star-o"></i> Favorite</button>
+
+                                        <button class="btn btn-info btn-xs" type="button" ng-click="edit(item)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-edit"></i> Edit</button>
+                                    
+                                        <button class="btn btn-danger btn-xs" type="button" ng-click="remove($index, item)" ng-if="userProfile.userType.trim() == 'system administrator' || item.userId == userProfile.userId"><i class="fa fa-remove"></i> Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div no-data-found ng-if="allReportsList.length == 0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- For dashboard -->
+<div class="wrapper wrapper-content animated fadeInRight" ng-if="assignList">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">    
+                    <h2>{{selected.name}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="row form-group">
+                        <label class="col-lg-2">Assign to</label>
+                        <div class="col-lg-4">
+                            <select ng-model="data.assignTo" class="form-control" ng-change="changeAssign(data.assignTo)">
+                                <option value="">Select</option>
+                                <option ng-repeat="item in selectList">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" ng-if="data.assignTo != '' && itemList.length == 0">
+                        <label class="col-lg-2"></label>
+                        <div class="col-lg-4">
+                            <h5>No record</h5>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" ng-if="data.assignTo.trim() == 'User' && itemList.length > 0">
+                        <table datatable class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="10"></th>
+                                    <th> {{data.assignTo}}</th>
+                                    <th> User Type</th>
+                                    <th> Circle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in itemList">
+                                    <td>
+                                        <input type="checkbox" ng-checked="confirmUserArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                    </td>
+                                    <td>{{item.firstName | capitalize}}  {{item.lastName | capitalize}}</td>
+                                    <td>{{ item.userType | capitalize }}</td>
+                                    <td ng-if="isArray(item.circle)">{{ item.circle.join(', ') }}</td>
+                                    <td ng-if="!isArray(item.circle)">{{ item.circle }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row form-group" ng-if="data.assignTo.trim() == 'Group' && itemList.length > 0">
+                        <table datatable class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="10"></th>
+                                    <th >{{data.assignTo}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in itemList">
+                                    <td>
+                                        <input type="checkbox" ng-checked="confirmGroupArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                    </td>
+                                    <td>{{item.title}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row form-group">
+                        <div class="col-sm-12  col-sm-offset-4">
+                            <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                            <button class="btn btn-primary" type="button" ng-click="save(data)" ng-if="itemList.length > 0">Save</button>
+                        </div>
+                        <!-- ng-disabled="cnfrmBtn" -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

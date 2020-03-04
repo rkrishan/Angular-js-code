@@ -1,0 +1,340 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Module</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+<!--     <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content"> -->
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(module)">
+                        <div class="form-group">
+                            <label class="col-md-2">Name of module</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Name of module" class="form-control" ng-model="module.name" ng-required="true" ng-blur="checkName(module.name)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2">Module Type</label>
+                            <div class="col-md-4">
+                                <select ng-model="module.type" class="form-control" ng-change="changeModuleType(module.type)" required>
+                                    <option value="">- SELECT</option>
+                                    <option ng-repeat="item in moduleType" value="{{item.id}}">{{item.value }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'info_box'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Info Box</h5>
+                                            <info content="'module_InfoBox'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/info_box.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="module.type == 'simple_heading'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Simple Heading</h5>
+                                            <info content="'module_simpleHading'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/simple_heading.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'clickable'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Clickable</h5>
+                                            <info content="'clickable'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/clickable.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div ng-if="module.type == 'data_ibox'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Data Ibox </h5>
+                                            <info content="'module_dataibox'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/data_ibox.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="module.type == 'custom'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Custom Module</h5>
+                                            <info content="'module_customModule'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div class="form-group">
+                                                <label class="col-md-2">Title</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" placeholder="Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2">File</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" placeholder="Html file name" class="form-control" ng-model="module.file" ng-required="true">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'simple_ibox' || module.type == 'simple_ibox_with_dual_data_point' || module.type == 'ibox_with_gauge'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Ibox</h5>
+                                            <info content="'module_SimpleIbox'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/simpleIBox.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'iBox_Multi_no_Header'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Ibox</h5>
+                                            <info content="'module_iBox_Multi_no_Header'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/iBox_Multi_no_Header.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'ibox_with_gauge'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Gauge</h5>
+                                        <info content="'module_iboxWithGauge'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/ibox_with_gauge.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'simple_ibox_with_dual_data_point'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Data Point 2</h5>
+                                            <info content="'module_iboxWithDualDataPoint'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/iBox2options.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="module.type == 'simple_ibox_with_trend'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Ibox</h5>
+                                            <info content="'module_simpleIboxWithTrend'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/iBoxWithTrend.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- For IBox -->
+                        <div ng-if=" module.type == 'ibox_with_embeded_chart' ">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Ibox</h5>
+                                            <info content="'module_iBoxEmbedWithChart'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/simpleIBoxWithChart.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- For Chart -->
+                        <div ng-if="module.type == 'ibox_with_embeded_chart'">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Configure Chart</h5>
+                                            <info content="'module_iBoxEmbedWithChart'" file="'help/help_module.html'"></info>
+                                        </div>
+                                        <div class="ibox-content" ng-include="'views/moduleoptions/chartOptions.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ng-if="module.type == 'simple_charts'" -->
+                        <div class="row" ng-if="module.type == 'simple_charts'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Chart</h5>
+                                        <info content="'module_SimpleCharts'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="form-group">
+                                            <label class="col-md-2">Title</label>
+                                            <div class="col-md-4">
+                                                <input type="text" placeholder="Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+                                            </div>
+                                        </div>
+                                        <div ng-include="'views/moduleoptions/chartOptions.html'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row" ng-if="module.type == 'simple_table' || module.type == 'table_with_search' ">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Table</h5>
+                                        <info content="'module_simpleTableOrTableWithSearch'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/tableOption.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'col_extended_table'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Table</h5>
+                                        <info content="'module_colExtendedTable'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/complexTable.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'extended_table'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Table</h5>
+                                        <info content="'module_extendedTable'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/complexTable.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'gauge'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Gauge</h5>
+                                        <info content="'module_gaugeChart'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/gauge.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'progress_bar'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Progress Bar</h5>
+                                        <info content="'module_gaugeChart'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/gauge.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'multi_gauge'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Multi Gauge</h5>
+                                        <info content="'module_gaugeChart'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/multi_gauge.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="module.type == 'map'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Map</h5>
+                                        <info content="'module_Map'" file="'help/help_module.html'"></info>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/mapOption.html'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row" ng-if="module.type == 'mupltiple_tab'">
+                            <div class="col-lg-9">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Configure Multiple Tab</h5>
+                                    </div>
+                                    <div class="ibox-content" ng-include="'views/moduleoptions/multipleTab.html'"></div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group" >
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4">
+                                <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                        
+                <!-- </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+    </div> -->
+</div>

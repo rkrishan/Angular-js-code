@@ -1,0 +1,96 @@
+<div class="wrapper-content animated fadeInRight" ng-controller="forecastingTpCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span >
+                        <b class="text-center">OLT Usage Prediction</b>
+                        <span class="pull-right"><b>OLT: &nbsp;</b>
+                            <select ng-model="selectOLT" style="height:24px;font-size:10px;padding:0px 42px;">
+                                <option value="JKT-GMRB1-OLT1-HW5600">JKT-GMRB1-OLT1-HW5600</option>
+                                <!-- <option value="BGR-GND-OLT1-ZTEC300" >BGR-GND-OLT1-ZTEC300</option> -->
+                                <!-- <option value="TNG-TLB-OLT1-ZTEC300">TNG-TLB-OLT1-ZTEC300</option> -->
+                                <option value="JKT-GBPLGM-OLT1-HW5600">JKT-GBPLGM-OLT1-HW5600</option>
+                                <option value="JKT-CPK-OLT1-HW5600">JKT-CPK-OLT1-HW5600</option>
+                                <option value="JKT-KLC-OLT1-HW5600">JKT-KLC-OLT1-HW5600</option>
+                                <!-- <option value="JKT-BNSGF-OLT1-HW5600">JKT-BNSGF-OLT1-HW5600</option> -->
+                                <!-- <option value="JKT-ADR7-OLT1-HW5600">JKT-ADR7-OLT1-HW5600</option> -->
+                                <option value="JKT-SSCP6A-OLT1-HW5600">JKT-SSCP6A-OLT1-HW5600</option>
+                                <option value="JKT-MPRB1-OLT1-HW5600">JKT-MPRB1-OLT1-HW5600</option>
+                                <!-- <option value="JKT-GERP3-OLT1-HW5600">JKT-GERP3-OLT1-HW5600</option> -->
+                                <!-- <option value="JKT-CBE1B1-OLT1-ZTEC300">JKT-CBE1B1-OLT1-ZTEC300</option> -->
+                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                    </span>
+                    <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div  ng-if="!loadingDiv && !noDataDiv">
+                                <highchart id="forecastingPlanMultiline" config="forecastingPlanMultiline" ></highchart>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <br><br>
+                            <div  ng-if="!loadingDiv && !noDataDiv">
+                                <table class="table  table-bordered table-hover " >
+                                    <thead>
+                                        <tr>
+                                            <th>Bill Plan</th>
+                                            <th>Forecast Period(Months)
+                                                <div class="btn-group pull-right">
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['1M-']" uib-btn-checkbox ng-click="statusMnthBtn(true, false, false)">1M</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['3M-']" uib-btn-checkbox ng-click="statusMnthBtn(false, true, false)">3M</label>
+                                                <label class="btn btn-primary btn-rounded btn-xs btn-outline" ng-model="monthBtn['6M-']" uib-btn-checkbox ng-click="statusMnthBtn(false, false, true)">6M</label>
+                                                </div><br><br>
+                                                Expected Subscribers Growth :
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="element in forecastingTableObj track by $index">
+                                            <td><span class="label label-success">{{ element.Plan }}</span></td>
+                                            <td>
+                                                <span >
+                                                    <select ng-model="selectPerc[$index]" style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectPrecG($index,element.Plan, selectPerc[$index])">
+                                                        <option value="-0.1">-10%</option>
+                                                        <option value="-0.05" >-05%</option>
+                                                        <option value="0" >0%</option>
+                                                        <option value="0.05">05%</option>
+                                                        <option value="0.1" >10%</option>
+                                                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </span>
+                                                
+                                                <span >
+                                                    <select ng-model="selectGShape[$index] " style="height:24px;font-size:10px;padding:0px 12px;" ng-change="selectGMode($index, element.Plan, selectGShape[$index])">
+                                                        <option value="Linear" >linear</option>
+                                                    </select>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <span class="pull-right"><button class="btn btn-xs btn-primary" ng-click="forecastClick()" type="submit">Forecast</button></span>
+                                <span class="pull-right"><button class="btn btn-xs btn-primary" ng-click="resetClick()" type="submit">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="col-lg-12">
+                        <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                        <div ng-if="!loadingDiv && !noDataDiv">
+                            <highchart id="forecasting" config="forecastingConfig" ></highchart>
+                        </div>
+                        <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

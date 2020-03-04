@@ -1,0 +1,241 @@
+<div class="wrapper-content animated fadeIn" ng-controller="nonDataSubUsersCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <!-- <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> -->
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group"><b>Total Users: {{totalUsers}}</b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div class="form-group"><b>SmartPhone Users: {{smartPhoneUsers}}</b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+               <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="dateSelect" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                                
+                        </div> 
+                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-10">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<!-- <b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp; --><b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+        <div class="col-lg-2">
+            <div class="ibox float-e-margins">
+                <span class="ibox-tools dropdown" uib-dropdown class="">
+                    <!-- <a class="dropdown-toggle" href uib-dropdown-toggle>
+                        <span class="pull-right label label-primary">Low Data IMSI &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-save"></i></span>
+                    </a> -->
+                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                    <button class="btn btn-xs btn-primary" ladda="loading" data-style="slide-down"  >
+                      Non Data IMSI &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-save"></i>
+                    </button>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="exportIMSI('excel')">Excel</a>
+                        </li>
+                        <li>
+                            <a ng-click="exportIMSI('csv')">CSV</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                   <uib-tab  heading="Area wise Distribution" ng-click="tabSelected('areawiseDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <div class="row">
+                                            <!-- <div class="col-lg-8">
+                                                <h2 class="m-b-xs"></h2>
+                                            </div> -->
+                                            <div class="col-lg-12  pull-right">
+                                                <!-- <span export-data></span> -->
+                                                <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(datasetCount,'excel', 'Non Data Sub Users Area wise Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataTableExport(datasetCount,'csv', 'Non Data Sub Users Area wise Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                                <div class="pull-right">
+                                                    <select ng-model="rowCount" ng-change='chngTopCellCount(rowCount)' style="height:18px;font-size:10px;padding:0px 12px;">
+                                                        <option value="100">Top 100</option>
+                                                        <option value="250">Top 250</option>
+                                                        <option value="500">Top 500</option>
+                                                        <option value="750">Top 750</option>
+                                                        <option value="1000">Top 1000</option>
+                                                        <option value="1500">Top 1500</option>
+                                                        <option value="2000">Top 2000</option>
+                                                        <option value="20000">&gt; 2000</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div>
+                                            <span ng-if="loadingCountMapCircleDiv" ng-bind-html="loading.snip" >{{loading.snip}} </span>
+                                            <span no-data-found ng-if="noDataCountMapCircleDiv"></span>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ui-gmap-google-map id='map' center='mapCount.center' zoom='mapCount.zoom' options='mapCount.options' size="mapCount.size" control="mapCount.control" >
+
+                                                    <ui-gmap-markers models="circlesCount" coords="'self'" icon="'icon'" events="mapCount.events" options="'options'" fit='true'>
+                                                        <ui-gmap-windows show="show">
+                                                            <div ng-non-bindable><b>{{title}}</b></div>
+                                                        </ui-gmap-windows>
+                                                    </ui-gmap-markers>
+
+                                                    <!-- <ui-gmap-circle ng-repeat="c in circlesCount track by $index" id="c.id" center="c.center" stroke="c.stroke" fill="c.fill" radius="c.radius" events="mapCount.events">
+                                                    </ui-gmap-circle> -->
+                                                </ui-gmap-google-map>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options="areaDistribution">
+                                            <thead>
+                                                <tr>
+                                                    <th>Area</th>
+                                                    <th>CellID</th>
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
+                                                    <th>Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="element in datasetCountTable track by $index">
+                                                    <td>{{ element.Area }}</td>
+                                                    <td>{{ element.cellid }}</td>
+                                                    <td>{{ element.latitude }}</td>
+                                                    <td>{{ element.longitude }}</td>
+                                                    <td>{{ element.Count }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Device wise Distribution" ng-click="tabSelected('deviceDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown>
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetSessionDistribution,'excel', 'Non Data Sub Users Device wise Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetSessionDistribution,'csv', 'Non Data Sub Users Device wise Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                            <div loading-icon ng-if="loadinghandsetDistributionBubbleDiv"></div>
+                                            <div ng-if="DatahandsetDistributionBubbleDiv">
+                                            <highchart id="handsetDistributionBubble" config="handsetDistributionBubbleChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDatahandsetDistributionBubbleDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="City wise Distribution" ng-click="tabSelected('cityDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown>
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a Title="Export" ng-click="dataExport(exportCitywiseDistribution,'excel', 'City wise Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportCitywiseDistribution,'csv', 'City wise Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                            <div loading-icon ng-if="loadingCitywiseDistributionDiv"></div>
+                                            <div ng-if="DataCitywiseDistributionDiv">
+                                                <highchart id="CitywiseDistribution" config="citywiseDistributionChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDataCitywiseDistributionDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

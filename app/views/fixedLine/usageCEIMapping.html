@@ -1,0 +1,99 @@
+<!-- <div class="row wrapper border-bottom white-bg" ng-controller="UsageCEIMappingBBCtrl">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Test</h3>
+</div>
+ -->
+<style type="text/css">
+    td{padding: 40px;}
+</style>
+
+<div class="wrapper-content animated fadeInRight" ng-controller="UsageCEIMappingBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="pull-right">
+                    <single-date-picker></single-date-picker>
+                    <button class="btn btn-sm btn-primary " type="submit" >Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>Subscriber Usage Vs Experience Matrix for date <b style="color:#1ab394;">{{sDate}} </b></span>
+                </div>
+                <div class="ibox-content">
+                    <div style="float: left;line-height: 480px;vertical-align: middle;"><b><span style="font-size: 16px; color:red;" >Usage </span>(Low)</b></div>
+                    <div class="col-lg-6">
+                        <div class="form-group text-center">
+                            <b><span style="font-size: 16px; color:red;" >CEI</span> (High)</b>
+                        </div>
+                        <table border="2" style="width:100%">
+                            <tr>
+                                <td>
+                                    <span>Low Usage High CEI &nbsp;&nbsp;<a><i ng-click="exportData('LH', 'loadingLH')"  style="color:#1ab394;" title="Download Suscribers list" class="ladda-button ladda-button-demo fa fa-user" ladda="loadingLH"></i></a></span>
+                                    <div class="widget btn-success p-lg text-center">
+                                        <div class=" m-b-md" >
+                                            <!-- <i class="fa fa-user fa-4x"></i> -->
+                                            <h2 class="font-bold no-margins">{{LH}}</h2>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>High Usage High CEI &nbsp;&nbsp;<a><i ng-click="exportData('HH', 'loadingHH')"  style="color:#1ab394;" title="Download Suscribers list" class="ladda-button ladda-button-demo fa fa-user" ladda="loadingHH"></i></a></span>
+                                    <div class="widget btn-primary p-lg text-center">
+                                        <div class=" m-b-md" >
+                                            <!-- <i class="fa fa-user fa-4x"></i> -->
+                                            <h2 class="font-bold no-margins">{{HH}}</h2>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Low Usage Low CEI &nbsp;&nbsp;<a><i ng-click="exportData('LL', 'loadingLL')"  style="color:#1ab394;" title="Download Suscribers list" class="ladda-button ladda-button-demo fa fa-user" ladda="loadingLL"></i></a></span>
+                                    <div class="widget btn-danger p-lg text-center">
+                                        <div class=" m-b-md" >
+                                            <!-- <i class="fa fa-user fa-4x"></i> -->
+                                            <h2 class="font-bold no-margins">{{LL}}</h2>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>High Usage Low CEI &nbsp;&nbsp;<a><i ng-click="exportData('HL', 'loadingHL')"  style="color:#1ab394;" title="Download Suscribers list" class="ladda-button ladda-button-demo fa fa-user" ladda="loadingHL"></i></a></span>
+                                    <div class="widget btn-warning p-lg text-center">
+                                        <div  >
+                                            <!-- <i class="fa fa-user fa-4x"></i> -->
+                                            <h2 class="font-bold no-margins">{{HL}}</h2>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="form-group text-center">
+                            <b><span style="font-size: 16px; color:red;" >CEI</span> (Low)</b>
+                        </div>
+                    </div>
+                    <div style="float: left;line-height: 480px;vertical-align: middle;"><b><span style="font-size: 16px; color:red;" >Usage </span>(High)</b></div>
+                    
+
+                    <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                                <div ng-if="!loadingDiv && !noDataDiv">
+                                    <highchart id="chartApp" config="pieChartConfig" ></highchart>
+                                </div>
+                                <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <h1 class="logo-name" style="margin-left:-35%">Specta</h1>
+    </div><br>
+    <form class="m-t" role="form" name="emailform" id="emailform" method="POST" 
+        ng-submit="email(user,emailform.$valid)" novalidate>
+        <div class="form-group"  ng-class="{ 'has-error': hasError('mail','required')}">
+            <input type="text" class="form-control" placeholder="Email" name="mail" required="" ng-model="user.mail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" ng-required="true">
+            <span class="text-success">{{serverMessage}}</span>
+        </div>
+        <button type="submit" class="btn btn-primary block full-width m-b">Send Email</button>
+        <a ui-sref="login" ><small>Login</small></a>
+    </form>
+    <p class="m-t"> <small>Pinnacle &copy; 2016-2020</small> </p>
+</div>

@@ -1,0 +1,267 @@
+<div class="border-bottom white-bg">
+    <nav class="navbar navbar-fixed-top specta-topnav" role="navigation">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                <i class="fa fa-reorder"></i>
+            </button>
+            <!-- <a href="#" class="navbar-brand">Inspinia</a> -->
+            <a ui-sref="index.main"><img class="specta-logo" ng-src="images/logo.png" ></a><!-- height="46" width="180"-->
+        </div>
+        <div class="navbar-collapse collapse" id="navbar" ng-controller="LeftMenuListCtrl">
+            <ul class="nav navbar-nav">
+
+                <li ng-class="{active: $state.current.data.pageTitle == 'Home'}">
+                    <a ui-sref="index.main"><span class="nav-label">Home</span> </a>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'Dashboard')}" dropdown>
+                    <a ui-sref="index.dashboardlist" class="dropdown-toggle" dropdown-toggle> Dashboard <span class="caret"></span>
+                        {{menuDashboardList}}
+                    </a>
+                    
+                    <ul role="menu" class="dropdown-menu " style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;">
+                        <li ng-repeat="menu in allDashboardList" ng-class="{active: menu.name == $state.current.data.currentPage }">
+                            <a ng-click="changeDashboard(menu._id)">{{ menu.name }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'Report')}" dropdown >
+                    <a ui-sref="index.reportslist" class="dropdown-toggle " dropdown-toggle> Reports <span class="caret" ></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu " style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;">
+                        <li ng-repeat="menu in menuReportsList" ng-class="{active: menu.name == $state.current.data.currentPage } ">
+                            <a ng-click="changeReport(menu._id)" ng-if="menu.type == 'dynamic'">{{ menu.name }}</a>
+                            <a ng-click="changeStaticReport(menu._id, menu.file)" ng-if="menu.type == 'static'">{{ menu.name }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'Analytics')}" dropdown>
+                    <a ui-sref="index.analysislist" class="dropdown-toggle" dropdown-toggle> Analytics <span class="caret"></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu" style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;" >
+                        <li ng-repeat="menu in menuAnalysisList" ng-class="{active: menu.name == $state.current.data.currentPage }">
+                            <a ng-click="changeAnalysis(menu._id)" ng-if="menu.type == 'dynamic'">{{ menu.name }}</a>
+                            <a  ng-click="changeStaticAnalysis(menu._id, menu.file)" ng-if="menu.type == 'static'">{{ menu.name }}</a>
+                            <!-- {{menu.file}} -->
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'Custom Report')}" ng-if="userProfile.userType != 'user' && userProfile.userType != 'corporate user' &&  userProfile.userType != 'circle user' " dropdown>
+                    <a ui-sref="index.customreportlist" class="dropdown-toggle" dropdown-toggle>Custom Report <span class="caret"></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu" class="dropdown-menu" style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;">
+                        <li ng-class="{active: 'Create Report' == $state.current.data.currentPage }">
+                            <a ng-click="changeCustomReport()">Create Report</a>
+                        </li>
+                        <li ng-repeat="menu in customReportList" ng-class="{active: menu.name == $state.current.data.currentPage }">
+                            <a ng-click="changeCustomReport(menu._id)">{{ menu.name }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'Staging')}" dropdown ng-if="userProfile.userType != 'user' && userProfile.userType != 'corporate user' &&  userProfile.userType != 'circle user' ">
+                    <a ui-sref="index.staginglist" class="dropdown-toggle" dropdown-toggle> Staging <span class="caret"></span>
+                    </a>
+
+                    <ul role="menu" class="dropdown-menu" class="dropdown-menu" style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;">
+                        <li ng-repeat="menu in stagingList">
+                            <a ng-click="changeStaging(menu._id)">{{ menu.name }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- <li ng-class="{active: ($state.current.data.pageTitle == 'Group')}" ng-if="userProfile.userType != 'user'">
+                    <a ui-sref="index.grouplist"><span class="nav-label">Group Management</span></a>
+                </li>
+
+                <li ng-class="{active: ($state.current.data.pageTitle == 'User')}" ng-if="userProfile.userType != 'user'">
+                    <a ui-sref="index.userlist"><span class="nav-label">User Management</span></a>
+                </li> -->
+
+                <li ng-class="{active: ['Schedule', 'Module', 'Statement', 'Chart Option', 'Redirection Optio', 'Configuration', 'Alert', 'Group', 'User', 'CEI Config', 'Offline Schedule', 'App Config'].indexOf( $state.current.data.pageTitle ) > -1 }" ng-if="userProfile.userType != 'user' && userProfile.userType != 'corporate user' &&  userProfile.userType != 'circle user' " dropdown>
+                    <a class="dropdown-toggle" dropdown-toggle> Configure<span class="caret"></span>
+                    </a>
+
+                    <ul role="menu" class="dropdown-menu">
+                        
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Module')}"><a ui-sref="index.modulelist">Modules</a></li>
+                        
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Statement')}"><a ui-sref="index.statementlist" ng-if="userProfile.userType.trim() =='system administrator'">Statements</a></li>
+
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Schedule')}"><a ui-sref="index.schedulelist">Scheduler</a></li>
+                        
+                        <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'Chart Option')}"><a ui-sref="index.chartoptionslist">Chart Options</a></li>
+                        
+                        <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'Redirection Option')}"><a ui-sref="index.redirectionlist">Redirection Options</a></li>
+                        
+                        <!-- <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'Configuration')}"><a ui-sref="index.configurationlist">System Configuration</a></li> -->
+                        
+                        <li  ng-class="{active: ($state.current.data.pageTitle == 'Alert')}"><a ui-sref="index.alertlist">Alert Configuration</a></li>
+
+                        <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'CEI Config')}"><a ui-sref="index.ceiconfiglist">CEI Configuration</a></li>
+
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Group')}"><a ui-sref="index.grouplist">Group Management</a></li>
+                        
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'User')}"><a ui-sref="index.userlist">User Management</a></li>
+
+                        <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'Offline Schedule')}"><a ui-sref="index.offlineschedulelist">Offline Schedule</a></li>
+
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'App Config')}"><a ui-sref="index.appconfiglist">App Config</a></li>
+                        
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'System Config')}"><a ui-sref="index.systemconfig">System Config</a></li>
+
+                        <!-- <li ng-class="{active: ($state.current.data.pageTitle == 'Probe Config')}"><a ui-sref="index.probeconfig">Probe Config</a></li> -->
+
+                        <!-- <li ng-if="userProfile.userType.trim() =='system administrator'" ng-class="{active: ($state.current.data.pageTitle == 'Campaign')}"><a ui-sref="index.campaignslist">Campaigns</a></li>
+                         --><!-- <li ng-class="{active: ($state.current.data.pageTitle == 'App Config')}"><a ui-sref="index.appconfiglist">App Config</a></li>
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Plan Config')}"><a ui-sref="index.planconfiglist">Plan Config</a></li>
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Node Config')}"><a ui-sref="index.nodeconfiglist">Node Config</a></li>
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Segment Config')}"><a ui-sref="index.segmentconfiglist">Segment Config</a></li>
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'DNS Config')}"><a ui-sref="index.dnsconfiglist">DNS Config</a></li>
+                        <li ng-class="{active: ($state.current.data.pageTitle == 'Area Config')}"><a ui-sref="index.areaconfiglist">Area Config</a></li> -->
+
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li ng-if="userProfile.userType.trim() =='system administrator'">
+                    <a class="count-info" ui-sref="index.systemmaintenance">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                </li>
+
+                <!--for central site changes -->
+
+                <!-- <li ng-if="userProfile.userType != 'user' " uib-dropdown class="nav navbar-top-links " style="padding: 5px 5px;"> 
+                    
+                    <a class="count-info dropdown-toggle" href uib-dropdown-toggle title="Redirect to Site">
+                        <i class="fa fa-location-arrow"></i>
+                    </a>
+                    <ul role="menu" uib-dropdown-menu class="animated fadeInRight m-t-xs uib-dropdown-menu"> -->
+                        <!-- for Tata sky site changes
+                         <li><a ng-click="autoLogin('Bengaluru')"> Bengaluru</a></li>
+                          <li><a ng-click="autoLogin('Mumbai')"> Mumbai</a></li> -->
+
+                           <!-- for Link 3 site changes -->
+                        <!-- <li><a ng-click="autoLogin('Dhaka')"> Dhaka</a></li>
+                        <li><a ng-click="autoLogin('CTG')"> CTG</a></li>
+                        <li><a ng-click="autoLogin('Shylet')"> Sylhet</a></li>
+                        <li><a ng-click="autoLogin('Khulna')"> Khulna</a></li>
+                        <li><a ng-click="autoLogin('Rajshahi')"> Rajshahi</a></li>
+                    </ul>
+                </li> -->
+
+                 <!--end of central site changes  -->
+
+                 
+                <li uib-dropdown>
+                    <a class="count-info" href uib-dropdown-toggle>
+                        <i class="fa fa-bell"></i> <span class="label label-primary">{{noteArr.length}}</span>
+                    </a>
+                    <ul class="dropdown-messages origional" uib-dropdown-menu style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;overflow-x: hidden;">
+                        <div ng-repeat="(key, value) in noteArr | orderBy: '-id'">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <a ng-href="{{value.url}}" target="_balnk" class="pull-left">
+                                                <i class="img-circle fa-2x fa fa-download"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-10" style="word-wrap:break-word;">
+                                            <small class="pull-right pointer" ng-click="removeAlert($index, value)"><i class="fa fa-remove"></i></small>
+                                            <h4>{{value.title}}</h4>
+                                            <div>{{value.subtitle}}</div>
+                                            <small class="text-muted text-right">{{value.time | date:'yyyy/MM/dd h:mm:ss a'}}</small>
+                                        </div>
+                                    </div>
+                                    <!-- <a ng-href="value.url" class="pull-left">
+                                        <i class="img-circle fa-2x fa fa-download"></i>
+                                    </a>
+
+                                    <div>
+                                        <h4>{{value.title}}</h4>
+                                        <span>Sub title</span>
+                                        <small class="text-muted text-right">{{value.time | date:'yyyy/MM/dd h:mm:ss a'}}</small>
+                                    </div> -->
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                        </div>
+                        <!-- <li>
+                            <div class="text-center link-block">
+                                <a ui-sref="index.notification">
+                                    <i class="fa-2x fa fa-warning text-danger"></i> <strong>View All Alerts</strong>
+                                </a>
+                            </div>
+                        </li> -->
+                    </ul>
+                </li>
+                <li uib-dropdown ng-if="userProfile.userType != 'user'">
+                    <a class="count-info" href uib-dropdown-toggle>
+                        <i class="fa fa-warning"></i> <span class="label label-danger">{{alertList.length}}</span>
+                    </a>
+                    <ul class="dropdown-messages origional" uib-dropdown-menu style="z-index:999;position:absolute;max-height: 410px;overflow-y: auto;overflow-x: hidden;">
+                        <div ng-repeat="(key, item) in alertList | orderBy: '-lastrunningtime'">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <a class="pull-left">
+                                                <i class="img-circle fa-2x fa fa-warning" ng-style="checkStatus(item.priority)"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-10" style="word-wrap:break-word;">
+                                            <small class="pull-right pointer btn btn-primary btn-xs" ng-click="alertACK($index, item)">ACK</small>
+                                            <h4>{{item.name}}</h4>
+                                            <div>{{item.message}}</div>
+                                            <small class="text-muted text-right">{{item.lastrunningtime | date:'yyyy/MM/dd h:mm:ss a'}}</small>
+                                        </div>
+                                    </div>
+                                    <!-- <a ng-href="value.url" class="pull-left">
+                                        <i class="img-circle fa-2x fa fa-download"></i>
+                                    </a>
+
+                                    <div>
+                                        <h4>{{value.title}}</h4>
+                                        <span>Sub title</span>
+                                        <small class="text-muted text-right">{{value.time | date:'yyyy/MM/dd h:mm:ss a'}}</small>
+                                    </div> -->
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                        </div>
+                        <li>
+                            <div class="text-center link-block">
+                                <a ui-sref="index.notification">
+                                    <strong>View All Alerts</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li uib-dropdown>
+                    <a class="count-info" href uib-dropdown-toggle>
+                        <i class="fa fa-user-circle-o fa-primary " style="color:#1ab394; font-size: 2em"></i>
+                    </a>
+                    <ul uib-dropdown-menu class="animated fadeInRight m-t-xs">
+                        <li><a ui-sref="index.profile"><i class="fa fa-user"></i> {{userProfile.firstName}} {{userProfile.lastName}}</a></li>
+                        <!-- <li><a ui-sref="index.profile"><i class="fa fa-user"></i> Profile</a></li> -->
+                        <!-- <li><a ng-click="autoLogin('CRM')"> CRM</a></li> -->
+                        <li><a ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
+                    </li>
+                    </ul>
+                </li>
+                <!-- <li>
+                    <a ui-sref="logout">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li> -->
+            </ul>
+        </div>
+    </nav>
+</div>

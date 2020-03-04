@@ -1,0 +1,108 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Group Assign</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <uib-tabset>
+                    <uib-tab heading="Dashboard" ng-click="loadList('dashboard')" active="view.dashboard">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content" ng-if="allDashboardList.length > 0">
+                                    <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10px;"><input type="checkbox" ng-checked="allDashboardList.length == confirmGroupArr.length" value="#" ng-click="CheckedAll(allDashboardList)"></th>
+                                                <th style="width:10px;"></th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in allDashboardList | orderBy: 'name'">
+                                                <td>
+                                                    <input type="checkbox" ng-checked="confirmGroupArr.indexOf(item._id) > -1 " value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" ng-checked="confirmArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-disabled="true">
+                                                </td>
+                                                <td>{{ item.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="col-sm-12">
+                                        <button type="button" ui-sref="index.grouplist" class="btn btn-white"> Cancle</button>
+                                        <button class="btn btn-primary" type="button" ng-click="saveDashboard()" ng-if="allDashboardList.length > 0">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Reports" ng-click="loadReports('reports')">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content" ng-if="reportsList.length > 0">
+                                    <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions" >
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10px;"></th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in reportsList | orderBy: 'name'">
+                                                <td>
+                                                    <input type="checkbox" ng-checked="confirmArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                                </td>
+                                                <td>{{ item.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="col-sm-12">
+                                        <button type="button" ui-sref="index.grouplist" class="btn btn-white"> Cancle</button>
+                                        <button class="btn btn-primary" type="button" ng-click="saveReport()" ng-if="reportsList.length > 0">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab heading="Analytics" ng-click="loadAnalysis('analytics')">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content" ng-if="analysisList.length > 0">
+                                    <table datatable class="table table-striped table-bordered table-hover" dt-options="dtOPtions" >
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10px;"></th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in analysisList | orderBy: 'name'">
+                                                <td>
+                                                    <input type="checkbox" ng-checked="confirmArr.indexOf(item._id) > -1 || item.isMember" value="{{item._id}}" ng-click="multiCheck(item._id)">
+                                                </td>
+                                                <td>{{ item.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="col-sm-12">
+                                        <button type="button" ui-sref="index.grouplist" class="btn btn-white"> Cancle</button>
+                                        <button class="btn btn-w-m btn-primary" type="button" ng-click="saveAnalytics()" ng-if="analysisList.length > 0">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

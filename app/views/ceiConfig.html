@@ -1,0 +1,414 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">CEI Configuration</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <form name="myForm" role="form" ng-submit="save(data)">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <!-- <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Profile Name</label>
+                                    <input type="text" class="form-control" ng-model="data.name" placeholder="Name" ng-required="true">
+                                </div>
+                            </div> -->
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>App</label>
+                                    <select class="form-control" ng-model="data.app" ng-change="checkApp(data.app)" ng-required="true">
+                                        <option value="">Select</option>
+                                        <option value="Default">Default</option>
+                                        <option ng-repeat="item in appList">{{item.App | removeSpaces}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Min Volume (MB)</label>
+                                    <input type="text" class="form-control" ng-model="data.minvolume" placeholder="Min Volume" ng-required="true" numbers-only>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CEI parameter for 4G</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Latency</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Latency range (ms)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Latency CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.lte.latency">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.latency.range[item].from" placeholder="from" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.latency.range[item].to" placeholder="to" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.latency.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('lte', 'latency', item);" class="btn-primary m-r-sm" ng-show="enabled.lte.latency[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('lte', 'latency', item);" class="btn-danger m-r-sm" ng-hide="enabled.lte.latency[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Latency Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.lte.latency.wt" placeholder="Latency" ng-required="true" numbers-only maxlength="3" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2"></div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Throughput</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Throughput range (Mbps)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Throughput CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.lte.throughput">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.throughput.range[item].from" placeholder="from" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.throughput.range[item].to" placeholder="to" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.lte.throughput.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('lte', 'throughput', item);" class="btn-primary m-r-sm" ng-show="enabled.lte.throughput[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('lte', 'throughput', item);" class="btn-danger m-r-sm" ng-hide="enabled.lte.throughput[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Throughput Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.lte.throughput.wt" placeholder="Throughput" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CEI parameter for 3G</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Latency</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Latency range (ms)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Latency CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.utran.latency">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.latency.range[item].from" placeholder="from" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.latency.range[item].to" placeholder="to" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.latency.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('utran', 'latency', item);" class="btn-primary m-r-sm" ng-show="enabled.utran.latency[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('utran', 'latency', item);" class="btn-danger m-r-sm" ng-hide="enabled.utran.latency[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Latency Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.utran.latency.wt" placeholder="Latency" ng-required="true" numbers-only maxlength="3" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2"></div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Throughput</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Throughput range (Mbps)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Throughput CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.utran.throughput">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.throughput.range[item].from" placeholder="from" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.throughput.range[item].to" placeholder="to" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.utran.throughput.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('utran', 'throughput', item);" class="btn-primary m-r-sm" ng-show="enabled.utran.throughput[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('utran', 'throughput', item);" class="btn-danger m-r-sm" ng-hide="enabled.utran.throughput[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Throughput Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.utran.throughput.wt" placeholder="Throughput" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CEI parameter for 2G</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Latency</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Latency range (ms)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Latency CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.geran.latency">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.latency.range[item].from" placeholder="from" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.latency.range[item].to" placeholder="to" ng-required="true" numbers-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.latency.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('geran', 'latency', item);" class="btn-primary m-r-sm" ng-show="enabled.geran.latency[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('geran', 'latency', item);" class="btn-danger m-r-sm" ng-hide="enabled.geran.latency[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Latency Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.geran.latency.wt" placeholder="Latency" ng-required="true" numbers-only maxlength="3" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2"></div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Throughput</label>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label><h5>Throughput range (Mbps)</h5></label>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label><h5>Throughput CEI</h5></label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" ng-repeat="item in rows.geran.throughput">
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.throughput.range[item].from" placeholder="from" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.throughput.range[item].to" placeholder="to" ng-required="true" decimal-only>
+                                    </div>
+
+                                    <div class="col-sm-1"></div>
+
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" ng-model="data.geran.throughput.range[item].cei" placeholder="value" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <button type="button" ng-click="addField('geran', 'throughput', item);" class="btn-primary m-r-sm" ng-show="enabled.geran.throughput[item]">
+                                            <span>+</span>
+                                        </button>
+
+                                        <button type="button" ng-click="removeField('geran', 'throughput', item);" class="btn-danger m-r-sm" ng-hide="enabled.geran.throughput[item]">
+                                            <span>-</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label>Throughput Weightage</label>
+                                        <input type="text" class="form-control" ng-model="data.geran.throughput.wt" placeholder="Throughput" ng-required="true" numbers-only maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-lg-12 text-center">
+                                    <button class="btn btn-white" type="button" ng-click="cancel()">Cancel</button>
+                                    <button class="btn btn-primary" type="submit">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,21 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <a class="pull-right" ng-click="cancel()"><i class="fa fa-times"></i></a>
+        <h4 class="modal-title" >Vps Vs Avg. Packet Size</h4>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper wrapper-content animated fadeIn" >
+            <div class="ibox-title">
+                <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+            </div>
+            <div class="ibox-content">
+                <div loading-icon ng-if="loadingUsageVsUsersDiv && !noDataUsageVsUsersDiv"></div>
+                <div ng-if="!loadingUsageVsUsersDiv && !noDataUsageVsUsersDiv">
+                    <highchart id="UsageVsUsers" config="UsageVsUsersChartConfig" ></highchart>
+                </div>
+                <div no-data-found ng-if="!loadingUsageVsUsersDiv && noDataUsageVsUsersDiv"></div>
+            </div>
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,685 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Probe Config</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <uib-tabset>
+                    <uib-tab heading="Probe Config">
+                        <div class="panel-body">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content">
+                                    <form class="form-horizontal" name="myForm" role="form" ng-submit="saveProbeConfig(ProbeConfigObj)">
+                                        <!-- style.css file, switcher button content has been changed from ON/OFF to True/False-->
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Broadband</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.IP_PROBE" class="onoffswitch-checkbox" id="example1" required>
+                                                    <label class="onoffswitch-label" for="example1">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Radius</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.RADIUS_PROBE" class="onoffswitch-checkbox" id="example2" required>
+                                                    <label class="onoffswitch-label" for="example2">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Mobility</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.GN_PROBE" class="onoffswitch-checkbox" id="example3" required>
+                                                    <label class="onoffswitch-label" for="example3">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Operator ID</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.OPERATOR_ID" placeholder="ID (Number Only)" numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Operator Name</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="opname" class="form-control" ng-model="ProbeConfigObj.OPERATOR_NAME" placeholder="Enter Name" required>
+                                            </div>
+                                        </div>
+                                        <div ng-show="myForm.$submitted || myForm.opname.$touched">
+                                            <span ng-show="form.opname.$error.required">Tell us your email.</span>
+                                            <span ng-show="form.opname.$error.email">This is not a valid email.</span>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Probe ID</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PROBE_ID" placeholder="ID (Number Only)" numbers-only required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="Probe Id is a Three digits number, First digit is Site Id (1 ~ 9) & last Two digits are Probe id (10 ~ 99) Site Id: 1- Dhaka, 2-CTG, 3-Sylhet This is First Probe in Sylhet so Probe no is 10 & probe Id is 310" tooltip-placement="right"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Log Level</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.LOG_LEVEL" placeholder="Number Only" numbers-only required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="Log levels:
+                                                        None= 0,&nbsp;
+                                                        Debug= 1,&nbsp;
+                                                        Trace = 2,&nbsp;
+                                                        Info = 4,&nbsp;
+                                                        Warn = 8,&nbsp;
+                                                        Minor = 16,&nbsp;
+                                                        Major = 32,&nbsp;
+                                                        Error = 64,&nbsp;
+                                                        SeriousError = 128">
+                                                </i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Print Stats</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.PRINT_STATS" class="onoffswitch-checkbox" id="print_stats" required>
+                                                    <label class="onoffswitch-label" for="print_stats">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group" ng-if="ProbeConfigObj.PRINT_STATS">
+                                            <label class="col-sm-2 control-label">Print Stats Frequancy</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PRINT_STATS_FREQ_SEC" placeholder="Time in Seconds" numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Log Stats Frequancy</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.LOG_STATS_FREQ_SEC" placeholder="Time in Seconds" numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Dump MAC</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.DUMP_MAC" class="onoffswitch-checkbox" id="dump_mac" required>
+                                                    <label class="onoffswitch-label" for="dump_mac">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">XDR Directory</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.XDR_DIR" placeholder="Specific path to directory" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">LOG Directory</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.LOG_DIR" placeholder="Specific path to directory" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DATA Directory</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DATA_DIR" placeholder="Specific path to directory" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Admin Flag</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.ADMIN_FLAG" class="onoffswitch-checkbox" id="admin_flag" required>
+                                                    <label class="onoffswitch-label" for="admin_flag">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Admin Port</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ADMIN_PORT" placeholder="tcp://*:port" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Active Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ActiveInterface" placeholder="Number Only" numbers-only>
+                                            </div>
+                                            <div class="infont col-sm-1">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="INTERFACE Type: &nbsp;&nbsp;&nbsp;&nbsp;1 - SOLARFLARE,&nbsp; 2 - ETHERNET,&nbsp; 3 - Both">
+                                                </i>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">ETHERNET Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ETHERNET_INTERFACE" placeholder="Interface Name, Interface Name" ng-blur="validateInput(ProbeConfigObj.ETHERNET_INTERFACE)" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">SOLARFLARE Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SOLAR_INTERFACE" placeholder="Interface Name, Interface Name" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">SOLARFLARE H/W Timestamp</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.SOLARFLARE_HW_TIMESTAMP" class="onoffswitch-checkbox" id="sf_hw_timestamp" required>
+                                                    <label class="onoffswitch-label" for="sf_hw_timestamp">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Max Packet length per Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.MAX_PKT_LEN_PER_INTERFACE" placeholder="512,512,512,512" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="hr-line-dashed"></div> -->
+
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Packet Distribution</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PacketDistribution" placeholder="0 or 1" numbers-only>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="0 - IP Based Distribution, 1 - Port Based Distribution" tooltip-placement="right"></i>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS Dump Interval</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="Hours" numbers-only>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">PPS per Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PPS_PER_INTERFACE" placeholder="500000,500000,500000,500000" required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="Maximum 4 interfaces supported" tooltip-placement="right"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">PPS cap percentage</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PPS_CAP_PERCENTAGE" placeholder="90,90,90,90" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Router per Interface</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ROUTER_PER_INTERFACE" placeholder="4,4,4,4" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Packet Listener CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PKT_LISTENER_CPU_CORE" placeholder="0,1,0,1" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Packet router CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.PKT_ROUTER_CPU_CORE" placeholder="2,3,5,6-7,8,9,10-2,3,5,6-7,8,9,10" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Packet Router Time Index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="5 or 10">
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="PKT_ROUTER_TIMEINDEX can be either 5 or 10" tooltip-placement="right"></i>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">Direction on MAC</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.DIRECTION_ON_MAC" class="onoffswitch-checkbox" id="example11" required>
+                                                    <label class="onoffswitch-label" for="example11">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="ProbeConfigObj.DIRECTION_ON_MAC">
+                                            <label class="col-sm-2 control-label">Source MAC</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SOURCE_MAC" placeholder="00:00:00:00:00:00" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="ProbeConfigObj.DIRECTION_ON_MAC">
+                                            <label class="col-sm-2 control-label">Destination MAC</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DESTINATION_MAC" placeholder="00:00:00:00:00:00" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IPV4 Range</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IPV4_RANGE" placeholder="" required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="Sample- 10.0.0.5-10.0.255.255, 126.45.0.0-126.45.50.50" tooltip-placement="right"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IPV6 Range</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IPV6_RANGE" placeholder="" required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="Sample- 10.0.0.5-10.0.255.255, 126.45.0.0-126.45.50.50" tooltip-placement="right"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session Manager Time Index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SESSION_MANAGER_TIMEINDEX" placeholder="5 or 10" required>
+                                            </div>
+                                            <div class="infont col-sm-2">
+                                                <i class="fa fa-info-circle fa-2x" style="color:#1ab394; font-size: 1.5em" uib-tooltip="PKT_ROUTER_TIMEINDEX can be either 5 or 10" tooltip-placement="right"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session manager write index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SESSION_MANAGER_WRITE_INDEX_ADV" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session manager read index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="" numbers-only>
+                                            </div>
+                                        </div> -->
+                                        
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Flusher time index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="" numbers-only>
+                                            </div>
+                                        </div> -->
+                                        
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">ZMQ Flusher time index</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="" numbers-only>
+                                            </div>
+                                        </div> -->
+                                        
+                                        <!-- <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session manager per time index packets</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="data.rank" placeholder="" numbers-only>
+                                            </div>
+                                        </div> -->
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP session time index packet limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_TIME_INDEX_PKT_LIMIT" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP session flush time index repo size</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_FLUSH_TIME_INDEX_REPO_SIZE" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP session packet limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_PKT_LIMIT" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP Session Time Limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_TIME_LIMIT" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP Session Clean Up Scan Frequancy (Seconds)</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_CLEAN_UP_SCAN_FREQ_SEC" placeholder="frequancy in Sec." numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP Session Clean Up Batch Limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_CLEAN_UP_BATCH_LIMIT" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP Session Clean Up Timeout (Seconds)</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_SESSION_CLEAN_UP_TIMEOUT_SEC" placeholder="Time in Sec." numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS Lookup DB Clean Up Timeout (Seconds)</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DNS_LOOKUPDB_CLEAN_UP_TIMEOUT_SEC" placeholder="Time in Sec." numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS key words</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DNS_KEY_WORDS" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS key time limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DNS_KEY_TIME_LIMIT_SEC" placeholder="Time in Sec." numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session manager instances</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SESSION_MANAGER_INSTANCES" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Session Manager CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.SESSION_MANAGER_CPU_CORE" placeholder="7,8,9,10" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Flusher No.</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.FLUSHER_NO" placeholder="" numbers-only disabled >
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Flusher CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.FLUSHER_CPU_CORE" placeholder="11,11" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">ZMQ Flusher CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ZMQ_FLUSHER_CPU_CORE" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">XDR Flusher CPU Core</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.XDR_FLUSHER_CPU_CORE" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">ZMQ Flusher TPS</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.ZMQ_FLUSER_TPS" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+                                        
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">IP Write XDR</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.IP_WRITE_XDR" class="onoffswitch-checkbox" id="example12" required>
+                                                    <label class="onoffswitch-label" for="example12">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP File Prefix</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_FILE_PREFIX" placeholder="ip" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">IP Flush Flag</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.IP_FLUSH_FLAG" class="onoffswitch-checkbox" id="example13" required>
+                                                    <label class="onoffswitch-label" for="example13">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">IP Flush port</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.IP_FLUSH_PORT" placeholder="tcp://*:port " required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">DNS Write XDR</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.DNS_WRITE_XDR" class="onoffswitch-checkbox" id="example14" required>
+                                                    <label class="onoffswitch-label" for="example14">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS File Prefix</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DNS_FILE_PREFIX" placeholder="dns" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">DNS Flush Flag</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.DNS_FLUSH_FLAG" class="onoffswitch-checkbox" id="example15" required>
+                                                    <label class="onoffswitch-label" for="example15">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">DNS Flush port</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.DNS_FLUSH_PORT" placeholder="tcp://*:port" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">RADIUS Write XDR</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.RADIUS_WRITE_XDR" class="onoffswitch-checkbox" id="example16" required>
+                                                    <label class="onoffswitch-label" for="example16">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">RADIUS File Prefix</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.RADIUS_FILE_PREFIX" placeholder="radius" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="col-sm-2 control-label">RADIUS Flush Flag</label>
+                                            <div class="switch col-sm-4">
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" ng-model="ProbeConfigObj.RADIUS_FLUSH_FLAG" class="onoffswitch-checkbox" id="example17" required>
+                                                    <label class="onoffswitch-label" for="example17">
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">RADIUS Flush port</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.RADIUS_FLUSH_PORT" placeholder="tcp://*:port" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">RADIUS Idle Session Timeout</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.RADIUS_IDLE_SESSION_TIMEOUT_IN_SEC" placeholder="Time in Sec." numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">RADIUS Session Packet Limit</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.RADIUS_SESSION_PACKET_LIMIT" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Radius Session Flush Time index Repo Size</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" ng-model="ProbeConfigObj.RADIUS_SESSION_FLUSH_TIME_INDEX_REPO_SIZE" placeholder="" numbers-only required>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <button class="btn btn-white" type="button" ui-sref="#">Cancel</button>
+                                                <button class="btn btn-primary" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

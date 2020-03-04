@@ -1,0 +1,107 @@
+<div class="wrapper-content animated fadeIn " ng-controller="CEICellAnalyticsCtrl" >
+    <div class="row" >
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.end" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        </div> 
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab heading="CEI" ng-click="tabSelected('ceiDistributionMap')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div>
+                                            <span ng-if="loadingCEIMapCircleDiv" loading-icon ></span>
+                                            <span no-data-found ng-if="noDataCEIMapCircleDiv"></span>
+                                        </div>
+                                        <export-module filename="'CEI Distribution'" dataobj="datasetCEI"></export-module>
+                                        <br/>
+                                        <div>
+                                            <ui-gmap-google-map id='mapCEI' center='mapCEI.center' zoom='mapCEI.zoom' options='mapCEI.options' size="mapCEI.size" control="mapCEI.control" >
+
+                                                <ui-gmap-markers models="circlesCEI" coords="'self'" icon="'icon'" events="mapCEI.events" fit='true'>
+                                                    <ui-gmap-windows show="show">
+                                                        <div ng-non-bindable><b>{{title}}</b></div>
+                                                    </ui-gmap-windows>
+                                                </ui-gmap-markers>
+
+                                            </ui-gmap-google-map>
+                                        </div>
+                                        <br/>
+                                        <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                                            <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus, circlesCEI)" ng-checked="{{checkboxCountHighStatus}}">
+                                            <label for="inlineCheckbox1"> Poor </label>
+                                        </div>
+                                        <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                                            <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus, circlesCEI)"  ng-checked="{{checkboxCountMediumStatus}}">
+                                            <label for="inlineCheckbox2"> Good </label>
+                                        </div>
+                                        <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus, circlesCEI)" ng-checked="{{checkboxCountLowStatus}}">
+                                            <label for="inlineCheckbox3"> Excellent </label>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                            <thead>
+                                                <tr>
+                                                    <th>CellID</th>
+                                                    <th>Area</th>
+                                                    <th>Latitude</th>
+                                                    <th>Longitude</th>
+                                                    <th>CEI</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="element in circlesCEI track by $index">
+                                                    <td>{{ element.cellid }}</td>
+                                                    <td>{{ element.Area }}</td>
+                                                    <td>{{ element.latitude }}</td>
+                                                    <td>{{ element.longitude }}</td>
+                                                    <td>{{ element.CEI }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <uib-tab index="1"  heading="CEI Distribution" ng-click="tabSelected('ceiDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="ibox-content">
+                                            <div loading-icon ng-if="loadingBarChartCEIDiv"></div>
+                                            <div ng-if="true">
+                                                <highchart id="BarChart" config="rncFailureDrilldownConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDataBarChartCEIDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+<div class="wrapper-content animated fadeIn" ng-controller="userUniqueAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right" >
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            
+                <!--<div class="form-group pull-right" ng-if='dateTab==false'>
+                     <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.start" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                                
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                   </form>
+                </div>-->
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Users Day wise" ng-click="tabSelected('usersDaywise')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <span class="pull-right label label-primary">Export</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataExport(exportUsersHourly,'excel', 'Users Day wise')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataExport(exportUsersHourly,'csv', 'Users Day wise')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                        
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingUsersHourlyDiv"></div>
+                                        <div ng-if="DataUsersHourlyDiv">
+                                            <highchart id="chart2" config="UsersHourlyChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersHourlyDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Users hourly" ng-click="tabSelected('usersHourly')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <span class="pull-right label label-primary">Export</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataExport(exportUsersHourly,'excel', 'Users hourly')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataExport(exportUsersHourly,'csv', 'Users hourly')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <small>For Date: {{date.end}}</small>
+                                        <div loading-icon ng-if="loadingUsersHourlyDiv"></div>
+                                        <div ng-if="DataUsersHourlyDiv">
+                                            <highchart id="chart2" config="UsersHourlyChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersHourlyDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="Users Plan wise" ng-click="tabSelected('usersPlanwise')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <span class="pull-right label label-primary">Export</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataExport(exportPlanSegment,'excel', 'Users Plan wise')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataExport(exportPlanSegment,'csv', 'Users Plan wise')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                        
+                                    <div class="ibox-content">
+                                        <small>For Date: {{date.end}}</small>
+                                        <div loading-icon ng-if="loadingUsersPlanwiseDiv"></div>
+                                        <div ng-if="DataUsersPlanwiseDiv">
+                                            <highchart id="chart2" config="UsersPlanwiseChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersPlanwiseDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="Users Segment wise" ng-click="tabSelected('usersSegmentwise')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <span class="pull-right label label-primary">Export</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataExport(exportPlanSegment,'excel', 'Users Segment wise')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataExport(exportPlanSegment,'csv', 'Users Segment wise')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                        
+                                    <div class="ibox-content">
+                                        <small>For Date: {{date.end}}</small>
+                                        <div loading-icon ng-if="loadingUsersPlanwiseDiv"></div>
+                                        <div ng-if="DataUsersPlanwiseDiv">
+                                            <highchart id="chart2" config="UsersPlanwiseChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsersPlanwiseDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

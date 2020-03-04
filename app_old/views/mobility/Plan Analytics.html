@@ -1,0 +1,423 @@
+<div class="wrapper-content animated fadeIn" ng-controller="PlanAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group" ng-if="currentTab =='Top20Areas'"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-if="currentTab =='RatDistribution'"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-if="currentTab =='SegmentApps'" ng-show="segmentHide"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group" ng-if="currentTab =='HandsetwiseDistribution'"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>{{currentPage}}</b>
+                    <select ng-model="select.plan" style="height:24px;font-size:10px;padding:0px 12px;">
+                        <option value="{{select.plan}}">{{select.plan}}</option>
+                        <option value="{{planName}}" ng-repeat="planName in planNameList track by $index">{{planName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    
+    <!-- <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}<span ng-if="segmentHide">&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}</span>&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div> -->
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab index="0" heading="Usage Vs {{UsersOrVisits}}" ng-click="tabSelected('UsageVsUsers')" >
+                        <div class="panel-body" active="true">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportUserVsUsage,'excel', 'Usage Vs '+UsersOrVisits)">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportUserVsUsage,'csv', 'Usage Vs '+UsersOrVisits)">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingUsageVsUsersDiv"></div>
+                                        <div ng-if="DataUsageVsUsersDiv">
+                                            <highchart id="UsageVsUsers" config="UsageVsUsersChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataUsageVsUsersDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab index="6" heading="RAT wise Distribution" ng-click="tabSelected('RatDistribution')"  >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="ibox float-e-margins">
+                                    <div class="col-lg-12 pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <i class="fa fa-save fa-lg"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataNestedExport(exportRATDistribution,'excel', 'RAT wise Distribution')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataNestedExport(exportRATDistribution,'csv', 'RAT wise Distribution')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                </div>      
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingRATDistributionBarDiv"></div>
+                                        <div ng-if="DataRATDistributionBarDiv">
+                                            <highchart id="RATDistributionBar" config="RATDistributionBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataRATDistributionBarDiv"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" ng-if="appPageActive">
+                                    <div class="ibox float-e-margins">
+                                        <div loading-icon ng-if="loadingRATDistributionBarDiv"></div>
+                                        <div ng-if="DataRATDistributionBarDiv">
+                                            <highchart id="RATDistributionBar" config="RATDistributionDurationBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataRATDistributionBarDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab index="1" heading="Top 20 Areas" ng-click="tabSelected('Top20Areas')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistribution,'excel', 'Top 20 Areas Usage Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistribution,'csv', 'Top 20 Areas Usage Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingAppDistributionBarDiv"></div>
+                                        <div ng-if="DataAppDistributionBarDiv">
+                                            <highchart id="AppDistributionBar" config="AppDistributionBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataAppDistributionBarDiv"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" ng-if="appPageActive">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistributionDuration,'excel', 'Top 20 Areas Duration Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistributionDuration,'csv', 'Top 20 Areas Duration Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingAppDistributionDurationBarDiv"></div>
+                                        <div ng-if="DataAppDistributionDurationBarDiv">
+                                            <highchart id="AppDistributionBar" config="appDistributionDurationBarChartOptions" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataAppDistributionDurationBarDiv"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab index="2" heading="{{SegOrApp}} wise Disribution" ng-click="tabSelected('SegmentApps')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="col-md-4">
+                                            <div class="ibox float-e-margins">
+                                                <div class="pull-right">
+                                                    <span class="ibox-tools dropdown" uib-dropdown>
+                                                        <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                            <i class="fa fa-save fa-lg"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a ng-click="dataExport(exportSegmentUsageDistribution,'excel', SegOrApp+' wise Disribution')">Export to Excel</a>
+                                                            </li>
+                                                            <li>
+                                                                <a ng-click="dataExport(exportSegmentUsageDistribution,'csv', SegOrApp+' wise Disribution')">Export to CSV</a>
+                                                            </li>
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                                <div loading-icon ng-if="loadingsegmentDistributionPieDiv"></div>
+                                                <div ng-if="DatasegmentDistributionPieDiv">
+                                                    <highchart id="segmentDistributionPie" config="segmentDistributionPieChartConfig" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noDatasegmentDistributionPieDiv"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="pull-right">
+                                                    <span class="ibox-tools dropdown" uib-dropdown >
+                                                        <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                            <i class="fa fa-save fa-lg"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a ng-click="dataNestedExport(exportsegmentUsageDistributionMultiline,'excel', SegOrApp+' wise Disribution Daywise')">Export to Excel</a>
+                                                            </li>
+                                                            <li>
+                                                                <a ng-click="dataNestedExport(exportsegmentUsageDistributionMultiline,'csv', SegOrApp+' wise Disribution Daywise')">Export to CSV</a>
+                                                            </li>
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                                <div loading-icon ng-if="loadingsegmentUsageDistributionMultilineDiv"></div>
+                                                <div ng-if="DatasegmentUsageDistributionMultilineDiv">
+                                                    <highchart id="segmentDistributionPie" config="segmentUsageDistributionMultilineChartConfig" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noDatasegmentUsageDistributionMultilineDiv"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab index="3" heading="{{PlanOrApp}} wise Distribution" ng-click="tabSelected('AppDistribution')" >
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown>
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistribution,'excel', PlanOrApp+' wise Distribution')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportAppDistribution,'csv', PlanOrApp+' wise Distribution')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingAppDistributionBarDiv"></div>
+                                        <div ng-if="DataAppDistributionBarDiv">
+                                            <highchart id="AppDistributionBar" config="AppDistributionBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataAppDistributionBarDiv"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown >
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppDistributionMultiline,'excel', PlanOrApp+' wise Distribution Daywise')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppDistributionMultiline,'csv', SegOrApp+' wise Disribution Daywise')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingAppDistributionMultilineDiv"></div>
+                                        <div ng-if="DataAppDistributionMultilineDiv">
+                                            <highchart id="AppDistribution" config="AppDistributionMultilineChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataAppDistributionMultilineDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab index="4" heading="Device wise Distribution" ng-click="tabSelected('HandsetwiseDistribution')">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Device Distribution Session</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown>
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetSessionDistribution,'excel', 'Handset wise Session Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetSessionDistribution,'csv', 'Handset wise Session Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                            <div loading-icon ng-if="loadinghandsetDistributionBubbleDiv"></div>
+                                            <div ng-if="DatahandsetDistributionBubbleDiv">
+                                            <highchart id="handsetDistributionBubble" config="handsetDistributionBubbleChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDatahandsetDistributionBubbleDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Device Distribution Usage</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="ibox float-e-margins">
+                                            <div class="pull-right">
+                                                <span class="ibox-tools dropdown" uib-dropdown>
+                                                    <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                        <i class="fa fa-save fa-lg"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetUsageDistribution,'excel', 'Handset wise Usage Distribution')">Export to Excel</a>
+                                                        </li>
+                                                        <li>
+                                                            <a ng-click="dataExport(exportHandsetUsageDistribution,'csv', 'Handset wise Usage Distribution')">Export to CSV</a>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </div>
+                                            <div loading-icon ng-if="loadinghandsetDistributionBarDiv"></div>
+                                            <div ng-if="DatahandsetDistributionBarDiv">
+                                            <highchart id="handsetDistributionBar" config="handsetDistributionBarChartConfig" ></highchart>
+                                            </div>
+                                            <div no-data-found ng-if="noDatahandsetDistributionBarDiv"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="CEI" ng-click="tabSelected('CEI')">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>CEI Distribution for {{currentPage}} <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="CEIDist.fileName" dataobj="exportCEIDist" fileheader="CEIDist.fileHeader"></export-module>
+                                    </div>
+                                    <div loading-icon ng-if="loadingCEIDiv"></div>
+                                    <div ng-if="DataCEIDiv">
+                                        <highchart id="CEIDistribution" config="CEIDistributionChartOptions" ></highchart>
+                                    </div>
+                                    <div no-data-found ng-if="noDataCEIDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab  heading="Latency" ng-click="tabSelected('Latency')">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <span>Latency Distribution for <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'"> --> {{currentPage}}  <!-- </span> --> <b style="color:#1ab394;">{{drdwnSelect}}</b> between <b style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                        </span>
+                                        <export-module filename="LatDist.fileName" dataobj="exportLatencyDist" fileheader="LatDist.fileHeader"></export-module>
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingCEIDiv"></div>
+                                        <div ng-if="DataCEIDiv">
+                                            <highchart id="LatencyDistribution" config="CEIDistributionChartOptions" ></highchart>
+                                            <!-- <p class="text-center" style="font-size: 14px;"><b><span style="color:rgb(13, 251, 89)">0ms-20ms</span>&nbsp;&nbsp;<span style="color:#333333">Excellent</span>&nbsp;&nbsp;<span style="color:rgb(237, 251, 13);"> 20ms-50ms</span>&nbsp;&nbsp;<span style="color:#333333">Good</span>&nbsp;&nbsp;<span style="color:rgb(255, 28, 28);"> &#62;50ms</span>&nbsp;&nbsp;<span style="color:#333333">Bad</span>&nbsp;</b><!-- <small >&nbsp;For Sessions &#62; 1MB</small> -></p>
+                                            <p class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></p> -->
+                                        </div>
+                                        <div no-data-found ng-if="noDataCEIDiv"></div>
+                                        <!-- <div ng-if="DataUsageVsUsersDiv" class="text-center " style="color:#1ab394;" ><b>&lowast;&nbsp;</b><small >For Sessions &#62; 1MB</small></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

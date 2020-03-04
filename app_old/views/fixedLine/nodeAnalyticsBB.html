@@ -1,0 +1,52 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="nodeAnalyticsBBCtrl">
+
+    <div class="row" >
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Node:</b>
+                    <select chosen id="states" class="chosen-select" style="width:100px;" tabindex="1" ng-model="nodeSelect.node" ng-options="s for s in node">
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="input-group pull-right">
+                    <date-range-picker></date-range-picker>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+
+    <div class="row" >
+        <div class="col-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Latency Count for node : {{nodeSelect.node}}</h5>
+                    <export-module filename="'Latency Count for node : '{{nodeSelect.node}}" dataobj="exportLatencyCount"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingLatencyCountDiv && !noDataLatencyCountDiv"></div>
+                    <div ng-if="!loadingLatencyCountDiv && !noDataLatencyCountDiv" >
+                        <highchart id="latencyCount" config="latencyCountData" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingLatencyCountDiv && noDataLatencyCountDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" >
+        <div class="col-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Throughput Count for node : {{nodeSelect.node}}</h5>
+                    <export-module filename="'Throughput Count for node : '{{nodeSelect.node}}" dataobj="exportThroughputCount"></export-module>
+                </div>
+                <div class="ibox-content">
+                    <div loading-icon ng-if="loadingThroughputCountDiv && !noDataThroughputCountDiv"></div>
+                    <div ng-if="!loadingThroughputCountDiv && !noDataThroughputCountDiv" >
+                        <highchart id="throughputCount" config="throughputCountData" ></highchart>
+                    </div>
+                    <div no-data-found ng-if="!loadingThroughputCountDiv && noDataThroughputCountDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

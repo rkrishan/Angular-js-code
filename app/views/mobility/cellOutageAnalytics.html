@@ -1,0 +1,142 @@
+<div class="wrapper-content animated fadeIn " ng-controller="cellOutageAnalyticsCtrl" >
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <!-- <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>-->
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div> 
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group date">
+                            <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.end" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                        </div> 
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" ng-if="insideLazyLoad">
+        <div class="col-lg-8">
+            <span><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<!-- <b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp; --><b>Device:</b> {{deviceinfo}}
+            </span>
+        </div>
+        
+    </div>
+    
+   <div class="row" >
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h2 class="m-b-xs">Cell Outage Analytics</h2>
+                        </div>
+                        <div class="col-lg-4  pull-right">
+                            <!-- <span export-data></span> -->
+                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                    <i class="fa fa-save fa-lg"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="dataTableExport(datasetCountTable,'excel', 'Congestion Analytics')">Export to Excel</a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="dataTableExport(datasetCountTable,'csv', 'Congestion Analytics')">Export to CSV</a>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <span ng-if="loadingCountMapCircleDiv" ng-bind-html="loading.snip" >{{loading.snip}} </span>
+                        <span no-data-found ng-if="noDataCountMapCircleDiv"></span>
+                    </div>
+                   
+                    <br/>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ui-gmap-google-map id='map' center='mapCount.center' zoom='mapCount.zoom' options='mapCount.options' size="mapCount.size" control="mapCount.control" >
+
+                                <ui-gmap-markers models="circlesCount" coords="'self'" icon="'icon'" events="mapCount.events" options="'options'" fit='true'>
+                                    <ui-gmap-windows show="show">
+                                        <div ng-non-bindable><b>{{title}}</b></div>
+                                    </ui-gmap-windows>
+                                </ui-gmap-markers>
+
+                            </ui-gmap-google-map>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox3" ng-model="checkboxCountLowStatus" ng-click="checkboxLowCountStateChange(checkboxCountLowStatus)" ng-checked="{{checkboxCountLowStatus}}">
+                            <label for="inlineCheckbox3">{{low}} </label>
+                        </div>
+                        <div class="checkbox checkbox-circle checkbox-warning checkbox-inline" >
+                            <input type="checkbox" id="inlineCheckbox2" ng-model="checkboxCountMediumStatus" ng-click="checkboxMediumCountStateChange(checkboxCountMediumStatus)"  ng-checked="{{checkboxCountMediumStatus}}">
+                            <label for="inlineCheckbox2"> {{medium}} </label>
+                        </div>
+                        <div class="checkbox checkbox-circle checkbox-danger checkbox-inline" >
+                            <input type="checkbox" id="inlineCheckbox1" ng-model="checkboxCountHighStatus" ng-click="checkboxHighCountStateChange(checkboxCountHighStatus)" ng-checked="{{checkboxCountHighStatus}}">
+                            <label for="inlineCheckbox1"> {{highest}} </label>
+                        </div>
+                        
+                    </div>
+                    
+                    <br/>
+                    <!-- <br/>
+                    <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example" dt-options="cellUserDistribution">
+                        <thead>
+                            <tr>
+                                <th>CellID</th>
+                                <th>Area</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="element in datasetCountTable track by $index">
+                                <td>{{ element.cellid }}</td>
+                                <td>{{ element.Area }}</td>
+                                <td>{{ element.latitude }}</td>
+                                <td>{{ element.longitude }}</td>
+                                <td>{{ element.Count }}</td>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

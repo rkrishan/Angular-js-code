@@ -1,0 +1,26 @@
+<div class="pull-right" ng-controller="staticAnalysisCtrl">
+    
+    <span class="ibox-tools dropdown" uib-dropdown  ng-if="UserProfile.export">
+        <a class="dropdown-toggle" href uib-dropdown-toggle title="Export" >
+            <i class="fa fa-save fa-lg"></i>
+        </a>
+        <ul class="dropdown-menu" ><!-- ng-if="!nested" -->
+            <li>
+                <a ng-click="getSimpleJSONExport(dataObjArray,'excel', fileName, fileHeader)">Export to Excel</a>
+            </li>
+            <li>
+                <a ng-click="getSimpleJSONExport(dataObjArray,'csv', fileName, fileHeader)">Export to CSV</a>
+                
+            </li>
+        </ul>
+        
+        <!-- <ul class="dropdown-menu" ng-if="nested">
+            <li>
+                <a ng-click="dataNestedExport(dataObjArray,'excel', fileName)">Export to Excel</a>
+            </li>
+            <li>
+                <a ng-click="dataNestedExport(dataObjArray,'csv', fileName)">Export to CSV</a>
+            </li>
+        </ul> -->
+    </span>
+</div>

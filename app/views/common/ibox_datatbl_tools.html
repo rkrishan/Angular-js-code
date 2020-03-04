@@ -1,0 +1,57 @@
+<div class="ibox-tools dropdown" uib-dropdown>
+    <a class="dropdown-toggle" href uib-dropdown-toggle ng-show="userProfile.userType != 'user'">
+        <i class="fa fa-wrench"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-user" ng-show="userProfile.userType != 'user' ">
+        <li><a ng-click="detail(component.component)" title="Detail">Details of module</a></li>
+        <li><a ng-click="removeComponent(component)" title="Remove">Remove Module</a></li>
+    </ul>
+</div>
+
+<div class="ibox-tools dropdown" uib-dropdown ng-if="userProfile.export && component.component.data == 'DBPull'">
+    <a class="dropdown-toggle" href uib-dropdown-toggle>
+        <i class="fa fa-save"></i>
+    </a>
+    <!-- DataTable case -->
+    <!-- <ul class="table-export dropdown-menu" >
+        <li te-option te-value="'pdf'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'pdf')">Export to PDF</a>
+        </li>
+        <li te-option te-value="'excel'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'excel')">Export to Excel</a>
+        </li>
+        <li te-option te-value="'csv'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'csv')">Export to CSV</a>
+        </li>
+        <li>
+            <a ng-click="exportModule(component.component, 'png')">PNG</a>
+        </li>
+        <li te-option te-value="'png'" te-param="'type'">
+            <a onClick ="$('#module.id').dataTable({ destroy: true,searching: false,'bInfo': false,paging: false,order: [[2,'desc']]});$('#module.id').tableExport({type:'png',escape:'false', tableName:'module.name'});$('#module.id').dataTable({ destroy: true,searching: false,'bInfo': false,'bLengthChange': false,paging: true,order: [[2,'desc']]});">Export to PNG</a>
+        </li>
+        <li te-option te-value="'doc'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'doc')">Export to MS-Word</a>
+        </li>
+        <li te-option te-value="'powerpoint'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'powerpoint')">Export to MS-Powerpoint</a>
+        </li>
+        <li te-option te-value="'txt'" te-param="'type'">
+            <a ng-click="dataTableExport(component.component, 'txt')">Export to TXT</a>
+        </li>
+         <li te-option te-value="'sql'" te-param="'type'">
+            <a onClick ="$('#module.id').dataTable({ destroy: true,searching: false,'bInfo': false,paging: false,order: [[2,'desc']]});$('#module.id').tableExport({type:'sql',escape:'false', tableName:'module.name'});$('#module.id').dataTable({ destroy: true,searching: false,'bInfo': false,'bLengthChange': false,paging: true,order: [[2,'desc']] });">Export to  SQL</a>
+        </li>
+    </ul> -->
+    <ul class="dropdown-menu">
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'excel')">Export to Excel</a>
+        </li>
+        
+        <li>
+            <a ng-click="exportChartToExcel(displaydata[component.component._id], 'csv')">Export to CSV</a>
+        </li>
+    </ul>
+</div>
+<div class="ibox-tools" ng-if="component.component.label">
+    <span ng-class="component.component.labelColor"> {{component.component.label}}</span>
+</div>

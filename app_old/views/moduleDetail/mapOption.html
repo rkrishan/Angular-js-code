@@ -1,0 +1,73 @@
+<div class="form-group">
+    <label class="col-sm-6">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement</label>
+    <div class="col-sm-6">{{module.statementName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement Id</label>
+    <div class="col-sm-6">{{module.query}}</div>
+</div>
+
+<div class="form-group" ng-if="module.data == 'DBPull'">
+    <label class="col-sm-6">Frequency</label>
+    <div class="col-sm-6">{{frequencyList[module.frequency]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Type</label>
+    <div class="col-sm-6">{{module.mapType}}</div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple'">
+    <label class="col-sm-6">Data Value</label>
+    <div class="col-sm-6">{{module.dataValue}}</div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple' ">
+    <label class="col-sm-6">Shape</label>
+    <div class="col-sm-6">{{module.shape}}</div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple' && module.shape != 'marker'">
+    <label class="col-sm-6">Color</label>
+    <div class="col-sm-6">{{module.color}}</div>
+</div>
+
+<div class="form-group" ng-if="module.shape == 'marker'">
+    <label class="col-sm-6">Icon</label>
+    <div class="col-sm-6">{{iconList[module.icon]}}</div>
+</div>
+
+<div class="form-group" ng-if="module.icon == 'custom'">
+    <label class="col-sm-4">Data Range</label>
+    <label class="col-sm-2">From</label>
+    <label class="col-sm-2">To</label>
+    <label class="col-sm-4">Icon</label>
+</div>
+
+<div class="form-group" ng-if="module.icon == 'custom'" ng-repeat="(key, val) in module.customIcon">
+    <label class="col-sm-4"></label>
+    <div class="col-sm-2">{{module.from[key]}}</div>
+    <div class="col-sm-2">{{module.to[key]}}</div>
+    <div class="col-sm-4">{{iconList[val]}}</div>
+</div>
+
+<div class="form-group" ng-if="module.mapType == 'simple' ">
+    <label class="col-sm-6">Info Box</label>
+    <div class="col-sm-6">{{module.infobox}}</div>
+</div>
+
+<div class="form-group" ng-show="module.infobox">
+    <label class="col-sm-6">Data Field</label>
+    <div class="col-sm-6">{{module.infoboxDataField}}</div>
+</div>

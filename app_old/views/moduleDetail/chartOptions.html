@@ -1,0 +1,209 @@
+<div class="form-group" ng-show="module.type == 'simple_charts'">
+    <label class="col-sm-6">Name</label>
+    <div class="col-sm-6">{{module.name}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Data Source</label>
+    <div class="col-sm-6">{{dataType[module.data]}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement</label>
+    <div class="col-sm-6">{{module.statementName}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Statement Id</label>
+    <div class="col-sm-6">{{module.query}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">No. of Data Element</label>
+    <div class="col-sm-6">{{module.dataelement}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Chart Type</label>
+    <div class="col-sm-6">{{module.chartType}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Library</label>
+    <div class="col-sm-6">{{module.libType}}</div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Chart Options</label>
+    <div class="col-sm-6">{{module.options}}</div>
+</div>
+
+<!-- Line chart || Bar chart -->
+<div ng-if="(module.chartType | lowercase) == 'line' || (module.chartType | lowercase) == 'bar'">
+    <div class="form-group">
+        <label class="col-sm-6">X-axis Label</label>
+        <div class="col-sm-6">{{module.labels}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Type For X-axis Data</label>
+        <div class="col-sm-6">{{module.labelType}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time'">
+        <label class="col-sm-6">Time Show In</label>
+        <div class="col-sm-6">{{module.timeType}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Series(s)</label>
+        <div class="col-sm-6">{{module.series}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Y-axis Label</label>
+        <div class="col-sm-6">{{module.yAxislabel}}</div>
+    </div>
+</div>
+
+<!-- Pie chart || Doughnut chart || Polararea chart || Radar chart -->
+<div ng-if="(module.chartType | lowercase) == 'pie' || (module.chartType | lowercase) == 'doughnut' || (module.chartType | lowercase) == 'polararea' || (module.chartType | lowercase) == 'radar' || (module.chartType | lowercase) == 'pyramid' ">
+    <div class="form-group">
+        <label class="col-sm-6">Label</label>
+        <div class="col-sm-6">{{ module.labels }}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Series</label>
+        <div class="col-sm-6">{{ module.series }}</div>
+    </div>
+</div>
+
+<!-- Scatter -->
+<div ng-if="(module.chartType | lowercase) == 'scatter'">
+    <div class="form-group">
+        <label class="col-sm-6">Label</label>
+        <div class="col-sm-6">{{module.labels}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Type For X-axis Data</label>
+        <div class="col-sm-6">{{module.labelType}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time'">
+        <label class="col-sm-6">Time Show In</label>
+        <div class="col-sm-6">{{module.timeType}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Series(s)</label>
+        <div class="col-sm-6">{{module.series}}</div>
+    </div>
+
+    <!-- <div class="form-group">
+        <label class="col-sm-6">Shape</label>
+        <div class="col-sm-6">{{module.shape[module.series]}}</div>
+    </div> -->
+</div>
+
+<!-- stackedbar chart || Bar chart -->
+<div ng-if="(module.chartType | lowercase) == 'stackedbar' || (module.chartType | lowercase) == 'stackedbarhorizontal' || module.chartType == 'MultiLine'">
+    <div class="form-group">
+        <label class="col-sm-6">X-axis Label</label>
+        <div class="col-sm-6">{{module.labels}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Type For X-axis Data</label>
+        <div class="col-sm-6">{{module.labelType}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time'">
+        <label class="col-sm-6">Time Show In</label>
+        <div class="col-sm-6">{{module.timeType}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Y-axis Series</label>
+        <div class="col-sm-6">{{module.ySeries}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Series</label>
+        <div class="col-sm-6">{{module.series}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Y-axis Label</label>
+        <div class="col-sm-6">{{module.yAxislabel}}</div>
+    </div>
+</div>
+
+<!-- Line + Bar chart -->
+<div ng-if="module.chartType == 'LinePlushBar'">
+    <div class="form-group">
+        <label class="col-sm-6">X-axis Label</label>
+        <div class="col-sm-6">{{module.labels}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Type For X-axis Data</label>
+        <div class="col-sm-6">{{module.labelType}}</div>
+    </div>
+
+    <div class="form-group" ng-if="module.labelType == 'time'">
+        <label class="col-sm-6">Time Show In</label>
+        <div class="col-sm-6">{{module.timeType}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Line Series</label>
+        <div class="col-sm-6">{{module.lineSeries}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Line Series Unit</label>
+        <div class="col-sm-6">{{module.lineUnit}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Bar Series</label>
+        <div class="col-sm-6">{{module.barSeries}}</div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-6">Units</label>
+    <div class="col-sm-6">{{module.chartUnit}}</div>
+</div>
+
+<!-- <div class="form-group">
+    <label class="col-sm-6">Apply fix ordering</label>
+    <div class="col-sm-6">{{module.fixOrder}}</div>
+</div> -->
+
+
+
+<div class="form-group">
+    <label class="col-sm-6">Auto adjust unit</label>
+    <div class="col-sm-6">{{module.chartUnitAdjustFlag}}</div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-sm-6">Is Clickable</label>
+    <div class="col-sm-6">{{module.clickable}}</div>
+</div>
+
+<div ng-if="module.clickable">
+    <div class="form-group">
+        <label class="col-sm-6">ToolTip</label>
+        <div class="col-sm-6">{{module.clickableTooltip}}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-6">Page</label>
+        <div class="col-sm-6">{{redirectPage}}</div>
+    </div>
+</div>

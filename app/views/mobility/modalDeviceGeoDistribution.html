@@ -1,0 +1,81 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <!-- <a class="pull-right" ng-click="cancel()"><i class="fa fa-times"></i></a> -->
+        <div class=" pull-right">
+            <span class="ibox-tools dropdown" uib-dropdown class="">
+                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                    <span class="pull-right label label-primary">Export</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="dataTableExport(modelRawData,'excel', 'Detail ')">Export to Excel</a>
+                    </li>
+                    <li>
+                        <a ng-click="dataTableExport(modelRawData,'csv', 'Detail')">Export to CSV</a>
+                    </li>
+                </ul>
+            </span>
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="wrapper wrapper-content animated fadeIn" >
+            <div class="ibox-title">
+                <form class="form-inline">
+                    <div class="form-group"><b>CellID: </b>
+                        {{cellid}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    
+                    <div class="form-group"><b>Usage: </b>
+                        {{Usage}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>Count: </b>
+                        {{Count}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>Attach Total: </b>
+                        {{attachTotal}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>Attach Failure: </b>
+                        {{attachFailure}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>PDP Total: </b>
+                        {{PDPToal}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>PDP Failure: </b>
+                        {{PDPFailure}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </form>
+            </div>
+            <div class="ibox-content">
+                <table datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>CellID</th>
+                            <th>App</th>
+                            <th>Sessions</th>
+                            <th>Duration(Min.)</th>
+                            <th>Usage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="element in modelData track by $index">
+                            <td>{{ element.cellid }}</td>
+                            <td>{{ element.App }}</td>
+                            <td>{{ element.Sessions }}</td>
+                            <td>{{ element.Duration }}</td>
+                            <td>{{ element.Usage }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" ng-click="cancel()">Close</button>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+<div class="wrapper-content animated fadeIn" ng-controller="userSegmentAnalyticsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+                    <uib-tab  heading="Handset type Distribution" ng-click="tabSelected('RAT')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                       <div class="col-md-12">
+                                            <div class="ibox float-e-margins">
+                                                <div class="pull-right">
+                                                    <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                        <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                            <span class="pull-right label label-primary">Export</span>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a ng-click="dataNestedExport(exportHandsetCapabilityDistribution,'excel', 'Handset Capability Distribution')">Export to Excel</a>
+                                                            </li>
+                                                            <li>
+                                                                <a ng-click="dataNestedExport(exportHandsetCapabilityDistribution,'csv', 'Handset Capability Distribution')">Export to CSV</a>
+                                                            </li>
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                        
+                                                <div class="ibox-content">
+                                                     <div loading-icon ng-if="loadingHandsetStackedBarDiv"></div>
+                                                    <div ng-if="DataHandsetStackedBarDiv">
+                                                        <highchart id="chart2" config="HandsetStackedBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataHandsetStackedBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </uib-tab> 
+                    
+                    <uib-tab  heading="Multiple Device" ng-click="tabSelected('multipleDevice')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="pull-right">
+                                        <span class="ibox-tools dropdown" uib-dropdown class="">
+                                            <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                <span class="pull-right label label-primary">Export</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a ng-click="dataNestedExport(exportMultipleDevice,'excel', 'Multiple Device')">Export to Excel</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="dataNestedExport(exportMultipleDevice,'csv', 'Multiple Device')">Export to CSV</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </div>
+                                        
+                                    <div class="ibox-content">
+                                        <div loading-icon ng-if="loadingMultipleDevicePieDiv"></div>
+                                            <div ng-if="DataMultipleDevicePieDiv" >
+                                                <div class="col-md-4" ng-repeat="element in multipleDeviceDataConfig track by $index">
+                                                    <div class="ibox float-e-margins">
+                                                        <div class="ibox-content">
+                                                            <h3>Segment: {{element.series[0].name}}</h3>
+                                                            <highchart id="$index" config="element" ></highchart>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div no-data-found ng-if="noDataMultipleDevicePieDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </uib-tab> 
+                    
+                    <!--<tab  heading="App Segment" ng-click="tabSelected('appSegment')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="col-md-12">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingAppsSegmentBarDiv"></div>
+                                                    <div ng-if="DataAppsSegmentBarDiv">
+                                                        <highchart id="chart2" config="AppsSegmentBarChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataAppsSegmentBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    -->
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

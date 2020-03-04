@@ -1,0 +1,293 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin: 10px 0 10px;">Home </h2>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row" ng-if="favoriteList.length > 0">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Favorite</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="col-md-2" ng-repeat="item in favoriteList">
+                        <a class="btn btn-block btn-social btn-linkedin" ng-if="item.pageType == 'dashboards'" ui-sref="index.dashboards({id: item._id})" title="{{item.name}}" style="padding: 3px 0 3px 38px;">
+                            <span class="fa fa-star" style="top: -4px;"></span> {{item.name}}
+                        </a>
+
+                        <a class="btn btn-block btn-social btn-linkedin" ng-if="item.pageType == 'report'" ui-sref="index.reports({id: item._id})" title="{{item.name}}" style="padding: 3px 0 3px 38px;">
+                            <span class="fa fa-star" style="top: -4px;"></span> {{item.name}}
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-repeat="(index, main) in categoryList">
+        <div class="col-lg-3" ng-repeat="item in main track by $index">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="widget style1 lazur-bg" style="padding:6px 10px;">
+                        <div class="row vertical-align">
+                            <div class="col-xs-3">
+                                <i class="fa {{item.icon}} fa-3x"></i>
+                            </div>
+                            <div class="col-xs-9">
+                                <h3 class="font-bold">{{item.name}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <ul class="todo-list m-t small-list" style="font-weight: bold;">
+                        <li ng-repeat="menu in item.list track by $index">
+                            <!-- Report Page {{menu.pageType}} {{menu.type}}  {{menu.name}} -->
+                            <a ui-sref="index.reports({id: menu._id})" ng-if="menu.pageType == 'report' && menu.type == 'dynamic'"><span class="m-l-xs">{{menu.name}}</span> </a>
+
+                            <a ui-sref="index.staticreport({id: menu._id})" ng-if="menu.pageType == 'report' && menu.type == 'static'">
+                                <span class="m-l-xs">{{menu.name}}</span>
+                            </a>
+
+                            <!-- Analytics Page-->
+                            <a ui-sref="index.analytics({id: menu._id})" ng-if="menu.pageType == 'analytics' && menu.type == 'dynamic'"><span class="m-l-xs">{{menu.name}}</span> </a>
+                            
+                            <a ui-sref="index.staticanalysis({id: menu._id})" ng-if="menu.pageType == 'analytics' && menu.type == 'static'">
+                                <span class="m-l-xs">{{menu.name}}</span>
+                            </a>
+
+
+                            <a ui-sref="index.dashboards({id: menu._id})" ng-if="menu.pageType == 'dashboard' && menu.type == 'dynamic'"><span class="m-l-xs">{{menu.name}}</span> </a>
+                            
+                        </li>
+                        <!-- <li>
+                            <span class="m-l-xs">Go to shop and find some products.</span>
+
+                        </li>
+                        <li>
+                            <span class="m-l-xs">Send documents to Mike</span>
+                        </li>
+                        <li>
+                            <span class="m-l-xs">Go to the doctor dr Smith</span>
+                        </li>
+                        <li>
+                            <span class="m-l-xs">Plan vacation</span>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="col-lg-4">
+                        <a ui-sref="index.dashboardlist">
+                            <div class="widget style1 navy-bg">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <!-- <i class="fa fa-th-large fa-5x"></i> -->
+                                        <i class="fa fa-area-chart fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <!-- <span> Today degrees </span> -->
+
+                                        <h2 class="font-bold">Dashboard</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <a ui-sref="index.reportslist">
+                            <div class="widget style1 lazur-bg">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-bar-chart-o fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <!-- <span> Today degrees </span> -->
+
+                                        <h2 class="font-bold">Reports</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <a ui-sref="index.analysislist">
+                            <div class="widget style1 yellow-bg" style="background-color:#127172">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-pie-chart fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <!-- <span> Today degrees </span> -->
+                                        <h2 class="font-bold">Analytics</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div ng-if="currentUser.userType != 'user'">
+                        <div class="col-lg-4">
+                            <a ui-sref="index.userlist">
+                                <div class="widget style1 navy-bg">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-user fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">User</h2>
+                                            <span> Management </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <a ui-sref="index.grouplist">
+                                <div class="widget style1 lazur-bg">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-users fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">Group</h2>
+                                            <span> Management </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <a ui-sref="index.staginglist">
+                                <div class="widget style1 yellow-bg" style="background-color:#127172">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-line-chart fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">Staging</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <a ui-sref="index.statementlist">
+                                <div class="widget style1 navy-bg">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-cog fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">Statements</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <a ui-sref="index.modulelist">
+                                <div class="widget style1 lazur-bg">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-table fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">Modules</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-4" ng-if="currentUser.userType =='system administrator'">
+                            <a ui-sref="index.systemmaintenance" >
+                                <div class="widget style1 yellow-bg" style="background-color:#127172">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <i class="fa fa-wrench fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-right">
+                                            <h2 class="font-bold">System Maintenance</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row" ng-if="userProfile.userType != 'user' && userProfile.userType != 'corporate user' && userProfile.userType != 'circle user'">
+                        <div class="col-lg-2">
+                            <div class="widget btn-info p-lg text-center">
+                                <div class="btn m-b-md" ng-click="goto('grouplist')">
+                                    <i class="fa fa-users fa-4x"></i>
+                                    <h3 class="font-bold no-margins">Group <br>Management</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="widget btn-default p-lg text-center">
+                                <div class="btn m-b-md" ng-click="goto('userlist')">
+                                    <i class="fa fa-user fa-4x"></i>
+                                    <h3 class="font-bold no-margins">User <br>Management</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="widget btn-warning p-lg text-center" style="background-color:#F781F3;">
+                                <div class="btn m-b-md" ng-click="goto('staginglist')">
+                                    <i class="fa fa-pie-chart fa-4x"></i>
+                                    <h3 class="font-bold no-margins">Staging</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row" ng-if="userProfile.userType != 'user'  && userProfile.userType != 'corporate user' && userProfile.userType != 'circle user'">
+                        <div class="col-lg-2">
+                            <div class="widget btn-success p-lg text-center">
+                                <div class="btn m-b-md" ng-click="goto('statementlist')">
+                                    <i class="fa fa-cog fa-4x"></i>
+                                    <h3 class="font-bold no-margins">Statements</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="widget btn-primary p-lg text-center">
+                                <div class="btn m-b-md" ng-click="goto('modulelist')">
+                                    <i class="fa fa-cog fa-4x"></i>
+                                    <h3 class="font-bold no-margins">Modules</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="widget lazur-bg p-lg text-center">
+                                <div class="btn m-b-md">
+                                    <i class="fa fa-wrench fa-4x"></i>
+                                    <h3 class="font-bold no-margins">Configure</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

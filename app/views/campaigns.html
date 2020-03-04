@@ -1,0 +1,87 @@
+<div class="row wrapper border-bottom white-bg">
+    <h2 class="pull-left" style="margin:10px 0 0 0;">Home / </h2>
+    <h3 class="pull-left" style="margin:16px 0 13px 8px;">Campaigns</h3>
+</div>
+
+<div class="wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Campaigns</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" name="myForm" role="form" ng-submit="save(data)">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" ng-model="data.name" placeholder="Name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Target rule</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.targetRule" ng-change="changeGroup(data.targetRule)" required>
+                                    <option value="">Select</option>
+                                    <option value="{{item._id}}" ng-repeat="item in campaignrulesArr">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="realtime">
+                            <label class="col-sm-2 control-label">Realtime</label>
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-info btn-circle"><i class="fa fa-check"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="optionsArr.length > 0">
+                            <label class="col-sm-2 control-label">Schedule</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" ng-model="data.schedule" required>
+                                    <option value="">Select</option>
+                                    <option ng-repeat="item in optionsArr">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Start Date</label>
+                            <div class="col-sm-4">
+                                <input type="datetime" class="form-control" date-time view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" format="YYYY-MM-DD" ng-model="data.startDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">End Date</label>
+                            <div class="col-sm-4">
+                                <input type="datetime" class="form-control" date-time view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" format="YYYY-MM-DD" ng-model="data.endDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Message</label>
+                            <div class="col-sm-4">
+                                <textarea class="form-control" placeholder="Message" ng-model="data.message" rows="5"> </textarea>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label>Fields</label>
+                                <p class="pointer" ng-repeat="val in fields" ng-click="appedToMsg(val.name)">{{val.name}}</p>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button" ui-sref="index.campaignslist">Cancel</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

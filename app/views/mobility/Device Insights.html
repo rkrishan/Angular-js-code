@@ -1,0 +1,434 @@
+<div class="wrapper-content animated fadeIn" ng-controller="deviceInsightsCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <!-- <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>-->
+                
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="input-group pull-right">
+                    <form role="form" class="form-inline">
+                        <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
+                            <div class="form-group" >
+                                <input id="startDate" type="text" class="form-control input-xs" ng-model="date.start" required placeholder="From Date"/>
+                            </div>
+                            <div class="form-group">
+                                <input id="endDate" type="text" class="form-control input-xs" ng-model="date.end" required  placeholder="To Date">
+                            </div>
+                            <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <p><!-- <b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp; --><b>Device:</b> {{deviceinfo}}</p>
+        </div>
+    </div>
+    
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="tabs-container" >
+                <uib-tabset >
+
+                    <uib-tab  heading="Device Distribution" ng-click="tabSelected('deviceDistribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                for Date&nbsp;:&nbsp;{{date.end}}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Device wise Total Usage</h5>
+                                                <export-module filename="'Device wise Total Usage'" dataobj="exportDeviceTotalUsage" ></export-module>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div loading-icon ng-if="loadingDeviceTotalUsagePieDiv"></div>
+                                                <div ng-if="DataDeviceTotalUsagePieDiv" >
+                                                    <highchart id="usage" config="deviceTotalUsage" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noDataDeviceTotalUsagePieDiv"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Device wise Total Users</h5>
+                                                <export-module filename="'Device wise Total Users'" dataobj="exportDevicewiseUsers" ></export-module>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div loading-icon ng-if="loadingDeviceTotalUsersPieDiv"></div>
+                                                <div ng-if="DataDeviceTotalUsersPieDiv" >
+                                                    <highchart id="Users" config="deviceTotalUsers" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noDataDeviceTotalUsersPieDiv"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>Avg. Usage per Device</h5>
+                                                <export-module filename="'Avg. Usage per Device'" dataobj="exportAvgUsagePerDevice"></export-module>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div loading-icon ng-if="loadingDeviceTotalUsagePieDiv"></div>
+                                                <div ng-if="DataDeviceTotalUsagePieDiv" >
+                                                    <highchart id="usage" config="deviceAvgUsage" ></highchart>
+                                                </div>
+                                                <div no-data-found ng-if="noDataDeviceTotalUsagePieDiv"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+
+                    <uib-tab  heading="Device Penetration Graph" ng-click="tabSelected('DevicePenetration')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportDeviceCountMultiLineChart,'excel', 'Device Penetration')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportDeviceCountMultiLineChart,'csv', 'Device Penetration')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingPenetrationDiv"></div>
+                                        <div class="ibox float-e-margins" ng-if="dataPenetrationDiv">
+                                             <highchart id="DeviceCountMultiLine" config="DeviceCountMultiLineChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataPenetrationDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-lg-12" >
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="spiner-example" ng-if="loadingPenetrationTableDiv">
+                                            <div snipper-circle></div>
+                                        </div>
+                                        <div class="table-responsive"  ng-if="dataPenetrationTableDiv">
+                                            <table id="top10Models" class="table table-striped table-hover table-bordered no-margins">
+                                                <thead >
+                                                    <tr>
+                                                        <th style="text-align:center; background-color: rgba(0, 0, 0, 0.20); border: 1px solid grey;" ng-repeat="colHeaders in topModelsObj"  colspan='{{colSpan}}'>{{colHeaders.RecordDate | date : 'yyyy-MM-dd'}}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="text-align:center; background-color: rgba(0, 0, 0, 0.15);  border: 1px solid grey;" ng-repeat="data in colHeader track by $index" >{{data}}</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat= 'data in keysTopModel '>
+                                                        <td style="text-align:center; border: 1px solid rgba(0, 0, 0, 0.15);" ng-repeat="rowData in data track by $index ">{{rowData}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <span no-data-found ng-if="noDataPenetrationTableDiv"></span>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Top devices by penetration" ng-click="tabSelected('DevicePenetrationTable')">
+                        <div class="panel-body">                            
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content">
+                                    <div>
+                                        <h2 class="m-b-xs">Top Devices by Penetration</h2>for Date&nbsp;:&nbsp;{{date.end}}
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportDevicePenetrationCountTable,'excel', 'Top Devices by Penetration')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportDevicePenetrationCountTable,'csv', 'Top Devices by Penetration')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <table datatable="ng" dt-options="penetrationTableOptions" class="table table-striped table-bordered table-hover dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th>Device</th>
+                                                <th>Penetration %</th>
+                                                <th>Traffic %</th>
+                                                <th>Total Traffic (GB)</th>
+                                                <th>Avg Traffic (MB)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="element in dataset">
+                                                <td>{{ element.device }}</td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.penetration }}<i class="text-{{element.textColorPenetration}} fa fa-level-{{element.indicatorStatusPenetration}}" title="{{element.comparedPenetration}} % {{element.indicatorStatusPenetration}}, as compared to {{date.start}}"></i></td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.traffic }}<i class="text-{{element.textColorTraffic}} fa fa-level-{{element.indicatorStatusTraffic}}" title="{{element.comparedTraffic}} % {{element.indicatorStatusTraffic}}, as compared to {{date.start}}"></i></td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.maxtraffic }}<i class="text-{{element.textColorMaxTraffic}} fa fa-level-{{element.indicatorStatusMaxTraffic}}" title="{{element.comparedMaxTraffic}} % {{element.indicatorStatusMaxTraffic}}, as compared to {{date.start}}"></i></td>
+                                                <td style="font-size:{{ element.fontsize}}px;" >{{ element.avgtraffic }}<i class="text-{{element.textColorAvgTraffic}} fa fa-level-{{element.indicatorStatusAvgTraffic}}" title="{{element.comparedAvgTraffic}} % {{element.indicatorStatusAvgTraffic}}, as compared to {{date.start}}"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab heading="Penetration vs Usage" ng-click="tabSelected('UsageVsUsers')">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataExport(exportPenetrationVsUsageChart,'excel', 'Penetration vs Usage')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataExport(exportPenetrationVsUsageChart,'csv', 'Penetration vs Usage')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingPenetrationVsUsageDiv"></div>
+                                        <div class="ibox float-e-margins" ng-if="dataPenetrationVsUsageDiv">
+                                             <highchart id="PenetrationVsUsage" config="PenetrationVsUsageChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDataPenetrationVsUsageDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <uib-tab  heading="Distribution" ng-click="tabSelected('Distribution')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12 ">
+                                <div class="ibox float-e-margins">
+                                    <span class="ibox-tools dropdown" uib-dropdown class="">
+                                        <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                            <i class="fa fa-save fa-lg"></i>
+                                        </a>
+                                        <ul class=" dropdown-menu">
+                                            <li>
+                                                <a ng-click="dataNestedExport(exportDistributionMultilineChart,'excel', 'Distribution')">Export to Excel</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="dataNestedExport(exportDistributionMultilineChart,'csv', 'Distribution')">Export to CSV</a>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                                        
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div>
+                                            <h2 class="m-b-xs">Usage Distribution
+                                                <span class="pull-right"><h5><small>Click Stack for Segment wise Distribution</small></h5></span>
+                                            </h2>
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingDistributionMultiineDiv"></div>
+                                                    <div ng-if="DataDistributionMultiineDiv==true">
+                                                        <highchart id="chart2" config="UsageDistributionMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataDistributionMultiineDiv"></div>
+                                                    <!--<div class="text-center text-navy"><small>Top 10 Devices</small></div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingDistributionBarDiv"></div>
+                                                    <div ng-if="DataDistributionBarDiv==true">
+                                                        <highchart id="chart1" config="UsageDistributionBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataDistributionBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div>
+                                            <h2 class="m-b-xs">Penetration Distribution
+                                            <span class="pull-right"><h5><small>Click Stack for Segment wise Distribution</small></h5></span>
+                                            </h2>
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-8">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingDistributionMultiineDiv"></div>
+                                                    <div ng-if="DataDistributionMultiineDiv==true">
+                                                        <highchart id="chart2" config="CountDistributionMultiineChartConfig" ></highchart>
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataDistributionMultiineDiv"></div>
+                                                    <div class="text-center text-navy"><small>Top 10 Devices</small></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" ng-if="showBar">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div loading-icon ng-if="loadingDistributionBarDiv"></div>
+                                                    <div ng-if="DataDistributionBarDiv==true">
+                                                        <highchart id="chart1" config="CountDistributionBarChartConfig" ></highchart>   
+                                                    </div>
+                                                    <div no-data-found ng-if="noDataDistributionBarDiv"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    
+                    <!-- <uib-tab  heading="Device Capability Vs Plan Users" ng-click="tabSelected('deviceCapability')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class=" dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportDeviceCapabilityStackedBar,'excel', 'Device Capability Vs Plan Users')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportDeviceCapabilityStackedBar,'csv', 'Device Capability Vs Plan Users')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingdeviceCapabilityStackedBarDiv"></div>
+                                        <div ng-if="DatadeviceCapabilityStackedBarDiv">
+                                            <highchart id="chart2" config="deviceCapabilityStackedBarChartConfig" ></highchart>
+                                        </div>
+                                        <div no-data-found ng-if="noDatadeviceCapabilityStackedBarDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> 
+                
+                    <uib-tab  heading="App CEI" ng-click="tabSelected('appCEI')" >
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <div class="pull-right">
+                                            <span class="ibox-tools dropdown" uib-dropdown class="">
+                                                <a class="dropdown-toggle" href uib-dropdown-toggle>
+                                                    <i class="fa fa-save fa-lg"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppCEI,'excel', 'App CEI')">Export to Excel</a>
+                                                    </li>
+                                                    <li>
+                                                        <a ng-click="dataNestedExport(exportAppCEI,'csv', 'App CEI')">Export to CSV</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                        <div loading-icon ng-if="loadingdeviceAppCEIDiv"></div>
+                                        <div ng-if="DatadeviceAppCEIDiv">
+                                            <div class=" pull-right">
+                                                <p ><h5 style="color: #18a689;">%age of Poor CEI</h5></p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>App</th>
+                                                                    <th ng-repeat="elementData in columns track by $index">{{elementData}}</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="rowData in rowDataArray track by $index">
+                                                                    <td ng-repeat="element in rowData track by $index">{{element}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div no-data-found ng-if="noDatadeviceAppCEIDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab> --> 
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+</div>

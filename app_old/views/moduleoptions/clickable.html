@@ -1,0 +1,37 @@
+<div class="form-group">
+    <label class="col-md-2">Title</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Clickable Title" class="form-control" ng-model="module.title" ng-required="true" ng-blur="checkTitle(module.title)">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2">ToolTip</label>
+    <div class="col-md-4">
+        <input type="text" placeholder="Tooltip" class="form-control" ng-model="module.tooltip" ng-required="true">
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label class="col-md-2">Page</label>
+    <div class="col-md-4">
+        <select ng-model="module.page" class="form-control" ng-change="changePage(module.page)" required>
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in redirectionOption" value="{{item.fileId}}|{{item.table}}">{{item.file}} | {{item.page}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2">Icon</label>
+    <div class="col-md-6">
+        <input icheck type="radio" name="icon" value="fa-line-chart" class="form-control" ng-model="module.icon">
+        <i class="fa fa-line-chart"></i>
+         <input icheck type="radio" name="icon" value="fa-pie-chart" class="form-control" ng-model="module.icon">
+        <i class="fa fa-pie-chart"></i>
+         <input icheck type="radio" name="icon" value ="fa-bar-chart" class="form-control" ng-model="module.icon">
+        <i class="fa fa-bar-chart"></i>
+         <input icheck type="radio" name="icon" value ="fa-area-chart" class="form-control" ng-model="module.icon">
+        <i class="fa fa-area-chart"></i>
+    </div>
+</div>

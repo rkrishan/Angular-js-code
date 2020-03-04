@@ -1,0 +1,236 @@
+<div class="wrapper-content animated fadeIn " ng-controller="handoverDistributionCtrl">
+    <!--<div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline" ng-submit="click()">
+                <div class="form-group"><b>Location</b>
+                    <input type="button" value="&darr;" ng-click="location()" />
+                    <div id="location" ng-show="treeLocation" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>RAT</b>
+                    <input type="button" value="&darr;" ng-click="rat()"  />
+                    <div id="rat" ng-show="treeRAT" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Segment</b>
+                    <input type="button" value="&darr;" ng-click="segment()"/>
+                    <div id="segment" ng-show="treeSegment" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group"><b>Device</b>
+                    <input type="button" value="&darr;" ng-click="device()"/>
+                    <div id="device" ng-show="treeDevice" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div class="form-group pull-right">
+                    <div class="input-group ">
+                        <form role="form" class="form-inline">
+                            <div class="form-group pull-right">
+                                <div class="input-group date">
+                                    <input id="datepick" type="datetime" class="form-control" date-time ng-model="date.end" view="date" auto-close="true" placeholder="Select Date" min-view="date" min-Date="minDate" max-Date="maxDate" date-change="changeDate" format="YYYY-MM-DD" watch-direct-changes="true">
+                                </div> 
+                            </div>
+                        </form>
+                    </div>
+                    <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    
+    <div class="row" >
+        <div class="col-lg-9">
+            <span><b>Location:</b> {{locationinfo}}&nbsp;&nbsp;&nbsp;<b>RAT:</b> {{ratinfo}}&nbsp;&nbsp;&nbsp;<b>Segment:</b>{{segmentinfo}}&nbsp;&nbsp;&nbsp;<b>Device:</b> {{deviceinfo}}
+            </span>
+        </div>
+        <div class="col-lg-3">
+            <span class="dropdown col-lg-12" dropdown>
+                <a class="dropdown-toggle count-info pull-right" title="Advance Filter" href dropdown-toggle >
+                    <h3><i class="fa fa-filter"></i></h3>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts  animated fadeInRight ">
+                    <li>
+                        <form class="form-inline" name="myForm" role="form" >
+
+                            <div class="form-group">
+                                <label class="control-label"><h3>Usage &nbsp;:&nbsp; &nbsp; </h3></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.fromUsage" placeholder="&euro;&euro;" style="width:80px;">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.toUsage" placeholder="&euro; &euro;" style="width:80px;">
+                            </div>&nbsp;&nbsp;
+                            <div class="form-group">
+                                <div class="float-e-margins">
+                                    <select ng-model="dynamicPopover.unitUsage" class="input-sm" style="width:80px;">
+                                        <option value="Bytes">Bytes</option>
+                                        <option value="KB">KB</option>
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <form class="form-inline" name="myForm" role="form" >
+
+                            <div class="form-group">
+                                <label class="control-label"><h3>Count &nbsp;:&nbsp; &nbsp; </h3></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-right"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.fromCount" placeholder="&euro;&euro;" style="width:80px;">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;&nbsp;<h3><i class="fa fa-angle-left"></i></h3>&nbsp;&nbsp; </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-sm" ng-model="dynamicPopover.toCount" placeholder="&euro; &euro;" style="width:80px;">
+                            </div>&nbsp;&nbsp;
+                            <div class="form-group">
+                                <div class="float-e-margins">
+                                    <select ng-model="dynamicPopover.unitCount" class="input-sm" style="width:80px;">
+                                        <option value="Unit">Unit</option>
+                                        <option value="K">K</option>
+                                        <option value="M">M</option>
+                                   </select>
+                                </div>
+                            </div>
+                        </form>
+
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <button class="btn btn-primary btn-sm pull-right" type="submit" ng-click='saveFilterOption(dynamicPopover)'>Submit</button>
+                    </li>
+                </ul>
+           </span>
+        </div>
+    </div>
+    -->
+    <div class="row" >
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div>
+                        <h2 class="m-b-xs">3G sites
+                             <span class="pull-right"><a href="" ng-click="dataTableExport('3GSites','excel', '3G Sites')"><span class="pull-right label label-primary">Export</span></a></span>
+                            <span ng-if="loadingCountMapCircleDiv" ng-bind-html="loading.snip" >{{loading.snip}} </span>
+                            <span no-data-found ng-if="noDataCountMapCircleDiv"></span>
+                        </h2>
+                    </div>
+                    
+                    <br/>
+                    <div >
+                        <ui-gmap-google-map id='map' center='mapCount.center' zoom='mapCount.zoom' options='mapCount.options' size="mapCount.size" >
+                            <ui-gmap-circle  ng-repeat="c in circlesCount track by c.id" center="c.center"stroke="c.stroke" fill="c.fill" radius="c.radius" > 
+                            </ui-gmap-circle>
+                        </ui-gmap-google-map>
+                    </div>
+                    <br/>
+                    <h5><p ><i class="fa fa-circle" style="color:#FF0000;"></i>&nbsp; &gt;20000 &nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-circle" style="color:#FFC107;"></i>&nbsp; 20000-5000 &nbsp;&nbsp;&nbsp;&nbsp; 
+                        <i class="fa fa-circle" style="color:#08B21F;"></i>&nbsp; &lt;5000 </p></h5>
+                    <br>
+                    <div class="ibox-content">
+                        <div ng-if="datasetCount.length>0">
+                            <table id="3GSites" datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Cell ID</th>
+                                        <th>Handover</th>
+                                        <th>Latitude</th>
+                                        <th>Longitude</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="element in datasetCount">
+                                        <td>{{ element.cellid }}</td>
+                                        <td>{{ element.Handover }}</td>
+                                        <td>{{ element.latitude }}</td>
+                                        <td>{{ element.longitude }}</td>
+                                        <td>{{ element.Count }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <!--</div>
+    
+    <div class="row">-->
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div>
+                        <h2 class="m-b-xs">High Handover Distribution
+                            <span class="pull-right"><a href="" ng-click="dataTableExport('highHandoverDist','excel', 'High Handover Dist.')"><span class="pull-right label label-primary">Export</span></a></span>
+                            <span ng-if="loadingUsageMapCircleDiv" ng-bind-html="loading.snip">{{loading.snip}}</span>
+                            <span no-data-found ng-if="noDataUsageMapCircleDiv"></span>
+                        </h2>
+                    </div>
+                    <br/>
+                    <p ng-if="infoLine">Showing results for: {{protocol}} {{usage}}</p>
+                    <div>
+                        <ui-gmap-google-map center='highHandoverDist.center' zoom='highHandoverDist.zoom' options='highHandoverDist.options' size="highHandoverDist.size">
+                            <ui-gmap-circle ng-repeat="c in circlesUsage track by c.id" center="c.center" stroke="c.stroke" fill="c.fill" radius="c.radius">
+                            </ui-gmap-circle>
+                        </ui-gmap-google-map>
+                    </div>
+                    <br/>
+                    <h5><p ><i class="fa fa-circle" style="color:#FF0000;"></i>&nbsp; &gt;20000  &nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-circle" style="color:#FFC107;"></i>&nbsp; 20000-5000 &nbsp;&nbsp;&nbsp;&nbsp; 
+                        <i class="fa fa-circle" style="color:#08B21F;"></i>&nbsp; &lt;5000 </p>
+                    </h5>
+                    <br> 
+                    <div class="ibox-content">
+                        <div ng-if="datasetUsage.length>0">
+                            <table id="highHandoverDist" datatable="ng" class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>Cell ID</th>
+                                        <th>Handover</th>
+                                        <th>Latitude</th>
+                                        <th>Longitude</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="element in datasetUsage">
+                                        <td>{{ element.cellid }}</td>
+                                        <td>{{ element.Handover }}</td>
+                                        <td>{{ element.latitude }}</td>
+                                        <td>{{ element.longitude }}</td>
+                                        <td>{{ element.Count }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>

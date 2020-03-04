@@ -1,0 +1,25 @@
+<div ng-controller="infoCtrl">
+	<div ng-if="statement_cep_specta_stream">
+		<p>This is the real time data source (mandatory)</p>
+	</div>
+
+	<div ng-if="statement_cep_specta_aggregation">
+		<p>Select the aggregation operator here (mandatory)</p>
+	</div>
+
+	<div ng-if="statement_cep_specta_filter">
+		<p>Enter filter condition here (optional)</p>
+	</div>
+
+	<div ng-if="statement_cep_specta_groupby">
+		<p>You can select a field to group elements (optional)</p>
+	</div>
+
+	<div ng-if="statement_cep_specta_sortby">
+		<p>Select the sort column (optional)</p>
+	</div>
+
+	<div ng-if="statement_cep_specta_limit">
+		<p>This will limit the number of elements returned by statement (optional)</p>
+	</div>
+</div>

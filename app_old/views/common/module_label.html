@@ -1,0 +1,9 @@
+<div class="form-group">
+    <label class="col-md-2">Label</label>
+    <div class="col-md-4">
+        <select ng-model="module.label" class="form-control" ng-change="labelChange(module.label)">
+            <option value="">- SELECT</option>
+            <option ng-repeat="item in labelArr" value="{{item}}">{{item}}</option>
+        </select>
+    </div>
+</div>
