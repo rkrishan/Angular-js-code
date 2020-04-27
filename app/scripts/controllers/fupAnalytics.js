@@ -222,9 +222,7 @@ function FupAnalyticsBBCtrl($scope, httpService, $filter, $state, dataFormatter,
     
     $scope.selectValue= function(){
         onLoad();
-}    
-
-    
+}     
       
 }
 
@@ -234,8 +232,9 @@ function PotentialUpgradeBBCtrl($scope, $rootScope, httpService, $filter, $state
     ){
 
     var date = new Date();
-    var firstDayofMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    $scope.startDate =  convert(firstDayofMonth)
+    // var firstDayofMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    var previousMonthDate = new Date(date.getFullYear(), date.getMonth()-1, 1);
+    $scope.startDate =  convert(previousMonthDate)
 
 $(".datepicker").datepicker({
     clearBtn : true,
@@ -243,7 +242,7 @@ $(".datepicker").datepicker({
     format: "mm-yyyy",
     viewMode: "months", 
     minViewMode: "months",
-}).datepicker('setDate', new Date());
+}).datepicker('setDate', previousMonthDate);
 
       
 
@@ -257,14 +256,14 @@ $(".datepicker").datepicker({
                 point: {
                     events: {
                         click: function(e){
-                            console.log("value in e",e)
+                            // console.log("value in e",e)
                         var seriesName = e.point.series.name;
                         // console.log("point name ",e.point.name[0])
                         console.log('e', new Date(e.point.category), e, seriesName);
                         var params = {
                             fromDate: $scope.sdate,
                             clickableTooltip: e.point.name,
-                            priority : e.point.name,
+                            Priority : e.point.name,
                             seriesName: seriesName,
                             pageId: $stateParams.id
                         }
@@ -279,15 +278,16 @@ $(".datepicker").datepicker({
             var objArray= response.data;
             // console.log("objArray", objArray);
             $scope.HIGH= 0;
-             $scope.MEDIUM= 0;
-             $scope.LOW= 0;
+            $scope.MEDIUM= 0;
+            $scope.LOW= 0;
+            
             for(var i in objArray){
-                if(objArray[i].priority == "HIGH")
-                    $scope.H= objArray[i].count;
-                else if(objArray[i].priority == "MEDIUM")
-                    $scope.HL= objArray[i].count;
-                else if(objArray[i].Status == "LOW")
-                    $scope.LL= objArray[i].count;
+                if(objArray[i].Priority == "HIGH")
+                $scope.HIGH= objArray[i].Count;
+                else if(objArray[i].Priority == "MEDIUM")
+                $scope.MEDIUM= objArray[i].Count;
+                else if(objArray[i].Priority == "LOW")
+                $scope.LOW= objArray[i].Count;
             }
 
 
@@ -298,29 +298,29 @@ $(".datepicker").datepicker({
                 //for pie chart data
                 for(var i=0; i<objArray.length; i++){
 
-                    if(objArray[i].priority == "HIGH"){
+                    if(objArray[i].Priority == "HIGH"){
 
                         pieChartArray[i]= {
-                            name: objArray[i].priority, 
-                            y: parseFloat(objArray[i].count),
+                            name: objArray[i].Priority, 
+                            y: parseFloat(objArray[i].Count),
                             color: "#F13C59"
                         };
                     }
-                    else if(objArray[i].priority == "MEDIUM"){
+                    else if(objArray[i].Priority == "MEDIUM"){
                         // $scope.HL= objArray[i].Users;
 
                         pieChartArray[i]= {
-                            name: objArray[i].priority, 
-                            y: parseFloat(objArray[i].count),
+                            name: objArray[i].Priority, 
+                            y: parseFloat(objArray[i].Count),
                             color: '#52D726'
                         };
                     }
-                    else if(objArray[i].priority == "LOW"){
+                    else if(objArray[i].Priority == "LOW"){
                         // $scope.LH= objArray[i].Users;
 
                         pieChartArray[i]= {
-                            name: objArray[i].priority, 
-                            y: parseFloat(objArray[i].count),
+                            name: objArray[i].Priority, 
+                            y: parseFloat(objArray[i].Count),
                             color: "#007ED6"
                         };
                     }
@@ -339,7 +339,7 @@ $(".datepicker").datepicker({
                 $scope.pieChartConfig= {
                     "options" : pieChartOpt,
                     series: [{
-                        name: "priority",
+                        name: "Priority",
                         colorByPoint: true,
                         showInLegend:true,
                         data: pieChartArray
@@ -367,7 +367,7 @@ $(".datepicker").datepicker({
     function defaultLoad(){
 
         $scope.sdate = $scope.startDate;
-        var potentailUpgradeURL =  globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br1"+"&fromDate="+$scope.sdate+"T00:00:00.000Z";
+        var potentailUpgradeURL =  globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br0"+"&fromDate="+$scope.sdate+"T00:00:00.000Z";
         console.log(potentailUpgradeURL)
         getData(potentailUpgradeURL);
 
@@ -392,23 +392,8 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
     $scope.select.rowCount= '50';
     $scope.total_count = 0;
 
-
-
-
-    //----------------------------------------------  Getting current and previous month name--------------------
-
-
-    var now = new Date();
-    // var currentYear = (new Date).getFullYear();
-    $scope.currentMonth = GetMonthName((new Date).getMonth());
-    $scope.lastMonth = GetMonthName((now.getMonth() - 1));
-
-    function GetMonthName(monthNumber) {
-        monthNumber = monthNumber < 0 ? 11 : monthNumber;
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[monthNumber];
-      }
-
+    var downLoadUrl;
+    
     //--------------------------------------------------------------------------------------------------------------
 
     $scope.customerID;
@@ -416,6 +401,7 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
     var cities = [];
     var areas = [];
     var plans = [];
+
 
     $scope.tree = {
         city: false,
@@ -436,6 +422,7 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
     }
 
     
+
  //------------------------------------------------ City Filter -----------------------------------------------------
  var selectedCities = [];
  $scope.selectedCities = selectedCities;
@@ -453,15 +440,68 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
              return node.data.key;
          });
          $scope.selectedCities = selectedCities;
+         /** Cities */
+         var citiesArea = [];
+         var nodeNames = [];
+         if (selectedCities.length == 0 ) {
+             citiesArea = areas;
+         } else {
+             _.forEach(selectedCities, function(city) {
+                 var area = _.filter(areas, function(item) {
+                     return item.City == city;
+                 });
+                 citiesArea = citiesArea.concat(area);
+             });
+
+         }
+         var areaTree =$("#area").dynatree("getTree");
+         areaTree.options.children = citiesArea;
+         areaTree.reload();
+         $scope.selectedAreas = [];
+
+
+
+         /** Plans */
+         var citiesPlans = [];
+         if (selectedCities.length == 0 ) {
+             citiesPlans = plans;
+         } else {
+             _.forEach(plans, function(plan) {
+                 var objType = {
+                     title: plan.title,
+                     key: plan.key,
+                     children: []
+                 };
+                 _.forEach(plan.children, function(validity) {
+                     var objValidity = {
+                         title: validity.title,
+                         key: validity.key
+                     };
+                     var items = _.filter(validity.children, function(item) {
+                         return selectedCities.indexOf(item.City) > -1;
+                     });
+                     if (items.length > 0) {
+                         objValidity.children = items;
+                         objType.children.push(objValidity);
+                     }
+                 });
+                 if (objType.children.length > 0) {
+                     citiesPlans.push(objType);
+                 }
+             });
+         }
+         var planTree =$("#plan").dynatree("getTree");
+         planTree.options.children = citiesPlans;
+         planTree.reload();
+         $scope.selectedPlans = [];
      }
  }
-
  function getRegionCities(){
-    var params = 'collection=lku_city&op=select&db=datadb';
+     var params = 'collection=lku_region_city&op=select&db=datadb';
      httpService.get(globalConfig.dataapiurl + params).then(function (res) {
          _.forEach(res.data, function(item){
-             item.title = item.City;
-             item.key = item.City;
+             item.title = item.city;
+             item.key = item.city;
          });
          cityList.children = res.data;
          cities = cityList.children;
@@ -492,8 +532,7 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
  }
 
  function getArea(){
-    var params = 'collection=lku_area&op=select&db=datadb';
-    // console.log("Arae filter ",globalConfig.dataapiurl + params)
+     var params = 'collection=lku_area&op=select&db=datadb';
      httpService.get(globalConfig.dataapiurl + params).then(function (res) {
          _.forEach(res.data, function(item){
              item.title = item.Area;
@@ -505,43 +544,94 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
      });
  }
  getArea();
-
+ 
+ 
 // --------------------------------------------------- Plan Filter ----------------------------------------------------------
- // Plan filter 
 
  var selectedPlans = [];
- $scope.selectedPlans = selectedPlans;
- var planList = {
-     checkbox: true,
-     selectMode: 3,
-     classNames: {connector: "dynatree-connector", nodeIcon: ''},
-     // children: [],
-     onSelect: function(select, node) {
-         var selNodes = node.tree.getSelectedNodes();
-                
-         // Get a list of all selected segment, and convert to a key array:
-         selectedPlans = $.map(selNodes, function(node){
-             return node.data.key;
-         });
-         $scope.selectedPlans = selectedPlans;
-     }
-    
- }
+    $scope.selectedPlans = selectedPlans;
+    var planList = {
+        checkbox: true,
+        selectMode: 3,
+        classNames: {connector: "dynatree-connector", nodeIcon: ''},
+        // children: [],
+        onSelect: function(select, node) {
+            var selNodes = node.tree.getSelectedNodes();
+                   
+            // Get a list of all selected nodes, and convert to a key array:
+            selectedPlans = $.map(node.tree.getSelectedNodes(), function(node){
+                return node.data.key;
+            });
+            /** Plans */
+            var citiesPlans = [];
+            if (selectedPlans.length > 0 ) {
+                _.forEach(plans, function(plan) {
+                    _.forEach(plan.children, function(validity) {
+                        _.forEach(validity.children, function(item) {
+                            if( selectedPlans.indexOf(item.title) > -1 && citiesPlans.indexOf(item.title) == -1) {
+                                citiesPlans.push(item.title);
+                            }
+                        });
+                    });
+                });
+            }
+            $scope.selectedPlans = selectedPlans = citiesPlans;
+        }
+    }
 
- function getPlan(){
-    var params = 'collection=lku_plan_city&op=select&db=datadb';
-    // console.log("Plan filter ",globalConfig.dataapiurl + params)
-     httpService.get(globalConfig.dataapiurl + params).then(function (res) {
-         _.forEach(res.data, function(item){
-             item.title = item.Plan;
-             item.key = item.Plan;
-         });
-         planList.children = res.data;
-         plans = planList.children;
-         $("#plan").dynatree(angular.copy(planList));
-     })
- }
- getPlan();
+    function removeDuplicates(array, key) {
+        var lookup_t = {};
+        var result = [];
+        for(var i=0; i<array.length; i++) {
+            if(!lookup_t[array[i][key]]){
+                lookup_t[array[i][key]] = true;
+                result.push(array[i]);
+            }
+        }
+        return result;
+    }
+
+    function getPlan(){
+        var params = 'collection=lku_plan_city&op=select&db=datadb';
+        httpService.get(globalConfig.dataapiurl + params).then(function (res) {
+            var types = _.map(res.data, function(item) {
+                return item.PlanType;
+            });
+            types = _.uniq(types);
+
+            var validities = _.map(res.data, function(item) {
+                return item.Validity;
+            });
+            validities = _.uniq(validities);
+            var pList = [];
+            _.forEach(types, function(type) {
+                var objType = {
+                    title: type,
+                    key: type,
+                    children: []
+                };
+                _.forEach(validities, function(validity) {
+                    var objValidity = {
+                        title: validity,
+                        key: validity
+                    };
+                    var items = _.filter(res.data, function(item) {
+                        item.title = item.key = item.Plan;
+                        return item.PlanType == type && item.Validity == validity;
+                    });
+                    if (items.length > 0) {
+                        objValidity.children = removeDuplicates(items, 'Plan');
+                        objType.children.push(objValidity);
+                    }
+                });
+                pList.push(objType);
+            });
+            planList.children = pList;
+            plans = planList.children;
+            $("#plan").dynatree(angular.copy(planList));
+        });
+    }
+    getPlan();
 
 
 
@@ -549,9 +639,9 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
 
     function cut(str, end){
         return str.substr(0,end);
-      }
+    }
 
-    function formatDate(date) {
+    function formatDate(date){
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
@@ -565,28 +655,62 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
         return [year, month, day];
     }
 
-
     function onLoad(){
+
         $scope.loading = true;
         $scope.dataLoaded = false;
         $scope.noData = false;
         $scope.startDate = '';
         var startDate = '';
 
-        var _url =            globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br2test";
-        var total_count_url =  globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652gh876fdc0";
+        var _url =            globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br2";
+        var total_count_url =  globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br1";
+        downLoadUrl =      globalConfig.pullfilterdataurl+"af01dcb6249d89f4a652m4p4u4br3";
 
         if( $stateParams.params ) {
-
             startDate = $filter('date')( $stateParams.params.fromDate, "yyyy-MM-dd");
             $scope.startDate = startDate;
             _url += "&fromDate="+startDate+"T00:00:00.000Z";
             total_count_url +="&fromDate="+startDate+"T00:00:00.000Z";
+            downLoadUrl +="&fromDate="+startDate+"T00:00:00.000Z";
 
-            var priority="['"+$stateParams.params.priority +"']"
+            var priority="['"+$stateParams.params.Priority +"']"
             _url += '&Priority='+encodeURIComponent(priority);
-            total_count_url += '&priority='+encodeURIComponent(priority);
+            total_count_url += '&Priority='+encodeURIComponent(priority);
+            downLoadUrl += '&Priority='+encodeURIComponent(priority);
         }
+
+
+        var monthsName = [];
+        function converterToMonthName(s) {
+            var months_update = [];
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            // s = "2020-01-01";
+            s =  s.replace(/-/g, '/');
+
+            // currentDate = new Date();
+            // currentDate.setMonth(new Date().getMonth()-i);
+            var d = new Date(s); 
+
+            // console.log(d)
+
+            months_update.push(months[d.getMonth()])
+
+            d.setMonth(d.getMonth()-1);
+
+
+            // console.log("months number ",d.getMonth())
+            
+           
+            months_update.push(months[d.getMonth()])  
+            return  months_update
+
+        }
+
+        monthsName = converterToMonthName($scope.startDate)
+        $scope.currentMonth = monthsName[0];
+        $scope.lastMonth = monthsName[1];
+
 
         if($scope.customerID){
 
@@ -602,6 +726,7 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
         }
 
         if(selectedAreas.length > 0) {
+            console.log("Selcted ARea NAme ",selectedAreas)
             var Area = JSON.stringify(selectedAreas).replace(/"/g,"'");
             _url += "&Area="+encodeURIComponent(Area);
             total_count_url +="&Area="+encodeURIComponent(Area);
@@ -610,10 +735,26 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
         if(selectedPlans.length > 0) {
             var Plan = JSON.stringify(selectedPlans).replace(/"/g,"'");
             _url += "&Plan="+encodeURIComponent(Plan);
-            total_count_url +="&Area="+encodeURIComponent(Area);
+            total_count_url +="&Plan="+encodeURIComponent(Plan);
         }
 
         _url = _url+"&pageNo="+$scope.currentPage+"&pageSize="+$scope.select.rowCount;
+
+        if ( selectedCities.length > globalConfig.citySize_Pot  ) {
+            $scope.noData = true;
+            $scope.loading = false;
+            swal("Cities should be maximum "+globalConfig.citySize_Pot);
+        } else if( selectedAreas.length > globalConfig.areaSize_Pot ) {
+            $scope.noData = true;
+            $scope.loading = false;
+            swal("Area should be maximum "+globalConfig.areaSize_Pot);
+        } else if ( selectedPlans.length > globalConfig.planSize_Pot) {
+            $scope.noData = true;
+            $scope.loading = false;
+            swal("Plan should be maximum "+globalConfig.planSize_Pot);
+        }
+        else{
+
 
         httpService.get(_url).then(function(res){
             $scope.loading = false;
@@ -630,9 +771,7 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
             $scope.dataLoaded = false;
             $scope.noData = true;
         });
-
-        
-        
+    
         httpService.get(total_count_url).then(function(res){
             $scope.loading = false;
             if(res && res.data.length >  0) {
@@ -640,7 +779,6 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
             } else {
                 $scope.noData = true;
             }
-            
                             
         }).catch(function(err){
             console.log('err', err);
@@ -648,6 +786,8 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
             $scope.dataLoaded = false;
             $scope.noData = true;
         });
+
+    }
 
     }
     onLoad();
@@ -727,18 +867,6 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
         onLoad(num)
             
     }
-        
-    // $scope.sortBy = function(keyName){
-    //     var changedSortType = $scope.sortType === keyName;
-    //     $scope.sortType = keyName;
-
-    //     if(changedSortType){
-    //             $scope.sortReverse = !$scope.sortReverse;
-    //         } else {
-    //             $scope.sortReverse = false;
-    //         }
-        
-    //     };
 
     $scope.sortBy = function(keyName){
         var changedSortType = $scope.sortType === keyName;
@@ -753,9 +881,30 @@ function PotentialupgradeDeatilCtrl($scope,$rootScope, httpService, $filter, $st
       
     $scope.selectValue= function(){
         onLoad();
-        }
+    }
     
     $scope.submit= function(){
         onLoad();
-    }    
+    }  
+    
+    $scope.downloadData= function(){
+        downLoadUrl=downLoadUrl+"&mode=Download&reportname=MonthlyPotentialUpgrade&format=csv"
+        httpService.get(downLoadUrl).then(function(res){
+                //    swal("Click on bell icon to download the file");
+                const wrapper = document.createElement('div');
+               wrapper.innerHTML = wrapper.innerHTML = "<i class='fa fa-bell'><i>";
+
+                swal({
+                title: 'Your request under process',
+                text: 'Click on bell icon to download the file',
+                icon: "success",
+                });
+        }).catch(function(err){
+            console.log('err', err);
+           
+        });
+
+    }
 }
+    
+

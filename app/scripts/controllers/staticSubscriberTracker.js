@@ -775,7 +775,9 @@ var selectedBts  = [];
 
 
 //Subscriber Movement Details Ctrl
-function SubscriberMovementDetailsLink3Ctrl($scope, httpService, $filter, $state, dataFormatter, globalConfig, $stateParams){
+function 
+
+SubscriberMovementDetailsLink3Ctrl($scope, httpService, $filter, $state, dataFormatter, globalConfig, $stateParams){
 
     function onLoad(){
         $scope.loading = true;

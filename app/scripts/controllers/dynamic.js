@@ -43,12 +43,7 @@ angular.module('specta')
     $scope.displaydata  = {};
     $scope.statements   = [];
     $scope.text = '';
-    $scope.fromUsage='0';
-    $scope.toUsage ;
-    $scope.unit = 'Bytes';
     var pageName = null;
-
-    $scope.parameter = " ";
     $scope.paramsArray= [];
 
     $scope.toggleFilter = function(){
@@ -78,7 +73,6 @@ angular.module('specta')
         $stateParams.paramsArray.pop();
         
         if(url[2] == 'dashboards')
-        console.log("data api url callling ")
         $state.go('index.dashboards', {id: url[3], params: $stateParams.params, filterParams: null, 'paramsArray':$stateParams.paramsArray, name: null});
         if(url[2] == 'reports')
             $state.go('index.reports', {id: url[3], params: $stateParams.params, filterParams: null, 'paramsArray':$scope.paramsArray, name: null});
@@ -91,16 +85,16 @@ angular.module('specta')
         "destroy": true,
         "aaSorting": [],
         "paging": true, 
-        "searching": true,
+        "searching": false,
         "bSort": true,
-        "bLengthChange": true,
+        "bLengthChange": false,
         "bInfo": false,
         "autoWidth": true,
         
     }
 
     $scope.exportModule = function(component, type){
-        // console.log(component);
+        console.log(component);
         //$('#{{component.component._id}}').tableExport({type:'pdf',escape:'false',tableName:'Handset wise Traffic'});
         $('#'+component._id).tableExport({type: type, pdfFontSize:'10', escape:'false', tableName: component.title}, function(res){
             //console.log('cb', res)
@@ -111,7 +105,9 @@ angular.module('specta')
     }
     
     $scope.exportChartToExcel = function(component, type){
-        console.log(component);
+        var formatData = {};
+        console.log("export chart ",component,type);
+        console.log("Type",$scope.exportdata)
         utility.getSimpleJSONExport(component.origionalData, type, component.component.title);
         /*if(component.component.ySeries){
             utility.getNestedJSONExport(component.tempData, type, component.component.title);
@@ -253,12 +249,8 @@ angular.module('specta')
                 swal('', 'No Found Page ', 'warning');
                 return;
             }
-            $scope.oldHeaderName = "";
             $scope.headerName = response.data[0].name;
-            // if($scope.headerName==$scope.headerName){
-            //     $scope.oldHeaderName = response.data[0].name
-            // }
-            // $state.current.data.currentPage = response.data[0].name;
+            $state.current.data.currentPage = response.data[0].name;
             $scope.report = response.data[0];
             var day = 1;
             var from = $filter('date')( new Date().getTime(), "yyyy-MM-dd");
@@ -437,20 +429,6 @@ angular.module('specta')
                 }
             });
         }
-    }
-
-    if($scope.fromUsage|| $scope.toUsage){
-        // alert($scope.fromUsage)
-        // console.log("from usage ",typeof($scope.fromUsage))
-        
-        var fromUsage, toUsage, paramUsage;
-        fromUsage = getBytes($scope.fromUsage, $scope.unit) || '';
-        toUsage = getBytes($scope.toUsage, $scope.unit) || '';
-        // console.log("from usage vlaue ",fromUsage, toUsage);
-        var tmp = getAdvanceFilterParam(fromUsage, toUsage, 'Usage');
-        console.log('tmp', tmp);
-        
-         $scope.parameter = "&UsageFilter="+ encodeURI(tmp) ;
     }
 
     $scope.loadPages = function (){
@@ -638,19 +616,6 @@ angular.module('specta')
                 cb(res.data[0]);
             });
     }
-    function text_truncate(str, length, ending) {
-        if (length == null) {
-          length = 100;
-        }
-        if (ending == null) {
-          ending = '...';
-        }
-        if (str.length > length) {
-          return str.substring(0, length - ending.length) + ending;
-        } else {
-          return str;
-        }
-      };  
 
     function subscribeForAllComponent(component1){
         var component = angular.copy(component1.component);
@@ -670,7 +635,6 @@ angular.module('specta')
             isStatement(component, function(res){
                 if(res){
                     component.statement = res;
-
                     
                     if( type == 'simple_ibox' || type == 'ibox_with_gauge' || type == 'simple_ibox_with_dual_data_point') subscribeIBox(component);
                     else if(type == 'info_box')                 subscribeInfoBox(component);
@@ -1567,66 +1531,23 @@ angular.module('specta')
                     httpService.get(url).then(function(res){
                         if( res.data == 'error' || res.data.length == 0)
                             $scope.displaydata[component._id].loader = false;
-                        
-                        var data = res.data;
-                        data = sortAcsending(component, data);
-                        snapshotSingleSeriesHighchart(component, data);
+                        snapshotSingleSeriesHighchart(component, res.data);
                         socket.subscribe(component.query,function(res){
                             var tmp = JSON.parse(res);
                             var data = tmp[component.query];
-                            if(!angular.isArray(data.event))
-                                data.event = [data.event]
-
-                            data = sortAcsending(component, data.event);
                             if( component.statement.type === 'refresh' || component.statement.type === 'moving' ){
-                                highchartSingleSeriesRefreshMoving(component, data);
+                                highchartSingleSeriesRefreshMoving(component, data.event);
                             }
                             else if( component.statement.type === 'replace' ){
-                                
-                                highchartSingleSeriesReplace(component, data);
+                                if(!angular.isArray(data.event))
+                                    data.event = [data.event]
+                                highchartSingleSeriesReplace(component, data.event);
                             }
                         })
                     })
                 }
                 else
                     setTimeInterval(component)
-            }
-
-            function sortAcsending(component, data){
-                return data;
-                var newArr = [];
-                console.log('component', component.title, data);
-                if (data.length > 0) {
-                    if( ! data[0][component.labels] ||  data[0][component.labels].indexOf('-') == -1) {
-                        return data;
-                    } else {
-                        var sort = data.sort( function(a, b){
-                            var aName = a[component.labels].toLowerCase();
-                            var bName = b[component.labels].toLowerCase();
-                            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-                        });
-                        console.log('sort', sort, component);
-                        var first = sort[0];
-                        newArr.push(first);
-                        data.forEach(function(item) {
-                            console.log("Data valuea are ",item)
-                            var find = first[component.labels].split('-')[1];
-                            var found = data.find(function(rec) { 
-                                console.log(rec[component.labels], rec[component.labels].split('-')[0]);
-                                return rec[component.labels].split('-')[0].trim() == find});
-                            if(!found){
-                                found = data.find( function(rec){ return rec[component.labels].split(' ')[0].trim() == find});
-                            }
-                            console.log('***************find ', find, found);
-                            if(found){
-                                newArr.push(found);
-                                first = found;
-                            }
-                        })
-                    }
-                }
-                console.log('return newArr;', newArr);
-                return newArr;
             }
 
             function snapshotSingleSeriesHighchart(component, data){
@@ -1963,6 +1884,7 @@ angular.module('specta')
                         collection = 'lku_lastseen_buckets'
 
                     var url = dbService.makeUrl({collection: collection, op:'select'});
+                    console.log("url", url);
                     httpService.get(url+'&db=datadb').success(function(res){
                         console.log("res", res);
                         res = res.sort(function(a, b){
@@ -2010,9 +1932,8 @@ angular.module('specta')
             function highchartStackedBarReplace(component, data1){
                 if(component.dataelement)
                     data1 = data1.splice(0, component.dataelement);
-                
+
                 if(!data1[0][component.ySeries]){
-                    // console.log('data1', component, data1);
                     swal('Wrong Series Selected X & Y', 'You selected opposite series for chart '+ component.title, 'error');
                     return;
                 }
@@ -2076,32 +1997,6 @@ angular.module('specta')
                     chartData.options.options.yAxis.title.text = component.yAxislabel + ' ('+ chartUnit + ')';
                 else
                     chartData.options.options.yAxis.title.text = component.yAxislabel || converted.unit;
-                
-                // component.isSubscribers = true;
-                // component.subscribersQuery = 'ac58e20384a16833de35ecb71';
-                // component.subscribers = 'TotalSubscribers';
-                if(component.isSubscribers) {
-                    getTotalSubscriberDayWise(component, function(res) {
-                        console.log('************************------------------------****', res);
-                        var qTotals = [];
-                        chartData.labeldata.forEach( function(date) {
-                            var rec = res.find( function(item) { return item[component.labels] == date});
-                            if (rec) {
-                                qTotals.push(rec[component.subscribers]);
-                            }
-                        })
-                        chartData.options.options.yAxis.stackLabels = {
-                            qTotals: qTotals,
-                            enabled: true,
-                            style: {
-                                fontWeight: 'bold'
-                            },
-                            formatter: function() {          
-                                return this.options.qTotals[this.x];
-                            }
-                        };
-                    });
-                }
                 return
 
                 /*$scope.CEIDistributionChartOptions= {
@@ -4103,7 +3998,6 @@ angular.module('specta')
     /*Table*/
         //Column Extended Table(Complex Table)
             function subscribeComplexTable(component){
-                console.log("componenet value from col_extnd table ",component)
                 $scope.displaydata[component._id] = {
                     component:component,
                     indicatorData: [],
@@ -4128,7 +4022,6 @@ angular.module('specta')
                         collection = 'lku_usage_buckets'
 
                     var url = dbService.makeUrl({collection: collection, op:'select'});
-                    console.log("Table data",url)
                     httpService.get(url+'&db=datadb').success(function(res){
                         // console.log('lku__bkt', res)
                         res = res.sort(function(a, b){
@@ -4188,6 +4081,7 @@ angular.module('specta')
             $scope.currPage = 1;
             $scope.maxSize = 3;
             $scope.itemsPerPage= 10;
+
             function complexTableReplaceData(component, data){
                 if(component.type == 'extended_table'){
                     extendedReplaceData(component, data)
@@ -4236,13 +4130,10 @@ angular.module('specta')
                                 processedData[j]= temp;
                             }
 
-                            var total = 0;
                             for(j in data[i].data){
                                 var item= data[i].data[j][component.colName];
                                 var index= $.inArray(item, colDataArray);
-                                if (component.isTotal) {
-                                    total += data[i].data[j][component.rowData];
-                                }
+
                                 var converted = countTableValue(data[i].data[j][component.rowData], component.unit);
                                 
                                 if(component.unit == 'count' || component.unit == 'percent')
@@ -4251,11 +4142,6 @@ angular.module('specta')
                                     processedData[index][component.rowData]= (converted.value).toFixed(globalConfig.defaultDecimal)+converted.unit;
                                 }
                             }
-                            if (component.isTotal) {
-                                var isTotal = countTableValue(total, component.unit);
-                                tempData['total'] = isTotal.value+' '+isTotal.unit;
-                            }
-
                             tempData[component.rowName]= data[i][component.rowName];
                             tempData['data']= angular.copy(processedData);
                             processedExtdTableData.push(tempData);
@@ -4268,8 +4154,6 @@ angular.module('specta')
                         }
                     })
                 }
-
-                console.log("complete table information ",$scope.displaydata[component._id])
             }
 
             function buildColDataArray(component, data, cb){
@@ -4317,6 +4201,7 @@ angular.module('specta')
                     data:{date: []},
                     updateTime:''
                 }
+                console.log(component, data[0])
                 if(data.length > 0){
                     $scope.totalItems = data.length;
                     var label = [];
@@ -4333,15 +4218,13 @@ angular.module('specta')
 
                     var colDataArray = [], processedExtdTableData = [];
                     // console.log(component.rowName, component.rowData, data[0])
-                    var rowLength = (data[0].data) ?  data[0].data.length : 0;
+                    var rowLength = data[0].data.length
                     // var keysTopModelArray = _.keys(data[0].data[0]);
                     var ObjArray = data
-                    var keysTopModelArray = [];
-                    if ( data[0].data && data[0].data.length > 0){
-                        for(z in data[0].data[0]){
-                            if(z == component.rowName || z == component.rowData)
-                                keysTopModelArray.push(z)
-                        }
+                    var keysTopModelArray = []
+                    for(z in data[0].data[0]){
+                        if(z == component.rowName || z == component.rowData)
+                            keysTopModelArray.push(z)
                     }
                     table.colSpan = keysTopModelArray.length
 
@@ -4386,6 +4269,7 @@ angular.module('specta')
                         }
                         tableData[i]= angular.copy(tabData);
                     }
+                    console.log(tableData[0])
                     table.keysTopModel= angular.copy(tableData);
                     table.topModelsObj= angular.copy(data);
 
@@ -4396,6 +4280,7 @@ angular.module('specta')
 
         //table
             function subscribeTable(component){
+                console.log("component Details from table ",component)
                 var options = {
                     paging: (component.paging) ? true : false,
                     searching: (component.searching) ? true: false,
@@ -4478,8 +4363,6 @@ angular.module('specta')
                 else
                     setTimeInterval(component);
             }
-
-
 
             function processTableSnapshotData(component, data){
                 var type = $scope.displaydata[component._id].statement.type;
@@ -4734,6 +4617,9 @@ angular.module('specta')
             }
 
             function bindTableData(tableData, component, total){
+                console.log("bind table data ",tableData)
+                // console.log("bind table data ",component)
+                // console.log("bind table data ",total)
                 var tableSort = angular.copy(tableData.tempData);
                 var labelArr = [];
                 angular.forEach(tableSort, function(val, key){
@@ -4798,6 +4684,11 @@ angular.module('specta')
 
                 $scope.displaydata[component._id].data.length = 0;
                 $scope.displaydata[component._id].origionalData = angular.copy(tableData.origionalData);
+                // $scope.exportdata = angular.copy(tableData.origionalData);
+
+                // console.log($scope.exportdata)
+
+                // console.log("$scope.displaydata[component._id].origionalData",$scope.displaydata[component._id].origionalData)
                 $timeout(function(){
                     console.log('table.data', tableData.data);
                     $scope.displaydata[component._id].data = tableData.data;
@@ -5309,17 +5200,14 @@ angular.module('specta')
 
             if(component.type == 'multi_gauge' || component.type == 'progress_bar'){
                 var url = dbService.makeUrl({collection: 'lku_node', op:'select'})
-                
                 httpService.get(url+'&db=datadb').success(function(res){
-                    console.log("multiGuage response  ", res)
-
+                    console.log("multiGuage response ", res)
                     $scope.displaydata[component._id].plotData = dbService.unique(res, 'AutoPlot', 1)
-                });
+                })
             }
-
+            
             if( component.data != 'DBPull' ){
                 var url = dbService.snapshotUrl({op:'select', id: component.query, limit: 1});
-
                 httpService.get(url).then(function(res){
                     // if(res.data.length == 0)
                          $scope.displaydata[component._id].loader = false;
@@ -5356,13 +5244,6 @@ angular.module('specta')
                         $scope.$apply();
                     });
                 });
-
-
-                // httpService.get(url2).then(function(res){
-
-                //     console.log("secondQUeryData " , res.data)
-
-                // });
             }
             else
                 setTimeInterval(component);
@@ -5481,74 +5362,23 @@ angular.module('specta')
         }
 
         function multiGaugeProcess(component, data){
-            $scope.ArrayList ;
-            if (component.query2!=null){
-                var url2 = globalConfig.pullfilterdataurl+component.query2
-                
-                httpService.get(url2).then(function(res){
-                        // Second Query Response
-
-                        var listObj  = res.data
-
-                        console.log("seconds Query Response ",res.data)
-
-                            var gauge = $scope.displaydata[component._id]
-                            var columnName = component.kpi_2
-                            gauge.multiData = []
-                            // component.kpi = 'TotalUsage'
-                            var plotData = gauge.plotData
-
-                        for(var i in plotData){
-                             var test = dbService.unique(data, component.plotKey, plotData[i].Node)[0];
-                                if(test){
-                                     var tmp = gaugeData(component, test);
-                                     gauge.options.max = convertToKBMBGB(component, plotData[i].capacity, tmp.gaugeunit);
-                                     var pct = (100* Number(tmp.gaugedata)) / gauge.options.max
-                                     pct = pct.toFixed(1)
-                                     gauge.multiData.push({
-                                     options   : gauge.options,
-                                     value     : Number(tmp.gaugedata),
-                                     unit      : tmp.gaugeunit,
-                                     title     : plotData[i].Node ,
-                                     area      : res.data[i][columnName],
-                                     pct       : pct,
-                                     max       : convertToKBMBGB(component, plotData[i].capacity, tmp.gaugeunit),
-                                     threshold1: convertToKBMBGB(component, plotData[i].threshold1, tmp.gaugeunit),
-                                     threshold2: convertToKBMBGB(component, plotData[i].threshold2, tmp.gaugeunit)
-                                })
-                        }
-                    }
-                        console.log(gauge)
-                        gauge.updateTime = globalConfig.updateTime()
-                    
-                    
-                    
-                 });
-          }
-          else{
-
             var gauge = $scope.displaydata[component._id]
             gauge.multiData = []
             // component.kpi = 'TotalUsage'
             var plotData = gauge.plotData
-
             for(var i in plotData){
                 var test = dbService.unique(data, component.plotKey, plotData[i].Node)[0];
                 if(test){
                     var tmp = gaugeData(component, test);
                     gauge.options.max = convertToKBMBGB(component, plotData[i].capacity, tmp.gaugeunit);
                     var pct = (100* Number(tmp.gaugedata)) / gauge.options.max
-                    var area = text_truncate(plotData[i].Area)
-                    var completename = plotData[i].Area
                     pct = pct.toFixed(1)
                     gauge.multiData.push({
                         options   : gauge.options,
                         value     : Number(tmp.gaugedata),
                         unit      : tmp.gaugeunit,
-                        title     : plotData[i].Node , //+ " ---------" + plotData[i].Area,
-                        area      : area,
+                        title     : plotData[i].Node + " -------   " + plotData[i].Area,
                         pct       : pct,
-                        completename :completename, 
                         max       : convertToKBMBGB(component, plotData[i].capacity, tmp.gaugeunit),
                         threshold1: convertToKBMBGB(component, plotData[i].threshold1, tmp.gaugeunit),
                         threshold2: convertToKBMBGB(component, plotData[i].threshold2, tmp.gaugeunit)
@@ -5557,9 +5387,6 @@ angular.module('specta')
             }
             console.log(gauge)
             gauge.updateTime = globalConfig.updateTime()
-
-          }
-            
         }
 
         function convertToKBMBGB(component, value, unit){
@@ -6691,10 +6518,6 @@ angular.module('specta')
         params.fromDate= params.fromDate || $scope.date.start;
         params.toDate = params.toDate || $scope.date.end;
 
-        if($scope.filter.planSelected){
-            params["planName"] = $scope.filter.planSelected;
-        }
-
         var filterParams = '';
         if($scope.locationSelected.length > 0)
             filterParams += '&location='+buildFilterParams($scope.locationSelected, false);
@@ -6744,7 +6567,6 @@ angular.module('specta')
                     else if(table == 'report')
                         $state.go('index.staticreport',{'id': id, 'params': params, 'filterParams': filterParams, 'paramsArray':$scope.paramsArray});
                     else if(table == 'dashboards'){
-                        console.log("param array value ",$scope.paramsArray)
                         $state.go('index.dashboards',{'id': id, 'params': params, 'filterParams': filterParams, 'paramsArray':$scope.paramsArray});
                     }
                         
@@ -6965,7 +6787,8 @@ angular.module('specta')
 
     var intervalsArr = [];
     function setTimeInterval(component){
-        console.log("data title ",component.title, component.frequency)
+        console.log("IN interval function",component)
+        console.log(component.title, component.frequency)
             timeInterval(component);
         if( angular.isDefined(component.frequency)){
             var intervalTime = parseInt(component.frequency);
@@ -6977,7 +6800,6 @@ angular.module('specta')
                 intervalsArr.push(interval);
             }
         }
-
     }
 
     $scope.$on('$destroy',function(){
@@ -6989,7 +6811,7 @@ angular.module('specta')
     });
 
     function timeInterval(component){
-        console.log('timeInterval >>>>', component.title );
+        //console.log('timeInterval >>>>', component.title );
         if($scope.report.view == 'Month'){
             var newDate = $scope.date.start;
             var endDate = $scope.date.end
@@ -7020,17 +6842,6 @@ angular.module('specta')
         if($scope.filter.planSelected)
             parameter += '&plan='+$scope.filter.planSelected;
 
-        if($stateParams.params){
-            if($stateParams.params.hasOwnProperty('planName'))
-            parameter +='&Plan='+$stateParams.params.planName
-        }
-        
-        if($stateParams.paramsArray){
-            if($stateParams.paramsArray[0].Key=="CDN"){
-                var from = $stateParams.paramsArray[0].fromDate
-            }
-        }
-
         parameter += '&fromDate='+ from +'&toDate='+to;
         if(component.statement.dataSource == 'DBPull' && component.statement.dbPullType != undefined)
             parameter += '&dbPullType='+ component.statement.dbPullType;
@@ -7042,71 +6853,46 @@ angular.module('specta')
         granularity = granularity || 0
         parameter += '&granularity='+ granularity ;
         // console.log("$stateParams.params", $stateParams.params);
-        // console.log("paramter data ",parameter)
-        if($stateParams.paramsArray){
-            // console.log("stateparam array object value ",$stateParams.paramsArray[0].Key,$stateParams.paramsArray[0].value )
-        }
         if($stateParams.paramsArray){
             if($stateParams.paramsArray.length>0){
             parameter += '&'+$stateParams.paramsArray[$stateParams.paramsArray.length-1].Key + '='+ $stateParams.paramsArray[$stateParams.paramsArray.length-1].value;
             }
         }
 
-        if($stateParams.paramsArray){
-            if($stateParams.paramsArray[0].Key=="CDN"){
-                parameter += '&'+$stateParams.paramsArray[0].Key + '='+$stateParams.paramsArray[0].value;
-            }
+        if($scope.filter.fromUsage){
+            var fromUsage, toUsage, paramUsage;
+            fromUsage = getBytes($scope.filter.fromUsage, $scope.filter.unit) || '';
+            toUsage = getBytes($scope.filter.toUsage, $scope.filter.unit) || '';
+            // console.log(fromUsage, toUsage);
+            var tmp = getAdvanceFilterParam(fromUsage, toUsage, 'Usage');
+            // console.log('tmp', tmp);
+            
+            parameter += "&UsageFilter="+ encodeURI(tmp) ;
         }
-
-        console.log("parametrs value ",parameter)
-        // Mlistner URL calling for Data table 
+		else{
+		var fromUsage, toUsage, paramUsage;
+            fromUsage = getBytes('15', 'GB') || '';
+            toUsage = getBytes($scope.filter.toUsage, $scope.filter.unit) || '';
+            // console.log(fromUsage, toUsage);
+            var tmp = getAdvanceFilterParam(fromUsage, toUsage, 'Usage');
+            // console.log('tmp', tmp);
+            
+            parameter += "&UsageFilter="+ encodeURI(tmp) ;
+		
+		}
+        
+        console.log("MLister Line for Dynamic page")
+        console.log("globalConfig.pullfilterdataurl + component.query + parameter",globalConfig.pullfilterdataurl + component.query + parameter)
         httpService.get(globalConfig.pullfilterdataurl + component.query + parameter).success(function(res){
-            //console.log("response ibox", res);
+            console.log("response ibox", res);
             if(res == 'null' || res.length == 0) $scope.displaydata[component._id].loader = false;
             else if( res.length > 0) processReplaceData(component, res);
         });
     }
 
-    function getTotalSubscriberDayWise(component, cb){
-        //console.log('timeInterval >>>>', component.title );
-        if($scope.report.view == 'Month'){
-            var newDate = $scope.date.start;
-            var endDate = $scope.date.end
-            var monthDate = dateConvert(newDate,endDate)
-        }
-
-        if($stateParams.params && $stateParams.params.fromDate && !$scope.report.GranularityDefault)
-            var from = $stateParams.params.fromDate+'T00:00:00.000Z'
-        else{
-            if($scope.report.view == 'Month'){
-                from = monthDate.from
-            }else{
-                var from = ($scope.date.start == undefined) ? $scope.date.end+'T00:00:00.000Z' : $scope.date.start+'T00:00:00.000Z';
-            }
-        }
-        if($stateParams.params && $stateParams.params.toDate && !$scope.report.GranularityDefault)
-            var to = $stateParams.params.toDate+'T23:59:59.999Z'
-        else{
-            if($scope.report.view == 'Month'){
-                to = monthDate.to
-            }else{
-               var to = $scope.date.end+'T23:59:59.999Z';
-            }
-        }
-
-        var parameter = '';
-        parameter += '&fromDate='+ from +'&toDate='+to;
-        httpService.get(globalConfig.pullfilterdataurl + component.subscribersQuery + parameter).success( function(res) {
-            if (!res) {
-                cb([]);
-            } else {
-                cb(res);
-            }
-        });
-    }
-    
 
     function dateConvert(newDate,endDate){
+        console.log("endDate=============",typeof(newDate),typeof(endDate))
         if(typeof(newDate) == 'string'){
             var date =  new Date(newDate)
             var year = $filter('date')(date, "yyyy")
@@ -7533,6 +7319,8 @@ angular.module('specta')
             })
         })
     }
+
+
     
     $scope.segmentSelected = [];
     $scope.loadSegment = function(){
@@ -7601,7 +7389,11 @@ angular.module('specta')
             })
         })
     }
-
+  
+    
+    
+    
+    
     $scope.deviceSelected = [];
     $scope.loadDevice = function(){
         //httpService.get(globalConfig.pulldataurlbyname + 'Device Filter till Company').then(function (response){
@@ -7907,6 +7699,7 @@ angular.module('specta')
 
         if($scope.filter.planSelected){
             if(typeof $scope.filter.planSelected == 'object'){
+                console.log($scope.filter.planSelected[0])
                 if($scope.filter.planSelected.length > 0 && $scope.filter.planSelected[0] != 'All')
                     parameter += '&Plan='+buildFilterParams($scope.filter.planSelected, true);
             }
@@ -7917,10 +7710,10 @@ angular.module('specta')
         if($scope.filter.oltSelected){
             if(typeof $scope.filter.oltSelected == 'object'){
                 if($scope.filter.oltSelected.length > 0 && $scope.filter.oltSelected[0] != 'All')
-                    parameter += '&OLT='+encodeURIComponent(buildFilterParams($scope.filter.oltSelected, true));
+                    parameter += '&OLT='+buildFilterParams($scope.filter.oltSelected, true);
             }
             else
-                 parameter += '&OLT='+encodeURIComponent($scope.filter.oltSelected);
+                parameter += '&OLT='+$scope.filter.oltSelected;
         }
 
         if($scope.filter.appSelected){
@@ -8052,24 +7845,26 @@ angular.module('specta')
             parameter += '&fromDate='+ from +'&toDate='+to;
         }
 
-        // $scope.fromUsage='0';
-        // $scope.toUsage ;
-        // $scope.unit = 'Bytes';
-
-       
-        if($scope.fromUsage|| $scope.toUsage){
-            // alert($scope.fromUsage)
-            // console.log("from usage ",typeof($scope.fromUsage))
-            
+        if($scope.filter.fromUsage || $scope.filter.toUsage){
             var fromUsage, toUsage, paramUsage;
-            fromUsage = getBytes($scope.fromUsage, $scope.unit) || '';
-            toUsage = getBytes($scope.toUsage, $scope.unit) || '';
-            // console.log("from usage vlaue ",fromUsage, toUsage);
+            fromUsage = getBytes($scope.filter.fromUsage, $scope.filter.unit) || '';
+            toUsage = getBytes($scope.filter.toUsage, $scope.filter.unit) || '';
+            // console.log(fromUsage, toUsage);
             var tmp = getAdvanceFilterParam(fromUsage, toUsage, 'Usage');
-            console.log('tmp', tmp);
+            // console.log('tmp', tmp);
             
             parameter += "&UsageFilter="+ encodeURI(tmp) ;
-        }
+        }else{
+            var fromUsage, toUsage, paramUsage;
+                fromUsage = getBytes('0', 'Bytes') || '';
+                toUsage = getBytes($scope.filter.toUsage, $scope.filter.unit) || '';
+                // console.log(fromUsage, toUsage);
+                var tmp = getAdvanceFilterParam(fromUsage, toUsage, 'Usage');
+                // console.log('tmp', tmp);
+                
+                parameter += "&UsageFilter="+ encodeURI(tmp) ;
+            
+            }
 
         var granularity = date.granularity
         if(!granularity)
@@ -8090,10 +7885,7 @@ angular.module('specta')
                 $scope.displaydata[component._id].data = [];
                 if($scope.displaydata[component._id].labeldata)
                     $scope.displaydata[component._id].labeldata = [];
-
-                    // alert(parameter)
                 // console.log("component", component);
-                // console.log("parameter",parameter)
                 httpService.get(globalConfig.pullfilterdataurl + component.query + parameter + '&queryname='+ component.statement.name).success(function(res){
                     // delete component.plotFor;
                     console.log("res", res);
@@ -8106,7 +7898,6 @@ angular.module('specta')
             }
         });
     }
-
 
     function getAdvanceFilterParam(fromValue, toValue,label){
         var paramAdvanceFilter= null;
@@ -8147,52 +7938,8 @@ angular.module('specta')
             else
                 usage = usageValue;
         }
-        console.log("value after return ",usage)
         return usage;
-        
     }
-
-    // function getAdvanceFilterParam(fromValue, toValue,label){
-    //     var paramAdvanceFilter= null;
-    //     if(angular.isDefined(fromValue) && fromValue != ''){
-    //         paramAdvanceFilter = "'$gte':"+fromValue;
-    //         if(toValue != ''){
-    //             paramAdvanceFilter += ",'$lte':"+toValue;
-    //                 return '{'+paramAdvanceFilter+'}';
-    //         }
-    //         else{
-    //             return '{'+paramAdvanceFilter+'}';
-    //         }
-    //     }else if(angular.isDefined(toValue)){
-    //         paramAdvanceFilter = "'$lte':"+toValue;
-    //         return '{'+paramAdvanceFilter+'}';
-    //     }
-    //     else{
-    //         swal('', 'Usage filter not selected!!', 'error')
-    //     }
-    // }
-
-    // function getBytes(usageValue, unit){
-    //     var usage;
-    //     if(usageValue>=0 && usageValue!=null){
-    //         if(unit != "Bytes"){
-    //             switch(unit){
-    //                 case 'GB':
-    //                     usage = Math.pow(2,30)*usageValue;
-    //                     break;
-    //                 case 'MB':
-    //                     usage = Math.pow(2,20)*usageValue;
-    //                     break;
-    //                 case 'KB':
-    //                     usage = Math.pow(2,10)*usageValue;
-    //                     break;
-    //             }
-    //         }
-    //         else
-    //             usage = usageValue;
-    //     }
-    //     return usage;
-    // }
 
     //datepicker- date change event
     $scope.changeDate = function (modelName, newDate){
@@ -8234,7 +7981,6 @@ angular.module('specta')
     //End Filter
 
     function processReplaceData(component, res){
-        console.log("process replace table ",component)
         $scope.displaydata[component._id].loader = false;
         var data1 = res;
         if(component.plotKey && component.plotKey != '')

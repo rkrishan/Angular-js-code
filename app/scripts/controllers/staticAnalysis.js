@@ -14321,6 +14321,8 @@ function appSubscriberMovementTrackerCtrl($scope, httpService, $filter, $state, 
     $scope.toggleCountFilter = function(){
         angular.element('#cntFilter').toggle();
     } 
+
+
    //Group By filter 
     $scope.ratData = [
         {"title":"PlanType","key":"Plantype"},
@@ -14430,7 +14432,7 @@ function appSubscriberMovementTrackerCtrl($scope, httpService, $filter, $state, 
                     });
                     citiesArea = citiesArea.concat(area);
 
-                    // console.log("filter area name after city ",citiesArea)
+                    console.log("filter area name after city ",citiesArea)
                 });
 
                 _.forEach(selectedCities, function(city) {

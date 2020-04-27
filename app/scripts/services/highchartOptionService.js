@@ -100,7 +100,46 @@ angular.module('specta')
 
         }
     }
+
+    // for Latency Bucket chart
+    this.highchartPieLegendOptionsWithClickable = {
+        chart: {
+            type: 'pie',
+        },
+        title: {
+            text: 'First Byte Latency Bucket Distribution'
+        },
+        // accessibility: {
+        //     point: {
+        //         valueSuffix: '%'
+        //     }
+        // },
+        // tooltip: {
+        //     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        // },
+        tooltip: {
+            pointFormat: '{series.name}: <br>{point.percentage:.1f} %<br>total: {point.total}'
+          },
+
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                size: 350,
+                cursor: 'pointer',
+                depth: 35,
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>:<br>{point.percentage:.1f} %<br>value: {point.y}',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor)
+                    }
+                },
+            },
+
+        }
+    }
     
+
     this.highChartPieLabelInsideOptions= {
         chart: {
             plotBackgroundColor: null,
@@ -537,6 +576,84 @@ angular.module('specta')
                 "format": "{value:%e %b}",
                 "align": "left"
             }
+        },
+        "yAxis": {
+            allowDecimals: false,
+            "min": 0,
+            "title":{"text":""},
+            "labels":{},
+            reversedStacks: false,
+            "stackLabels": {
+                "enabled": true,
+                "style": {
+                    "fontWeight": "bold",
+                    "color": "gray"
+                }
+            }
+        },
+        "legend": {
+            "reversed": true
+        },
+        "tooltip": {
+            "xDateFormat": "%e %b",
+            "shared": false,
+            pointFormat: null,//'<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+        },
+        "plotOptions": {
+
+            "column": {
+                stacking: 'percent',
+                "pointPadding": 0.2,
+                "borderWidth": 0,
+                point: {
+                    events:{
+                        click: function () {
+                         //console.log('Series: '+ this.series.name +', value: '+ this.y);
+                        }
+                    }
+                },
+                "dataLabels": {
+                    "enabled": false,
+                    "color": "white",
+                    "style": {"textShadow": "0 0 3px black"}
+                    /*formatter: function() {
+                        return '<b>' + this.series.name + '</b>: ' + this.percentage.toFixed(2) + ' %';
+                    }*/
+                }
+            }
+
+        }
+    }
+
+
+    // Displaying millesecond data in to hourly format 
+    
+
+    this.highchartStackedBarLabelDatetimeOptionsHourly = {
+        "chart": {
+            "type":"column",
+            height: 300
+        },
+        "credits": {"enabled": false},
+        'legend':{maxHeight: 60},
+        "exporting": {},
+        "title": {"text":""},
+        // "xAxis" :{
+        //     "title": {"text":""},
+        //     "type": "datetime",
+        //     //categories: dateArray,
+        //     "labels": {
+        //         "format": "{value:%e %b}",
+        //         formatter: function() {
+        //             return Highcharts.dateFormat('%H:%M', this.value);
+        //           },
+        //         "align": "left"
+        //     }
+        // },
+        xAxis: {
+            "type": "categories",
+            'categories': [],
+            
         },
         "yAxis": {
             allowDecimals: false,

@@ -191,47 +191,74 @@ angular.module('specta')
 	        }else{
 	        	console.log("collection not found");
 	        }
-	    })*/
-
+		})*/
+		
 	    //Export Data to Excel, CSV
 	    this.getSimpleJSONExport= function(exportObj, type,name){
-	    	// console.log("component", component);
+			// console.log("component", component);
+			console.log("Inside export function ",type,name)
 	    	var header= angular.copy(name);
-	    	name= name+"_"+new Date().getTime();
-		    var exportArray= [];
+			name= name+"_"+new Date().getTime();
+			var exportArray= [];
 	        for(var i in exportObj){
 	            var keys= Object.keys(exportObj[i]);
 	            var temp= {};
 	            for(var j in keys){
 	                if( !Array.isArray(exportObj[i][keys[j]])){
 	                    if(/Date/.test(keys[j]) || /Time/.test(keys[j])){
-	                    	// console.log("exportObj[i][keys[j]]", exportObj[i][keys[j]]);
-	                    	temp[keys[j]]= $filter('date')( exportObj[i][keys[j]], 'yyyy-MM-dd', 'UTC');
+							console.log("exportObj[i][keys[j]]", typeof(exportObj[i][keys[j]]));
+							// var dt = new Date($filter('date')(exportObj[i][keys[j]], "yyyy-MM-dd"));
+							// dt.setDate(dt.getDate() + 1)
+							// var t = $filter('date')(dt, 'yyyy-MM-dd', 'UTC');
+							// console.log("manupulation date id ",t)
+							if(typeof(exportObj[i][keys[j]])=='string'){
+								temp[keys[j]] = exportObj[i][keys[j]]
+
+							}
+							else{
+								temp[keys[j]]= $filter('date')( exportObj[i][keys[j]], 'yyyy-MM-dd', 'UTC');
+							}
+							
+							// temp[keys[j]]= $filter('date')( exportObj[i][keys[j]], 'yyyy-MM-dd', 'UTC');
+							console.log("temp[keys[j]]",temp[keys[j]]) 
 	                    }
 	                    else{
+							// console.log("inside string method ofelse ")
 	                        temp[keys[j]]= exportObj[i][keys[j]]
 	                    }
-	                }
+					}
 	            }
 	            for(var j in keys){
 	            	if(Array.isArray(exportObj[i][keys[j]])){
-	            		
 	                    for(var k in exportObj[i][keys[j]]){
 	                        var dataKey= Object.keys(exportObj[i][keys[j]][k]);
 	                        for(var l in dataKey){
 	                            if(/Date/.test(keys[j]) || /Time/.test(keys[j])|| /date/.test(keys[j])){
-	                                temp[dataKey[l]]= $filter('date')( exportObj[i][keys[j]][k][dataKey[l]], "yyyy-MM-dd",'UTC');
+
+										if(typeof(exportObj[i][keys[j]])=='string'){
+										temp[keys[j]] = exportObj[i][keys[j]]
+										}
+										else{
+										temp[dataKey[l]]= $filter('date')( exportObj[i][keys[j]][k][dataKey[l]], "yyyy-MM-dd",'UTC');
+										}
+
+										// -----------------------------------------------------------------------
+									// temp[dataKey[l]]= $filter('date')( exportObj[i][keys[j]][k][dataKey[l]], "yyyy-MM-dd",'UTC');
+									// temp[dataKey[l]] = exportObj[i][keys[j]][k][dataKey[l]];
 	                            }
 	                            else{
 	                                temp[dataKey[l]]= exportObj[i][keys[j]][k][dataKey[l]];
+									// console.log("inside first j keys ",temp[dataKey[l]])
 	                            }
-	                        }
+							}
+							// console.log("again temp data ",temp)
 	                        exportArray.push(angular.copy(temp))
 	                    }
 	                }
 	            }
 	        }
 	        if(exportArray.length> 0){
+				console.log("exportArray",exportArray)
 	        	if(type == 'excel')
 		            alasql('SELECT * INTO XLS("'+name+'.xls",?) FROM ?',[ {headers:true,caption: {title:[header], style: 'font-size: 100px; color:green;'}},exportArray]);
 		            if(type == 'csv')
@@ -239,13 +266,26 @@ angular.module('specta')
 		    	
 	        }else{
 	        	for(var i in exportObj){
+					console.log("inside export object array")
 		            var keys= Object.keys(exportObj[i]);
 		            for(var j in keys){
 		                if(/Date/.test(keys[j]) || /Time/.test(keys[j])){
-		                		exportObj[i][keys[j]]= $filter('date')( exportObj[i][keys[j]], "yyyy-MM-dd",'UTC' );
+
+								if (typeof(exportObj[i][keys[j]]) === "string"){
+
+									exportObj[i][keys[j]] = exportObj[i][keys[j]]
+
+								}
+								else{
+									exportObj[i][keys[j]]= $filter('date')( exportObj[i][keys[j]], "yyyy-MM-dd",'UTC' );
+								}
+								// console.log("exportObj[i][keys[j]] date is ",typeof(exportObj[i][keys[j]]),exportObj[i][keys[j]])
+							// exportObj[i][keys[j]] = exportObj[i][keys[j]]
+		                		// exportObj[i][keys[j]]= $filter('date')( exportObj[i][keys[j]], "yyyy-MM-dd",'UTC' );
 		                    }
 		                    else{
 		                        exportObj[i][keys[j]]= exportObj[i][keys[j]]
+								// console.log("value name ",exportObj[i][keys[j]])
 		                    }
 		            }
 		        }

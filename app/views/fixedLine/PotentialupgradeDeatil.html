@@ -1,5 +1,4 @@
-<div class="wrapper-content animated fadeIn" ng-controller="PotentialupgradeDeatilCtrl">
-    
+<div class="wrapper-content animated fadeIn" ng-controller="PotentialupgradeDeatilCtrl">  
     
     <div class="row">
         <div class="col-lg-12">
@@ -13,6 +12,10 @@
                     <form class="form-inline" ng-submit="submit()">
                         <div class="input-group">
                             <input type="text" ng-model="customerID" placeholder="Enter Subscriber Id" name="search" class="form-control" minlength="0" maxlength="20">
+                        </div>
+
+                        <div class="form-group" style="padding-top: 2px;">
+                            <button type="button" class="btn btn-primary btn-sm pull-right"  ng-click= "downloadData()" title="Download Full list"><i class="fa fa-download"></i></button>
                         </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
                         <div class="form-group"><b>City</b>
@@ -78,15 +81,17 @@
                                     <span ng-show="sortType == 'subscriberid' && !sortReverse" ></span>
                                 </th>
 
+                                <th ng-click="sortBy('city')" >City <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                    <span ng-show="sortType == 'city' && sortReverse" ></span>
+                                    <span ng-show="sortType == 'city' && !sortReverse" ></span>
+                                </th>
+
                                 <th ng-click="sortBy('area')" >Area  <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'area' && sortReverse"></span>
                                     <span ng-show="sortType == 'area' && !sortReverse"></span>
                                 </th>
 
-                                <th ng-click="sortBy('city')" >City <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
-                                    <span ng-show="sortType == 'city' && sortReverse" ></span>
-                                    <span ng-show="sortType == 'city' && !sortReverse" ></span>
-                                </th>
+                                
 
                                 <th ng-click="sortBy('planspeed')" >Plan Speed <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'planspeed' && sortReverse"></span>
@@ -99,32 +104,32 @@
                                     <span ng-show="sortType == 'datalimit' && !sortReverse"></span>
                                 </th>
                                 
-                                <th title="total monthly usage quota per customer /25 days"
-                                     ng-click="sortBy('avgdayusage')" >Avg Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                <th title="Total monthly usage quota per customer /25 days"
+                                     ng-click="sortBy('avgdayusage')" >Avg Usage (GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'avgdayusage' && sortReverse"></span>
                                     <span ng-show="sortType == 'avgdayusage' && !sortReverse"></span>
                                 </th>
 
                                <th title="Total usage for the current month"
-                                     ng-click="sortBy('currentusage')" >{{currentMonth}} Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                     ng-click="sortBy('currentusage')" >{{currentMonth}} Usage (GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'currentusage' && sortReverse"></span>
                                     <span ng-show="sortType == 'currentusage' && !sortReverse"></span>
                                 </th>
 
                                <th title="Total usage for the previous month"
-                                     ng-click="sortBy('previoususage')" >{{lastMonth}} Usage <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                     ng-click="sortBy('previoususage')" >{{lastMonth}} Usage (GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'previoususage' && sortReverse" ></span>
                                     <span ng-show="sortType == 'previoususage' && !sortReverse"></span>
                                 </th>
 
                                 <th title="Total usage in month/(Number of days of usage*avg usage)"
-                                     ng-click="sortBy('currentusageratio')" >{{currentMonth}} Usage Ratio <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                                     ng-click="sortBy('currentusageratio')" >{{currentMonth}} Usage Ratio (GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'currentusageratio' && sortReverse"></span>
                                     <span ng-show="sortType == 'currentusageratio' && !sortReverse"></span>
                                 </th>
 
-                               <th title="Usage ratio of the last month. Refer to the current usage ratio column for the description"
-                                     ng-click="sortBy('previoususageratio')" >{{lastMonth}} Usage Ratio <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
+                               <th title="Total usage in month/(Number of days of usage*avg usage)"
+                                     ng-click="sortBy('previoususageratio')" >{{lastMonth}} Usage Ratio (GB) <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                     <span ng-show="sortType == 'previoususageratio' && sortReverse" ></span>
                                     <span ng-show="sortType == 'previoususageratio' && !sortReverse"></span>
                                 </th>
@@ -135,7 +140,7 @@
                                 <span ng-show="sortType == 'normallag' && !sortReverse"></span>
                                </th> &nbsp;
 
-                                <th title="Number of days spent in FUP in the current cycle"
+                                <th title="Number of days spent in FUP. Click on i symbol to view the days in calendar"
                                 ng-click="sortBy('fupdaysinmonth')" > Fup in Month <span class="fa fa-caret-down"></span> <span class="fa fa-caret-up"></span>
                                 <span ng-show="sortType == 'fupdaysinmonth' && sortReverse"></span>
                                 <span ng-show="sortType == 'fupdaysinmonth' && !sortReverse"></span>
@@ -152,17 +157,21 @@
                                 <td>{{item.city}}</td>
                                 <td>{{item.area}}</td>
                                 <td>{{item.billplan}}</td>
-                                <td>{{item.datalimit}} GB</td>
-                                <td>{{item.avgdayusage}} GB</td>
-                                <td>{{item.currentusage}} GB</td>
-                                <td>{{item.previoususage}} GB</td>
+                                <td>{{item.datalimit}} </td>
+                                <td>{{item.avgdayusage}} </td>
+                                <td>{{item.currentusage}} </td>
+                                <td>{{item.previoususage}} </td>
                                 <td>{{item.currentusageratio}}</td>
                                 <td>{{item.previoususageratio}}</td>
                                 <td>{{item.normallag}}</td>
-                                <td style="color:#3474eb">
+                                <td style="color:#3474eb" ng-if="item.days.length>0">
                                     {{item.fupdaysinmonth}}
                                     <a title="Fup calander" ng-click=displaySubList(item.days) >
                                     <i class="fa fa-info"></i> </a>
+
+                                </td>
+                                <td style="color:#3474eb" ng-if="item.days.length==0">
+                                    {{item.fupdaysinmonth}}
 
                                 </td>
                                 <td>

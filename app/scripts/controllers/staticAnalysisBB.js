@@ -5003,10 +5003,13 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                         
                     var RATWiseUsageFormatArray= [], RATWiseLabelArray= [], RATWiseUsageData= [];
                     var objArray= response.data;
-                    $scope.exportSubDistArray= [];
+                    $scope.exportUsgDistArray= [];
+                    var formatData = {};
+                    var usageArray = [];
                     if(objArray.length>0){
-                        //exportObjData
-                        var exportSubDistArray= angular.copy(objArray);
+
+                        var exportUsgDistArray= angular.copy(objArray);
+
                         
                         var paramObject= {};
                         paramObject.objArray= objArray;
@@ -5036,8 +5039,7 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                             series: highchartProcessData.barColumnProcessHighchartData(paramObject)
                         }
                         
-                        
-                        $scope.exportSubDistArray= angular.copy(exportSubDistArray);
+                        $scope.exportUsgDistArray= angular.copy(exportUsgDistArray);
         
                         $scope.loadingUsersDistributionDiv= false;
                         $scope.DataUsersDistributionDiv= true;
@@ -5558,6 +5560,8 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
         
         httpService.get(url).then(function (response) {
             var objArray= response.data;
+
+            console.log("objArray hourly response ",response.data)
             
             if(objArray.length>0){
                 var exportTpVsSub= angular.copy(objArray);  
@@ -5607,7 +5611,7 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                             throughputData.push([objArray[i].Hour,formatedThroughputArray[0][++index]]);
                         }
                     }
-                    // console.log('throughputData', throughputData);
+                    console.log('throughputData', throughputData);
                     var optionsThroughputBar= angular.copy(highchartOptions.highchartBarLabelCategoriesOptions);
                     optionsThroughputBar.yAxis.title.text="Throughput( "+formatedThroughputArray[1]+" )";
                     optionsThroughputBar.tooltip.pointFormat= 'Throughput<b> {point.y:.3f} </b>'+ formatedThroughputArray[1]+'</b>';
@@ -5680,6 +5684,7 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                     }
                     else{
                     var usageVsThroughputChartOptions= angular.copy(highchartOptions.highchartLinePlusBarLabelCategoriesOptions);
+                    console.log("usageVsThroughputChartOptions",usageVsThroughputChartOptions)
                     $scope[chartConfig]= {
                         options: usageVsThroughputChartOptions,
                         series: [{
@@ -6199,11 +6204,11 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                 var upThroughputDistributionURL= globalConfig.pullfilterdataurlbyname+ currentPage+" minute wise Up Throughput for 1 Day&toDate="+$scope.date.end+"T00:00:00.000Z&"+currentPage+"="+currentPlanID;
                 var upThroughputHourlyDistributionURL= globalConfig.pullfilterdataurlbyname+ currentPage+" Hourly Up Throughput for 1 Day&toDate="+$scope.date.end+"T00:00:00.000Z&"+currentPage+"="+currentPlanID;
                 
-                    getThroughputDistribution(throughputDistributionURL, 'throughputChartConfig', 'loadingThroughputDiv', 'noDataThroughputDiv');
-                    getThroughputDistributionHourly(throughputHourlyDistributionURL, 'throughputHourlyChartConfig', 'loadingHourlyThroughputDiv', 'noDataHourlyThroughputDiv');
-                    getThroughputDistributionDay(throughputDayDistributionURL,'throughputDayChartConfig', 'loadingDayThroughputDiv', 'noDataDayThroughputDiv');
-                    getThroughputDistribution(upThroughputDistributionURL, 'upThroughputChartConfig', 'loadingupThroughputDiv', 'noDataupThroughputDiv');
-                    getThroughputDistributionHourly(upThroughputHourlyDistributionURL, 'upThroughputHourlyChartConfig', 'loadingHourlyupThroughputDiv', 'noDataHourlyupThroughputDiv');
+                getThroughputDistribution(throughputDistributionURL, 'throughputChartConfig', 'loadingThroughputDiv', 'noDataThroughputDiv');
+                getThroughputDistributionHourly(throughputHourlyDistributionURL, 'throughputHourlyChartConfig', 'loadingHourlyThroughputDiv', 'noDataHourlyThroughputDiv');
+                getThroughputDistributionDay(throughputDayDistributionURL,'throughputDayChartConfig', 'loadingDayThroughputDiv', 'noDataDayThroughputDiv');
+                getThroughputDistribution(upThroughputDistributionURL, 'upThroughputChartConfig', 'loadingupThroughputDiv', 'noDataupThroughputDiv');
+                getThroughputDistributionHourly(upThroughputHourlyDistributionURL, 'upThroughputHourlyChartConfig', 'loadingHourlyupThroughputDiv', 'noDataHourlyupThroughputDiv');
                 break;
 
             case 'OLTUtilization':
@@ -6268,6 +6273,8 @@ function planAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$r
                 $scope.cachedUncachedTpDist.fileHeader= $scope.currentPage+' Analytics'+"_"+"Cached/Uncached Throughput Distribution for "+$scope.currentPage+" "+$scope.drdwnSelect+" for Date "+$scope.edate;
                 
                 var CDNUsageDistributionURL= globalConfig.pullfilterdataurlbyname+currentPage+" wise CDN traffic distribution&fromDate="+$scope.date.start+"T00:00:00.000Z&toDate="+$scope.date.end+"T23:59:59.999Z&"+currentPage+"="+currentPlanID;
+
+                console.log("cahced/uncacde traffic distribution",CDNUsageDistributionURL)
                 
                 var CDNTpDistributionURL= globalConfig.pullfilterdataurlbyname+currentPage+" cdn minute wise Throughput for 1 Day&fromDate="+$scope.date.end+"T00:00:00.000Z&toDate="+$scope.date.end+"T23:59:59.999Z&"+currentPage+"="+currentPlanID;
                 
@@ -7278,7 +7285,7 @@ function churnAnalyticsBBCtrl($scope, $rootScope, httpService, $filter, $state,d
                                 var point_click_date = $filter('date')( this.category , "yyyy-MM-dd");
                                 // var params = {Key: component.ySeries, value: label, fromDate: from, toDate: from};
                                 console.log('from', point_click_date)
-                                displaySubList(key,point_click_date,label_name) 
+                                displaySubList(point_click_date,label_name) 
                             }
                         }
                     };
@@ -7999,6 +8006,7 @@ function appPerformanceBBCtrl($scope, httpService, $filter, $state,dataFormatter
 
     $scope.loadingLatencyDistributionDiv= true;
     $scope.noDataLatencyDistributionDiv= false;
+    
     function getLatencyData(url, series){
         $scope.loadingLatencyDistributionDiv= true;
         $scope.noDataLatencyDistributionDiv= false;
@@ -8046,6 +8054,7 @@ function appPerformanceBBCtrl($scope, httpService, $filter, $state,dataFormatter
 
     $scope.loadingCEIDistributionDiv= true;
     $scope.noDataCEIDistributionDiv= false;
+
     function getCEIData(url, key){
         var CEIDistributionChartOptions= {};
         $scope.loadingCEIDistributionDiv= true;
@@ -9462,6 +9471,9 @@ function UsageCEIMappingBBCtrl($scope, httpService, $filter, $state,dataFormatte
         })*/
     }
 }
+
+
+
 // End Customer Analytics Distribution controller
 //------------------------------------------------------------------------
 

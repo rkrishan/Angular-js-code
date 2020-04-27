@@ -1,0 +1,21 @@
+<div class="wrapper-content animated fadeIn" ng-controller="FirstByteLatencyDistributionBBCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <a class="pull-right label label-primary" ng-click="goBackPage()">Back</a>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="col-lg-8">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <span loading-icon ng-if="loadingDiv && !noDataDiv"></span>
+                <div ng-if="!loadingDiv && !noDataDiv">
+                    <highchart id="chartApp" config="pieChartConfig" ></highchart>
+                </div>
+                <span no-data-found ng-if="!loadingDiv && noDataDiv"></span>
+            </div>
+        </div>
+    </div>
+</div>
