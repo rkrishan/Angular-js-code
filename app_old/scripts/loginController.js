@@ -22,8 +22,8 @@ angular.module('specta')
             tmp.password = btoa(tmp.password);
         
         var request = JSON.stringify(tmp);
-        // console.log('tempUsername', tmp.username);
-        // console.log('tempPassword', tmp.password);
+        console.log('tempUsername', tmp.username);
+        console.log('tempPassword', tmp.password);
         httpService.post(globalConfig.pullDataUrl + '/Login?username='+ tmp.username.trim() +'&password='+ tmp.password)
         .success(function (result, status, headers, config){
             // var user = result.headers('X-USER-DATA'); its working in then function

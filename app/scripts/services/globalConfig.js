@@ -71,11 +71,13 @@ angular.module('specta')
     // host = '172.18.200.15'; //Airtel
     // host = '110.34.24.18'; //Nepal
     // host = '192.168.210.5' ; // Mumbai
-     host = '192.168.82.11' ; // Banglore 
-    //   host = '182.71.197.195' // EWAY
+    host = '192.168.82.11' ; // Banglore
+    // host = '122.160.40.168'  // local ip 
+    // host = '182.71.197.195' // EWAY
     // host = '10.49.28.250';  //link3 -central
     // host= '202 // var options = { port: 9000, hostname: '10.0.0.14' };
     // host = '10.0.0.54'; //14
+
     var options = { port: 9000, hostname: '10.0.0.14' };
     
     // host= '192 // var options = { port: 9000, hostname: '10.0.0.14' };
@@ -137,11 +139,11 @@ angular.module('specta')
             nodeSize               :  20,
             adjustTime             :  330*60*1000, 
             alertColorPalette      :  alertColorPalette,
-            host                   : 'http://'+host,
-            mapIcon                : 'http://' + host + ':8080',
+            host                   :  'http://'+host,
+            mapIcon                :  'http://' + host + ':8080',
             NListener              :  hostURL+'/NListener',
             CepListener            :  hostURL+'/CepListener?',
-            // dataapiurl             :  'http://10.0.0.11:8080/DataAPI'+'/UIListener?',
+            // dataapiurl          : 'http://10.0.0.11:8080/DataAPI'+'/UIListener?',
             dataapiurl             :  hostURL+'/UIListener?',
             dataapitrackurl        :  hostURL+'/UAListener?',
             datatablesapiurl       :  hostURL+'/MListener?action=collections',

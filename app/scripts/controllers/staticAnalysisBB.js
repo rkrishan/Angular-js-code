@@ -2803,7 +2803,7 @@ function customerDetailsBBCtrl($scope, $rootScope,SweetAlert, httpService, $filt
                
                 // end stacked bar first and last day
                 
-                console.log("CUstomer deatail page ",highchartProcessData.multilineProcessHighchartData(paramObject))
+                // console.log("CUstomer deatail page ",highchartProcessData.multilineProcessHighchartData(paramObject))
                 paramObject.flag= "series";
                 $scope.AppsMultiineChartConfig= {
                     options: AppsMultiLineOptions,
@@ -6529,7 +6529,7 @@ function dnsAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$ro
                 paramObject.seriesdata= "data";
                 paramObject.flag= "xAxis";
                 
-                console.log("paramObject", paramObject);
+                // console.log("paramObject", paramObject);
                 
                 var CEIDistributionUsersChartOptions= angular.copy(highchartOptions.highchartStackedBarLabelDatetimeOptions);
                 CEIDistributionUsersChartOptions.xAxis.categories= highchartProcessData.barColumnProcessHighchartData(paramObject);
@@ -6549,6 +6549,8 @@ function dnsAnalyticsBBCtrl($scope,httpService,globalConfig,$filter,$timeout,$ro
                 }
                 
                 $scope['export'+name]= angular.copy(objArray);
+
+                // console.log("Ram export data ",$scope['export'+name])
 
                 $scope['loading'+name+'Div']= false;
                 $scope['Data'+name+'Div']= true;

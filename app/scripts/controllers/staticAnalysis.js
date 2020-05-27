@@ -14489,6 +14489,7 @@ function appSubscriberMovementTrackerCtrl($scope, httpService, $filter, $state, 
             $scope.selectedPlans = [];
         }
     }
+
     function getRegionCities(){
         var params = 'collection=lku_region_city&op=select&db=datadb';
         httpService.get(globalConfig.dataapiurl + params).then(function (res) {
@@ -14909,6 +14910,7 @@ function buidUrl() {
         }
       }
     };
+    
     function plotData(data) {
         var usageDataArray = [];
         for(var i=0; i<data.length;i++){

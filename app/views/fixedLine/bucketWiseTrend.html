@@ -1,13 +1,12 @@
 <style type="text/css">
     td{padding: 40px;}
-
     .bootstrap-datetimepicker-widget .datepicker-days table tbody tr:hover {
     background-color: #eee;
 }
 
 </style>
 
-<div class="wrapper-content animated fadeInRight" ng-controller="LantencyBucketCTRL">
+<div class="wrapper-content animated fadeInRight" ng-controller="ConnectionLatencyCTRL">
     <div class="row">
         <div class="col-lg-12">
             <form class="form-inline" ng-submit="click()">
@@ -15,6 +14,36 @@
                     <div class="pull-right">
                         <button class="btn btn-sm btn-primary " type="submit" >Submit</button>
                     </div>
+
+                    <div class="form-group"><b>App</b>
+                        <input type="button" value="&darr;" ng-click="onTree('area')"/>
+                        <div id="area" ng-show="tree.area" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b>Bucket Name</b>
+                        <input type="button" value="&darr;" ng-click="onTree('plan')"/>
+                        <div id="plan" ng-show="tree.plan" style="z-index:999;position:absolute;max-height: 300px;width: auto; overflow-y: auto;">
+                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="form-group"><b> Export Type</b>
+                        <select ng-model="group" style="height:24px;font-size:10px;padding:0px 12px;" ng-disabled="isReadOnly" required>
+                                <option value="percentage" >percentage</option>
+                                <option value="Count" >Count</option>
+                            </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+
+                    <div class="col-lg-12">
+                        <p>
+                            <!-- <b ng-if="selectedZones.length > 0">Zone:</b> {{selectedZones.join(', ')}}
+                            <b ng-if="selectedCities.length > 0"><br>City:</b> {{selectedCities.join(', ')}}
+                            <b ng-if="selectedNodes.length > 0"><br>Node:</b> {{selectedNodes.join(', ')}} -->
+                            <b ng-if="selectedAreas.length > 0"><br>App:</b>{{selectedAreas.join(', ')}}
+                            <b ng-if="selectedPlans.length > 0"><br>Bucket:</b> {{selectedPlans.join(', ')}}
+
+                    </div>
+
                     <div ng-if="name=='Day'" class="pull-right">
                         <div class="input-group datepicker input-daterange"  data-provide= "datepicker" data-date-format="yyyy-mm-dd" data-date-start-date="2016-06-03" data-date-end-date="0d" data-date-clear-btn="true" data-date-autoclose="true" id="datepicker">
                             <div class="form-group" >
@@ -62,16 +91,17 @@
     <br/>
     <div class="row">
         <div class="col-lg-12">
+        </div>
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <a class="pull-right label label-primary" ng-click="goBackPage()">Back</a>
+            </div>
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span>Subscriber Usage Vs Experience Matrix for date <b style="color:#1ab394;">{{sDate}} </b></span>
-                </div>
                 <div class="ibox-content">
-
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span>First Latency Bucket Distiribution  <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  --> <!-- </span> --> <b style="color:#1ab394;" between style="color:#1ab394;">{{sDate}} - {{edate}} </b>
+                                <span>Connection latency Bucket wise Trend  <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  --> <!-- </span> --> <b style="color:#1ab394;" between style="color:#1ab394;">{{sDate}} - {{edate}} </b>
                             </span>
                                 <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
                             </div>
@@ -83,57 +113,7 @@
                         </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <span>Connection Latency Bucket Distiribution  <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  --> <!-- </span> --> <b style="color:#1ab394;" between style="color:#1ab394;">{{sDate}} - {{edate}} </b>
-                            </span>
-                                <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
-                            </div>
-                        <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
-                        <div ng-if="DataTpBktDistributionDiv">
-                            <highchart id="TpBktDistribution" config="ConnectionLatencyChartOptions" ></highchart>
-                        </div>
-                        <div no-data-found ng-if="noDataTpBktDistributionDiv">
-                        </div>
-                        </div>
-                    </div>
                     
-                    <div class="col-md-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <span>User Latency Bucket Distiribution  <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  --> <!-- </span> --> <b style="color:#1ab394;" between style="color:#1ab394;">{{sDate}} - {{edate}} </b>
-                            </span>
-                                <export-module filename="TpmDist.User_Latency" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.User_Latency" ></export-module>
-                            </div>
-                        <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
-                        <div ng-if="DataTpBktDistributionDiv">
-                            <highchart id="TpBktDistribution" config="UserLatencyChartOptions" ></highchart>
-                        </div>
-                        <div no-data-found ng-if="noDataTpBktDistributionDiv">
-                        </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <span>Data Latency Bucket Distiribution  <!-- <span ng-if="currentPage=='OLT'">DSLAM </span><span ng-if="currentPage!='OLT'">  --> <!-- </span> --> <b style="color:#1ab394;" between style="color:#1ab394;">{{sDate}} - {{edate}} </b>
-                            </span>
-                                <export-module filename="TpmDist.fileName" dataobj="exportSubscriberThroughput", fileHeader=" TpmDist.fileHeader" ></export-module>
-                            </div>
-                        <div loading-icon ng-if="loadingTpBktDistributionDiv"></div>
-                        <div ng-if="DataTpBktDistributionDiv">
-                            <highchart id="TpBktDistribution" config="DataLatencyChartOptions" ></highchart>
-                        </div>
-                        <div no-data-found ng-if="noDataTpBktDistributionDiv">
-                        </div>
-                        </div>
-                    </div>
-
-                    
-
                     <div class="clearfix"></div>
                 </div>
             </div>

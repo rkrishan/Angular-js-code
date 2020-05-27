@@ -625,6 +625,7 @@ var selectedBts  = [];
         }
       }
     };
+    
     function plotData(data) {
         var usageDataArray = [];
         for(var i=0; i<data.length;i++){
